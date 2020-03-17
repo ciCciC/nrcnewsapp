@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:layout_gravity="center">
+
+<!--    <TextView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="@string/app_name"-->
+<!--        android:textColor="@color/colorTextBar"-->
+<!--        android:background="@color/colorBgBar"-->
+<!--        />-->
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/category_fragment_list"
+        android:name="com.koray.nrcnewsapp.core.design.category.CategoryItemFragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:orientation="horizontal"
+        app:layoutManager="LinearLayoutManager"
+        tools:context=".core.design.category.CategoryItemFragment"
+        tools:listitem="@layout/fragment_category_item"/>
+
+</LinearLayout>
+
+<!--<androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--    xmlns:tools="http://schemas.android.com/tools"-->
+<!--    android:id="@+id/category_fragment_list"-->
+<!--    android:name="com.koray.nrcnewsapp.core.design.category.CategoryItemFragment"-->
+<!--    android:layout_width="wrap_content"-->
+<!--    android:layout_height="wrap_content"-->
+<!--    android:layout_marginLeft="5dp"-->
+<!--    android:layout_marginRight="5dp"-->
+<!--    android:gravity="center"-->
+<!--    android:layout_gravity="center"-->
+<!--    android:orientation="horizontal"-->
+<!--    app:layoutManager="LinearLayoutManager"-->
+<!--    tools:context=".core.design.category.CategoryItemFragment"-->
+<!--    tools:listitem="@layout/fragment_category_item"/>-->
