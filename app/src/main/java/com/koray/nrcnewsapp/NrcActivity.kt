@@ -3,9 +3,7 @@ package com.koray.nrcnewsapp
 import android.app.Activity
 import android.content.res.Configuration
 import android.os.Bundle
-import android.util.AttributeSet
 import android.widget.Toast
-import android.widget.Toolbar
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -35,6 +33,7 @@ class NrcActivity : AppCompatActivity(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        // TODO: custom toolbar
 //        setSupportActionBar(findViewById(R.id.my_toolbar))
 
         when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {

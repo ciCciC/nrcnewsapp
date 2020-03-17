@@ -1,0 +1,5 @@
+- custom toolbar
+- try adding different views inside a recycleviewer, eg horizontal and vertical swipe possibility
+- view article
+- share button
+- show articles depending on selected category
