@@ -43,16 +43,21 @@ class ArticleListFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_article_list, container, false)
 
-        // Set the adapter
-        if (view is RecyclerView) {
-            with(view) {
-                layoutManager = when {
-                    columnCount <= 1 -> LinearLayoutManager(context)
-                    else -> GridLayoutManager(context, columnCount)
-                }
-                adapter = MyArticleListRecyclerViewAdapter(ArticleListDummyContent.ITEMS, listener)
-            }
-        }
+        val recyclerView = view.findViewById<RecyclerView>(R.id.articleListFragmentLayout)
+        recyclerView.layoutManager = LinearLayoutManager(context) as RecyclerView.LayoutManager?
+
+//        // Set the adapter
+//        if (view is RecyclerView) {
+//            with(view) {
+//                layoutManager = when {
+//                    columnCount <= 1 -> LinearLayoutManager(context)
+//                    else -> GridLayoutManager(context, columnCount)
+//                }
+//                adapter = MyArticleListRecyclerViewAdapter(ArticleListDummyContent.ITEMS, listener)
+//            }
+//        }
+
+        recyclerView.adapter = MyArticleListRecyclerViewAdapter(ArticleListDummyContent.ITEMS, listener)
 
         return view
     }

@@ -42,6 +42,7 @@ class MyArticleListRecyclerViewAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = mValues[position]
+
 //        holder.mIdView.text = item.id
         holder.mContentView.text = item.content
 
@@ -55,6 +56,35 @@ class MyArticleListRecyclerViewAdapter(
 
     inner class ViewHolder(val mView: View) : RecyclerView.ViewHolder(mView) {
 //        val mIdView: TextView = mView.item_number
+        val mContentView: TextView = mView.content
+
+        override fun toString(): String {
+            return super.toString() + " '" + mContentView.text + "'"
+        }
+    }
+
+    inner class ViewHolderTest(val mView: View) : RecyclerView.ViewHolder(mView) {
+        //        val mIdView: TextView = mView.item_number
+        val mContentView: TextView = mView.content
+
+        override fun toString(): String {
+            return super.toString() + " '" + mContentView.text + "'"
+        }
+    }
+
+    interface T
+
+    inner class XTest(val mView: View) : T {
+        //        val mIdView: TextView = mView.item_number
+        val mContentView: TextView = mView.content
+
+        override fun toString(): String {
+            return super.toString() + " '" + mContentView.text + "'"
+        }
+    }
+
+    inner class YTest(val mView: View) : T {
+        //        val mIdView: TextView = mView.item_number
         val mContentView: TextView = mView.content
 
         override fun toString(): String {

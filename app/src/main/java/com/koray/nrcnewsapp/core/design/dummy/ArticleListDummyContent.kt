@@ -26,7 +26,7 @@ object ArticleListDummyContent {
     init {
         // Add some sample items.
         for (i in 1..COUNT) {
-            addItem(createDummyItem(i))
+            addItem(createDummyItem(i, (i != 1), if(i == 1) ViewType.category else ViewType.articleItem))
         }
     }
 
@@ -35,9 +35,9 @@ object ArticleListDummyContent {
         ITEM_MAP.put(item.id, item)
     }
 
-    private fun createDummyItem(position: Int): DummyItem {
-        var content = "Dit is een verzamelaarsgame ten top, met scherpe doch cartooneske graphics. Maar op een gegeven moment heb je het wel weer gezien."
-        return DummyItem(position.toString(), content, makeDetails(position))
+    private fun createDummyItem(position: Int, touchable: Boolean, viewType: ViewType): DummyItem {
+        val content = "Dit is een verzamelaarsgame ten top, met scherpe doch cartooneske graphics. Maar op een gegeven moment heb je het wel weer gezien."
+        return DummyItem(position.toString(), content, viewType, touchable)
     }
 
     private fun makeDetails(position: Int): String {
@@ -52,7 +52,12 @@ object ArticleListDummyContent {
     /**
      * A dummy item representing a piece of content.
      */
-    data class DummyItem(val id: String, val content: String, val details: String) {
+    data class DummyItem(val id: String, val content: String, val viewType: ViewType, val touchable: Boolean) {
+        fun isTouchable(): Boolean = touchable
         override fun toString(): String = content
+    }
+
+    enum class ViewType{
+        category, articleItem
     }
 }
