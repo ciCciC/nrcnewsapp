@@ -1,27 +1,21 @@
 package com.koray.nrcnewsapp.core.design.category
 
-import androidx.recyclerview.widget.RecyclerView
+
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
 import com.koray.nrcnewsapp.R
-
-
-import com.koray.nrcnewsapp.core.design.category.CategoryItemFragment.OnListFragmentInteractionListener
-import com.koray.nrcnewsapp.core.design.dummy.CategoryDummyContent
-import com.koray.nrcnewsapp.core.design.dummy.CategoryDummyContent.DummyItem
-
+import com.koray.nrcnewsapp.core.design.newspage.NewsPageFragment
 import kotlinx.android.synthetic.main.fragment_category_item.view.*
 
 /**
- * [RecyclerView.Adapter] that can display a [DummyItem] and makes a call to the
- * specified [OnListFragmentInteractionListener].
- * TODO: Replace the implementation with code for your data type.
+ * Hier wordt de adapter voor Category list afgehandeld
  */
 class MyCategoryItemRecyclerViewAdapter(
     private val mValues: List<String>,
-    private val mListener: OnListFragmentInteractionListener?
+    private val mListener: NewsPageFragment.CategoryOnListInteractionListener?
 ) : RecyclerView.Adapter<MyCategoryItemRecyclerViewAdapter.ViewHolder>() {
 
     private val mOnClickListener: View.OnClickListener
@@ -41,7 +35,6 @@ class MyCategoryItemRecyclerViewAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = mValues[position]
-//        holder.mIdView.text = item.id
         holder.mContentView.text = item
 
         with(holder.mView) {
@@ -52,9 +45,10 @@ class MyCategoryItemRecyclerViewAdapter(
 
     override fun getItemCount(): Int = mValues.size
 
+    // Deze is alleen voor categorie item dus vergis je niet met die in NewsPageRecyclerViewAdapter
     inner class ViewHolder(val mView: View) : RecyclerView.ViewHolder(mView) {
 //        val mIdView: TextView = mView.item_number
-        val mContentView: TextView = mView.content
+        val mContentView: TextView = mView.category_name
 
         override fun toString(): String {
             return super.toString() + " '" + mContentView.text + "'"

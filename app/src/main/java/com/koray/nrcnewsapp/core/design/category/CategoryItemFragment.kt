@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.koray.nrcnewsapp.BaseApplication
 import com.koray.nrcnewsapp.R
+import com.koray.nrcnewsapp.core.design.newspage.NewsPageFragment
 import com.koray.nrcnewsapp.core.network.repository.NrcRepository
 import com.koray.nrcnewsapp.core.network.viewmodel.CustomViewModelFactory
 import com.koray.nrcnewsapp.core.network.viewmodel.LiveArticlesModel
@@ -23,7 +24,7 @@ import com.koray.nrcnewsapp.core.network.viewmodel.LiveArticlesModel
  */
 class CategoryItemFragment : Fragment() {
 
-    private var listener: OnListFragmentInteractionListener? = null
+    private var listener: NewsPageFragment.CategoryOnListInteractionListener? = null
 
     private val nrcRepository: NrcRepository by inject()
 
@@ -52,25 +53,6 @@ class CategoryItemFragment : Fragment() {
             listener
         )
 
-        // Set the adapter
-//        if (recyclerView is RecyclerView) {
-//            with(view) {
-//
-//                // fetches the category items
-////                fetchCategories() TODO
-//                arrayListOf("games", "category", "technology")
-//                    .forEach { x -> categoriesList.add(x) }
-//
-//                layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false) as RecyclerView.LayoutManager?
-//
-//                adapter =
-//                    MyCategoryItemRecyclerViewAdapter(
-//                        categoriesList,
-//                        listener
-//                    )
-//            }
-//        }
-
         return view
     }
 
@@ -84,7 +66,7 @@ class CategoryItemFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if (context is OnListFragmentInteractionListener) {
+        if (context is NewsPageFragment.CategoryOnListInteractionListener) {
             listener = context
         } else {
             throw RuntimeException("$context must implement OnListFragmentInteractionListener")

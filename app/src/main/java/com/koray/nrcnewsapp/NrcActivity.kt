@@ -10,6 +10,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.koray.nrcnewsapp.core.design.articlelist.ArticleListFragment
 import com.koray.nrcnewsapp.core.design.category.CategoryItemFragment
+import com.koray.nrcnewsapp.core.design.newspage.NewsPageFragment
+import com.koray.nrcnewsapp.core.design.newspage.dummy.NewsPageDummyContent
 import com.koray.nrcnewsapp.core.design.util.FragmentAnimation
 import com.koray.nrcnewsapp.core.domain.ArticleItemModel
 import com.koray.nrcnewsapp.core.network.repository.NrcRepository
@@ -21,7 +23,8 @@ import javax.inject.Singleton
 
 @Singleton
 class NrcActivity : AppCompatActivity(),
-    CategoryItemFragment.OnListFragmentInteractionListener {
+    NewsPageFragment.CategoryOnListInteractionListener,
+    NewsPageFragment.OnListFragmentInteractionListener{
 
     private val nrcRepository: NrcRepository by inject()
     private val categoryItemFragment: CategoryItemFragment by lazy {
@@ -45,8 +48,9 @@ class NrcActivity : AppCompatActivity(),
 
 //        this.getAllCategories()
 //        this.getAllArticles()
-        initCategoryListFragment()
-        initArticleRandomListFragment()
+//        initCategoryListFragment()
+        initNewsPageFragment()
+//        initArticleRandomListFragment()
     }
 
     private fun getAllCategories(){
@@ -63,30 +67,34 @@ class NrcActivity : AppCompatActivity(),
         })
     }
 
-    private fun initCategoryListFragment() {
-//        val categoryItemFragment: CategoryItemFragment = CategoryItemFragment.newInstance()
+//    private fun initCategoryListFragment() {
+//        FragmentAnimation.rightBottomToLeftTop(supportFragmentManager)
+//            .add(R.id.category_list_container,
+//                categoryItemFragment,
+//                CategoryItemFragment.getTagName())
+//            .addToBackStack(null)
+//            .commit()
+//    }
+
+//    private fun initArticleRandomListFragment(){
+//        val articleListFragment: ArticleListFragment = ArticleListFragment.newInstance(1)
+//        FragmentAnimation.rightBottomToLeftTop(supportFragmentManager)
+//            .add(R.id.article_random_list_container,
+//                articleListFragment,
+//                ArticleListFragment.getTagName())
+//            .addToBackStack(null)
+//            .commit()
+//    }
+
+    // TODO
+    private fun initNewsPageFragment(){
+        val newsPageFragment: NewsPageFragment = NewsPageFragment.newInstance(1)
         FragmentAnimation.rightBottomToLeftTop(supportFragmentManager)
-            .add(R.id.category_list_container,
-                categoryItemFragment,
-                CategoryItemFragment.getTagName())
+            .add(R.id.news_page_container,
+                newsPageFragment,
+                NewsPageFragment.getTagName())
             .addToBackStack(null)
             .commit()
-    }
-
-    private fun initArticleRandomListFragment(){
-        val articleListFragment: ArticleListFragment = ArticleListFragment.newInstance(1)
-        FragmentAnimation.rightBottomToLeftTop(supportFragmentManager)
-            .add(R.id.article_random_list_container,
-                articleListFragment,
-                ArticleListFragment.getTagName())
-            .addToBackStack(null)
-            .commit()
-    }
-
-    override fun onListFragmentInteraction(category: String?) {
-        categorySelectionModel.setCategory(category!!)
-        showFillInMsgUiThread(category)
-        println("Clicked category")
     }
 
     private fun showFillInMsgUiThread(msg: String) {
@@ -100,6 +108,16 @@ class NrcActivity : AppCompatActivity(),
 
     private fun initToastMsg(msg: String, length: Int) {
         Toast.makeText(this, msg, length).show()
+    }
+
+    override fun onListFragmentInteraction(category: String?) {
+        categorySelectionModel.setCategory(category!!)
+        showFillInMsgUiThread(category)
+        println("Clicked category")
+    }
+
+    override fun onListFragmentInteraction(newsPageItem: NewsPageDummyContent.DummyItem?) {
+        showFillInMsgUiThread(newsPageItem?.content.toString())
     }
 }
 

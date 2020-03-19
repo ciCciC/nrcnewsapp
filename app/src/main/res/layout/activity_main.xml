@@ -17,29 +17,41 @@
 <!--        android:background="?attr/colorPrimary">-->
 <!--    </androidx.appcompat.widget.Toolbar>-->
 
-    <FrameLayout
-        android:id="@+id/category_list_container"
-        android:name="com.koray.nrcnewsapp.core.design.category.CategoryItemFragment"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_marginTop="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        tools:layout="@layout/fragment_category_list" />
+<!--    <FrameLayout-->
+<!--        android:id="@+id/category_list_container"-->
+<!--        android:name="com.koray.nrcnewsapp.core.design.category.CategoryItemFragment"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="60dp"-->
+<!--        android:layout_marginTop="10dp"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintVertical_bias="0.0"-->
+<!--        tools:layout="@layout/fragment_category_list" />-->
 
     <FrameLayout
-        android:id="@+id/article_random_list_container"
-        android:name="com.koray.nrcnewsapp.core.design..articlelist.ArticleListFragment"
+        android:id="@+id/news_page_container"
+        android:name="com.koray.nrcnewsapp.core.design.newspage.NewsPageFragment"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/category_list_container"
+        app:layout_constraintTop_toBottomOf="parent"
         app:layout_constraintVertical_bias="0.0"
-        tools:layout="@layout/fragment_article_list" />
+        tools:layout="@layout/fragment_news_page_list" />
+
+<!--    <FrameLayout-->
+<!--        android:id="@+id/article_random_list_container"-->
+<!--        android:name="com.koray.nrcnewsapp.core.design.articlelist.ArticleListFragment"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="0dp"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/category_list_container"-->
+<!--        app:layout_constraintVertical_bias="0.0"-->
+<!--        tools:layout="@layout/fragment_article_list" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

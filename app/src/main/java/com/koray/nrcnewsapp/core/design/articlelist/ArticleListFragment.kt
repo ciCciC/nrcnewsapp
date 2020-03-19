@@ -7,7 +7,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.koray.nrcnewsapp.R
 import com.koray.nrcnewsapp.core.design.dummy.ArticleListDummyContent
@@ -57,7 +56,7 @@ class ArticleListFragment : Fragment() {
 //            }
 //        }
 
-        recyclerView.adapter = MyArticleListRecyclerViewAdapter(ArticleListDummyContent.ITEMS, listener)
+        recyclerView.adapter = ArticleListRecyclerViewAdapter(ArticleListDummyContent.ITEMS, listener)
 
         return view
     }
