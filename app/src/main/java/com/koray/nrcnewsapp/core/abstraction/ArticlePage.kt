@@ -1,5 +1,5 @@
 package com.koray.nrcnewsapp.core.abstraction
 
-interface Article : ArticleItem {
+interface ArticlePage : BaseArticle {
     var sectionList: Array<Section>?
 }

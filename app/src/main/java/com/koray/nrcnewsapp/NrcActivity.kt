@@ -1,6 +1,5 @@
 package com.koray.nrcnewsapp
 
-import android.app.Activity
 import android.content.res.Configuration
 import android.os.Bundle
 import android.widget.Toast
@@ -8,25 +7,30 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.koray.nrcnewsapp.core.design.articlelist.ArticleListFragment
 import com.koray.nrcnewsapp.core.design.category.CategoryItemFragment
 import com.koray.nrcnewsapp.core.design.newspage.NewsPageFragment
-import com.koray.nrcnewsapp.core.design.newspage.dummy.NewsPageDummyContent
 import com.koray.nrcnewsapp.core.design.util.FragmentAnimation
+import com.koray.nrcnewsapp.core.design.util.inject
 import com.koray.nrcnewsapp.core.domain.ArticleItemModel
-import com.koray.nrcnewsapp.core.network.repository.NrcRepository
+import com.koray.nrcnewsapp.core.domain.ArticleItemTestModel
+import com.koray.nrcnewsapp.core.domain.CategoryItemModel
+import com.koray.nrcnewsapp.core.domain.NewsPageItemModel
+import com.koray.nrcnewsapp.core.network.repository.ArticleRepository
+import com.koray.nrcnewsapp.core.network.repository.CategoryRepository
 import com.koray.nrcnewsapp.core.network.viewmodel.CategorySelectionModel
 import com.koray.nrcnewsapp.core.network.viewmodel.CustomViewModelFactory
 import com.koray.nrcnewsapp.core.network.viewmodel.LiveArticlesModel
+import com.koray.nrcnewsapp.core.network.viewmodel.LiveCategoriesModel
 import javax.inject.Singleton
 
 
 @Singleton
 class NrcActivity : AppCompatActivity(),
     NewsPageFragment.CategoryOnListInteractionListener,
-    NewsPageFragment.OnListFragmentInteractionListener{
+    NewsPageFragment.OnListFragmentInteractionListener {
 
-    private val nrcRepository: NrcRepository by inject()
+    private val articleRepository: ArticleRepository by inject()
+    private val categoryRepository: CategoryRepository by inject()
     private val categoryItemFragment: CategoryItemFragment by lazy {
         CategoryItemFragment.newInstance()
     }
@@ -40,7 +44,8 @@ class NrcActivity : AppCompatActivity(),
 //        setSupportActionBar(findViewById(R.id.my_toolbar))
 
         when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
-            Configuration.UI_MODE_NIGHT_NO -> {} // Night mode is not active, we're using the light theme
+            Configuration.UI_MODE_NIGHT_NO -> {
+            } // Night mode is not active, we're using the light theme
             Configuration.UI_MODE_NIGHT_YES -> {
 
             } // Night mode is active, we're using dark theme
@@ -53,19 +58,21 @@ class NrcActivity : AppCompatActivity(),
 //        initArticleRandomListFragment()
     }
 
-    private fun getAllCategories(){
-        val model = ViewModelProviders.of(this, CustomViewModelFactory(nrcRepository)).get(LiveArticlesModel::class.java)
-        model.getCategories().observe(this, Observer<List<String>> { model ->
+    private fun getAllCategories() {
+        val model = ViewModelProviders.of(this, CustomViewModelFactory(categoryRepository))
+            .get(LiveCategoriesModel::class.java)
+        model.getCategories().observe(this, Observer { model ->
             model.forEach { x -> println("categorie: $x") }
         })
     }
 
-    private fun getAllArticles() {
-        val model = ViewModelProviders.of(this, CustomViewModelFactory(nrcRepository)).get(LiveArticlesModel::class.java)
-        model.getArticles().observe(this, Observer<List<ArticleItemModel>> { models ->
-            models.forEach { article -> println("Retrieved: $article") }
-        })
-    }
+//    private fun getAllArticles() {
+//        val model = ViewModelProviders.of(this, CustomViewModelFactory(articleRepository))
+//            .get(LiveArticlesModel::class.java)
+//        model.getArticleItems().observe(this, Observer<List<ArticleItemModel>> { models ->
+//            models.forEach { article -> println("Retrieved: $article") }
+//        })
+//    }
 
 //    private fun initCategoryListFragment() {
 //        FragmentAnimation.rightBottomToLeftTop(supportFragmentManager)
@@ -87,12 +94,14 @@ class NrcActivity : AppCompatActivity(),
 //    }
 
     // TODO
-    private fun initNewsPageFragment(){
+    private fun initNewsPageFragment() {
         val newsPageFragment: NewsPageFragment = NewsPageFragment.newInstance(1)
         FragmentAnimation.rightBottomToLeftTop(supportFragmentManager)
-            .add(R.id.news_page_container,
+            .add(
+                R.id.news_page_container,
                 newsPageFragment,
-                NewsPageFragment.getTagName())
+                NewsPageFragment.getTagName()
+            )
             .addToBackStack(null)
             .commit()
     }
@@ -110,17 +119,14 @@ class NrcActivity : AppCompatActivity(),
         Toast.makeText(this, msg, length).show()
     }
 
-    override fun onListFragmentInteraction(category: String?) {
-        categorySelectionModel.setCategory(category!!)
-        showFillInMsgUiThread(category)
+    override fun onListFragmentInteraction(category: CategoryItemModel?) {
+        categorySelectionModel.setCategory(category?.name.toString())
+        showFillInMsgUiThread(category?.name.toString())
         println("Clicked category")
     }
 
-    override fun onListFragmentInteraction(newsPageItem: NewsPageDummyContent.DummyItem?) {
-        showFillInMsgUiThread(newsPageItem?.content.toString())
+    override fun onListFragmentInteraction(newsPageItem: NewsPageItemModel?) {
+        if (newsPageItem is ArticleItemModel)
+            showFillInMsgUiThread(newsPageItem.teaser.toString())
     }
-}
-
-inline fun <reified T> Activity.inject(): Lazy<T> = lazy {
-    (this.applicationContext as? BaseApplication)?.ctx?.getBean(T::class.java)!!
 }

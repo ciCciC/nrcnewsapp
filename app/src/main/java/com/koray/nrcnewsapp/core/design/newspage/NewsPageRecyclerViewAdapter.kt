@@ -4,18 +4,18 @@ package com.koray.nrcnewsapp.core.design.newspage
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
-import androidx.annotation.NonNull
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.koray.nrcnewsapp.R
-import com.koray.nrcnewsapp.core.design.category.MyCategoryItemRecyclerViewAdapter
 import com.koray.nrcnewsapp.core.design.newspage.NewsPageFragment.CategoryOnListInteractionListener
 import com.koray.nrcnewsapp.core.design.newspage.NewsPageFragment.OnListFragmentInteractionListener
-import com.koray.nrcnewsapp.core.design.newspage.dummy.NewsPageDummyContent
 import com.koray.nrcnewsapp.core.design.newspage.dummy.NewsPageDummyContent.DummyItem
-import kotlinx.android.synthetic.main.fragment_article_item.view.*
+import com.koray.nrcnewsapp.core.design.viewholders.ArticleViewHolder
+import com.koray.nrcnewsapp.core.design.viewholders.BaseViewHolder
+import com.koray.nrcnewsapp.core.design.viewholders.CategoryViewHolder
+import com.koray.nrcnewsapp.core.domain.ArticleItemModel
+import com.koray.nrcnewsapp.core.domain.ArticleItemTestModel
+import com.koray.nrcnewsapp.core.domain.CategoryItemModel
+import com.koray.nrcnewsapp.core.domain.NewsPageItemModel
 
 /**
  * [RecyclerView.Adapter] that can display a [DummyItem] and makes a call to the
@@ -23,7 +23,8 @@ import kotlinx.android.synthetic.main.fragment_article_item.view.*
  * TODO: Replace the implementation with code for your data type.
  */
 class NewsPageRecyclerViewAdapter(
-    private val mValues: List<DummyItem>,
+    private val mValues: List<NewsPageItemModel>,
+    private val mValuesMap: Map<NewsPageItemModel.ItemType, Any>,
     private val mListener: OnListFragmentInteractionListener?,
     private val mCategoryListener: CategoryOnListInteractionListener?
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -34,28 +35,30 @@ class NewsPageRecyclerViewAdapter(
 
     init {
         mOnClickListener = View.OnClickListener { v ->
-            val item = v.tag as DummyItem
+            val item = v.tag as NewsPageItemModel
             mListener?.onListFragmentInteraction(item)
         }
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (mValues[position].viewType == NewsPageDummyContent.ViewType.CATEGORY)
+        return if (mValues[position].itemType == NewsPageItemModel.ItemType.CATEGORY)
             CATEGORY else ARTICLE
     }
 
     // TODO
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder {
         val view: View
 
         return if(viewType == CATEGORY) {
             view = LayoutInflater.from(parent.context)
                 .inflate(R.layout.fragment_category_list, parent, false)
-            XTest(view, mCategoryListener)
+            CategoryViewHolder(view,
+                (mValuesMap[NewsPageItemModel.ItemType.CATEGORY] as MutableList<CategoryItemModel>),
+                mCategoryListener)
         } else {
             view = LayoutInflater.from(parent.context)
                 .inflate(R.layout.fragment_article_item, parent, false)
-            YTest(view)
+            ArticleViewHolder(view)
         }
     }
 
@@ -63,52 +66,22 @@ class NewsPageRecyclerViewAdapter(
         val item = mValues[position]
 
         when (holder) {
-            is XTest -> {
+            is CategoryViewHolder -> {
                 with(holder.mView) {
                     tag = item
                 }
             }
-            is YTest -> {
-                holder.mContentView.text = item.content
-                with(holder.mView) {
-                    tag = item
-                    setOnClickListener(mOnClickListener)
+            is ArticleViewHolder -> {
+                if(item is ArticleItemModel){
+                    holder.mContentView.text = item.teaser
+                    with(holder.mView) {
+                        tag = item
+                        setOnClickListener(mOnClickListener)
+                    }
                 }
             }
         }
     }
 
     override fun getItemCount(): Int = mValues.size
-
-    // TODO: Refactor!!
-    open inner class ViewHolder(val mView: View) : RecyclerView.ViewHolder(mView) {
-    }
-
-    // TODO: Refactor!!
-    inner class XTest(mView: View, listener: CategoryOnListInteractionListener?) : ViewHolder(mView) {
-
-        private val categoriesList: MutableList<String> = ArrayList()
-
-        init {
-            val recyclerView: RecyclerView = mView.findViewById(R.id.category_fragment_list)
-            recyclerView.layoutManager =
-                LinearLayoutManager(mView.context, RecyclerView.HORIZONTAL, false) as RecyclerView.LayoutManager?
-
-            (1..10).forEach{ _ -> categoriesList.add("games")}
-            arrayListOf("games", "physics", "technology")
-                .forEach { x -> categoriesList.add(x) }
-
-            recyclerView.adapter = MyCategoryItemRecyclerViewAdapter(
-                categoriesList,
-                listener
-            )
-        }
-    }
-
-    // TODO: Refactor!!
-    inner class YTest(@NonNull mView: View) : ViewHolder(mView) {
-        // Op deze manier haal je een element op, apart bij ieder classe
-        val testImage: ImageView = mView.article_item_image
-        val mContentView: TextView = mView.article_item_content
-    }
 }

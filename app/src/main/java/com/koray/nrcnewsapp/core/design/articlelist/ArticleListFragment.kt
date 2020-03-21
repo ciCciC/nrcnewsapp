@@ -9,9 +9,8 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.koray.nrcnewsapp.R
-import com.koray.nrcnewsapp.core.design.dummy.ArticleListDummyContent
 
-import com.koray.nrcnewsapp.core.design.dummy.ArticleListDummyContent.DummyItem
+import com.koray.nrcnewsapp.core.design.articlelist.ArticleListDummyContent.DummyItem
 import com.koray.nrcnewsapp.core.network.viewmodel.CategorySelectionModel
 
 /**
@@ -43,7 +42,7 @@ class ArticleListFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_article_list, container, false)
 
         val recyclerView = view.findViewById<RecyclerView>(R.id.articleListFragmentLayout)
-        recyclerView.layoutManager = LinearLayoutManager(context) as RecyclerView.LayoutManager?
+        recyclerView.layoutManager = LinearLayoutManager(context)
 
 //        // Set the adapter
 //        if (view is RecyclerView) {

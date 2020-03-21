@@ -7,6 +7,7 @@ class ArticleItemModel(
     override var imageLink: String?,
     override var topic: String?,
     override var title: String?,
-    override var teaser: String?
-) : ArticleItem {
+    override var teaser: String?,
+    override var itemType: NewsPageItemModel.ItemType?
+) : ArticleItem, NewsPageItemModel {
 }

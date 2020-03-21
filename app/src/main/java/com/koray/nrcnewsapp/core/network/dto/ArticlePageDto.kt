@@ -1,11 +1,10 @@
 package com.koray.nrcnewsapp.core.network.dto
 
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.koray.nrcnewsapp.core.abstraction.Article
+import com.koray.nrcnewsapp.core.abstraction.ArticlePage
 import com.koray.nrcnewsapp.core.abstraction.Section
-import com.koray.nrcnewsapp.core.domain.ArticleModel
 
-class ArticleDto(
+class ArticlePageDto(
     @JsonProperty("sectionList")
     override var sectionList: Array<Section>?,
     @JsonProperty("pageLink")
@@ -18,6 +17,6 @@ class ArticleDto(
     override var title: String?,
     @JsonProperty("teaser")
     override var teaser: String?
-) : Article {
+) : ArticlePage {
 
 }

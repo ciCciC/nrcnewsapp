@@ -1,4 +1,4 @@
-package com.koray.nrcnewsapp.core.design.dummy
+package com.koray.nrcnewsapp.core.design.articlelist
 
 import java.util.*
 
@@ -25,7 +25,11 @@ object ArticleListDummyContent {
     init {
         // Add some sample items.
         for (i in 1..COUNT) {
-            addItem(createDummyItem(i))
+            addItem(
+                createDummyItem(
+                    i
+                )
+            )
         }
     }
 
@@ -36,7 +40,10 @@ object ArticleListDummyContent {
 
     private fun createDummyItem(position: Int): DummyItem {
         val content = "Dit is een verzamelaarsgame ten top, met scherpe doch cartooneske graphics. Maar op een gegeven moment heb je het wel weer gezien."
-        return DummyItem(position.toString(), content)
+        return DummyItem(
+            position.toString(),
+            content
+        )
     }
 
     /**

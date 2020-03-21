@@ -8,21 +8,22 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.koray.nrcnewsapp.R
 import com.koray.nrcnewsapp.core.design.newspage.NewsPageFragment
+import com.koray.nrcnewsapp.core.domain.CategoryItemModel
 import kotlinx.android.synthetic.main.fragment_category_item.view.*
 
 /**
  * Hier wordt de adapter voor Category list afgehandeld
  */
-class MyCategoryItemRecyclerViewAdapter(
-    private val mValues: List<String>,
+class CategoryItemRecyclerViewAdapter(
+    private val mValues: List<CategoryItemModel>,
     private val mListener: NewsPageFragment.CategoryOnListInteractionListener?
-) : RecyclerView.Adapter<MyCategoryItemRecyclerViewAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<CategoryItemRecyclerViewAdapter.ViewHolder>() {
 
     private val mOnClickListener: View.OnClickListener
 
     init {
         mOnClickListener = View.OnClickListener { v ->
-            val item = v.tag as String
+            val item = v.tag as CategoryItemModel
             mListener?.onListFragmentInteraction(item)
         }
     }
@@ -35,7 +36,7 @@ class MyCategoryItemRecyclerViewAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = mValues[position]
-        holder.mContentView.text = item
+        holder.mContentView.text = item.name
 
         with(holder.mView) {
             tag = item

@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.koray.nrcnewsapp.R
 import com.koray.nrcnewsapp.core.design.articlelist.ArticleListFragment.OnListFragmentInteractionListener
-import com.koray.nrcnewsapp.core.design.dummy.ArticleListDummyContent.DummyItem
+import com.koray.nrcnewsapp.core.design.articlelist.ArticleListDummyContent.DummyItem
 import kotlinx.android.synthetic.main.fragment_article_item.view.*
 
 /**
