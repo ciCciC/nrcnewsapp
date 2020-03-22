@@ -13,7 +13,6 @@ import com.koray.nrcnewsapp.core.design.viewholders.ArticleViewHolder
 import com.koray.nrcnewsapp.core.design.viewholders.BaseViewHolder
 import com.koray.nrcnewsapp.core.design.viewholders.CategoryViewHolder
 import com.koray.nrcnewsapp.core.domain.ArticleItemModel
-import com.koray.nrcnewsapp.core.domain.ArticleItemTestModel
 import com.koray.nrcnewsapp.core.domain.CategoryItemModel
 import com.koray.nrcnewsapp.core.domain.NewsPageItemModel
 
@@ -73,7 +72,9 @@ class NewsPageRecyclerViewAdapter(
             }
             is ArticleViewHolder -> {
                 if(item is ArticleItemModel){
-                    holder.mContentView.text = item.teaser
+                    holder.topic.text = item.topic?.toUpperCase()
+                    holder.title.text = item.title
+                    holder.teaser.text = item.teaser
                     with(holder.mView) {
                         tag = item
                         setOnClickListener(mOnClickListener)

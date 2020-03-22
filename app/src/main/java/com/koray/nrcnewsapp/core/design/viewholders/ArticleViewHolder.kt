@@ -6,6 +6,8 @@ import android.widget.TextView
 import kotlinx.android.synthetic.main.fragment_article_item.view.*
 
 class ArticleViewHolder(mView: View): BaseViewHolder(mView) {
-    val testImage: ImageView = mView.article_item_image
-    val mContentView: TextView = mView.article_item_content
+    val articleItemImg: ImageView = mView.article_item_image
+    val topic: TextView = mView.article_item_topic
+    val title: TextView = mView.article_item_title
+    val teaser: TextView = mView.article_item_teaser
 }

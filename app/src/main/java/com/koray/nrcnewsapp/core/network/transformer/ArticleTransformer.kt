@@ -9,20 +9,11 @@ import com.koray.nrcnewsapp.core.network.dto.ArticlePageDto
 object ArticleTransformer {
 
     fun toModel(articleItemDto: ArticleItemDto): ArticleItemModel {
-//        return ArticleItemModel(
-//            articleItemDto.pageLink,
-//            articleItemDto.imageLink,
-//            articleItemDto.topic,
-//            articleItemDto.title,
-//            articleItemDto.teaser,
-//            NewsPageItemModel.ItemType.ARTICLE
-//        )
-
         return ArticleItemModel(
-            "",
-            "",
-            "",
-            "",
+            articleItemDto.pageLink,
+            articleItemDto.imageLink,
+            articleItemDto.topic,
+            articleItemDto.title,
             articleItemDto.teaser,
             NewsPageItemModel.ItemType.ARTICLE
         )

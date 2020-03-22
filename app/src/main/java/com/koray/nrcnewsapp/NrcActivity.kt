@@ -51,37 +51,10 @@ class NrcActivity : AppCompatActivity(),
             } // Night mode is active, we're using dark theme
         }
 
-//        this.getAllCategories()
-//        this.getAllArticles()
 //        initCategoryListFragment()
         initNewsPageFragment()
 //        initArticleRandomListFragment()
     }
-
-    private fun getAllCategories() {
-        val model = ViewModelProviders.of(this, CustomViewModelFactory(categoryRepository))
-            .get(LiveCategoriesModel::class.java)
-        model.getCategories().observe(this, Observer { model ->
-            model.forEach { x -> println("categorie: $x") }
-        })
-    }
-
-//    private fun getAllArticles() {
-//        val model = ViewModelProviders.of(this, CustomViewModelFactory(articleRepository))
-//            .get(LiveArticlesModel::class.java)
-//        model.getArticleItems().observe(this, Observer<List<ArticleItemModel>> { models ->
-//            models.forEach { article -> println("Retrieved: $article") }
-//        })
-//    }
-
-//    private fun initCategoryListFragment() {
-//        FragmentAnimation.rightBottomToLeftTop(supportFragmentManager)
-//            .add(R.id.category_list_container,
-//                categoryItemFragment,
-//                CategoryItemFragment.getTagName())
-//            .addToBackStack(null)
-//            .commit()
-//    }
 
 //    private fun initArticleRandomListFragment(){
 //        val articleListFragment: ArticleListFragment = ArticleListFragment.newInstance(1)

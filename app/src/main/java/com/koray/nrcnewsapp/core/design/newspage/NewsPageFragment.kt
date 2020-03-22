@@ -78,22 +78,22 @@ class NewsPageFragment : Fragment() {
     }
 
     private fun fetchCategoryNames() {
-//        fetchDummyCategoryNames()
-        val model = ViewModelProviders.of(
-            this,
-            CustomViewModelFactory(categoryRepository)
-        ).get(LiveCategoriesModel::class.java)
-
-        model.getCategories()
-            .observe(viewLifecycleOwner, Observer { categoryList ->
-                newsPageItemList.add(
-                    CategoryListItemModel(
-                        categoryList,
-                        NewsPageItemModel.ItemType.CATEGORY
-                    )
-                )
-                newsPageItemMap[NewsPageItemModel.ItemType.CATEGORY] = categoryList
-            })
+        fetchDummyCategoryNames()
+//        val model = ViewModelProviders.of(
+//            this,
+//            CustomViewModelFactory(categoryRepository)
+//        ).get(LiveCategoriesModel::class.java)
+//
+//        model.getCategories()
+//            .observe(viewLifecycleOwner, Observer { categoryList ->
+//                newsPageItemList.add(
+//                    CategoryListItemModel(
+//                        categoryList,
+//                        NewsPageItemModel.ItemType.CATEGORY
+//                    )
+//                )
+//                newsPageItemMap[NewsPageItemModel.ItemType.CATEGORY] = categoryList
+//            })
     }
 
     private fun fetchDummyCategoryNames() {
@@ -109,19 +109,23 @@ class NewsPageFragment : Fragment() {
     }
 
     private fun fetchArticles() {
-//        fetchDummyArticleItems()
-        val model = ViewModelProviders.of(this, CustomViewModelFactory(articleRepository))
-            .get(LiveArticlesModel::class.java)
-        model.getArticleItems().observe(viewLifecycleOwner, Observer { models ->
-            newsPageItemList.addAll(models)
-        })
+        fetchDummyArticleItems()
+//        val model = ViewModelProviders.of(this, CustomViewModelFactory(articleRepository))
+//            .get(LiveArticlesModel::class.java)
+//        model.getArticleItems().observe(viewLifecycleOwner, Observer { models ->
+//            newsPageItemList.addAll(models)
+//        })
     }
 
     private fun fetchDummyArticleItems() {
         (1..10).forEach { _ ->
             newsPageItemList.add(
-                ArticleItemTestModel(
-                    "Dit is een verzamelaarsgame ten top, met scherpe doch cartooneske graphics. Maar op een gegeven moment heb je het wel weer gezien.",
+                ArticleItemModel(
+                    "http://www.nrc.nl/nieuws/2020/03/20/vreedzaam-leven-met-cyborgs-a3994387",
+                    "https://images.nrc.nl/UBptTebL0NGY2WXHE0lFHBfJguE=/640x384/smart/filters:no_upscale()/s3/static.nrc.nl/bvhw/files/2020/03/data56631545-f25ac3.jpg",
+                    "Cyborgs",
+                    "In gesprek met James Lovelock, de profeet van moeder aarde",
+                    "Met kunstmatige intelligentie kunnen we de aarde redden, denkt James Lovelock. In de jaren zeventig ontwikkelde de 100-jarige chemicus de Gaia-hypothese, over de aarde als zelfregulerend systeem. Klimaatverandering bedreigt dat mechanisme.",
                     NewsPageItemModel.ItemType.ARTICLE
                 )
             )
