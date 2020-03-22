@@ -1,7 +1,6 @@
-package com.koray.nrcnewsapp.core.design.dummy
+package com.koray.nrcnewsapp.core.design.articlelist
 
-import java.util.ArrayList
-import java.util.HashMap
+import java.util.*
 
 /**
  * Helper class for providing sample content for user interfaces created by
@@ -26,33 +25,31 @@ object ArticleListDummyContent {
     init {
         // Add some sample items.
         for (i in 1..COUNT) {
-            addItem(createDummyItem(i))
+            addItem(
+                createDummyItem(
+                    i
+                )
+            )
         }
     }
 
     private fun addItem(item: DummyItem) {
         ITEMS.add(item)
-        ITEM_MAP.put(item.id, item)
+        ITEM_MAP[item.id] = item
     }
 
     private fun createDummyItem(position: Int): DummyItem {
-        var content = "Dit is een verzamelaarsgame ten top, met scherpe doch cartooneske graphics. Maar op een gegeven moment heb je het wel weer gezien."
-        return DummyItem(position.toString(), content, makeDetails(position))
-    }
-
-    private fun makeDetails(position: Int): String {
-        val builder = StringBuilder()
-        builder.append("Details about Item: ").append(position)
-        for (i in 0..position - 1) {
-            builder.append("\nMore details information here.")
-        }
-        return builder.toString()
+        val content = "Dit is een verzamelaarsgame ten top, met scherpe doch cartooneske graphics. Maar op een gegeven moment heb je het wel weer gezien."
+        return DummyItem(
+            position.toString(),
+            content
+        )
     }
 
     /**
      * A dummy item representing a piece of content.
      */
-    data class DummyItem(val id: String, val content: String, val details: String) {
+    data class DummyItem(val id: String, val content: String) {
         override fun toString(): String = content
     }
 }

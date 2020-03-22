@@ -1,4 +1,5 @@
 package com.koray.nrcnewsapp.core.abstraction
 
-interface ArticleItem: BaseArticle {
+interface Category {
+    var name: String?
 }

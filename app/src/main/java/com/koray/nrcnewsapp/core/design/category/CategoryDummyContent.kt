@@ -1,4 +1,4 @@
-package com.koray.nrcnewsapp.core.design.dummy
+package com.koray.nrcnewsapp.core.design.category
 
 import java.util.ArrayList
 import java.util.HashMap
@@ -23,13 +23,43 @@ object CategoryDummyContent {
 
     init {
 
-        addItem(DummyItem(1, "Games"))
-        addItem(DummyItem(2, "Technology"))
-        addItem(DummyItem(3, "Physics"))
+        addItem(
+            DummyItem(
+                1,
+                "Games"
+            )
+        )
+        addItem(
+            DummyItem(
+                2,
+                "Technology"
+            )
+        )
+        addItem(
+            DummyItem(
+                3,
+                "Physics"
+            )
+        )
 
-        addItem(DummyItem(4, "Brussel"))
-        addItem(DummyItem(5, "Koray"))
-        addItem(DummyItem(6, "Bever"))
+        addItem(
+            DummyItem(
+                4,
+                "Brussel"
+            )
+        )
+        addItem(
+            DummyItem(
+                5,
+                "Koray"
+            )
+        )
+        addItem(
+            DummyItem(
+                6,
+                "Bever"
+            )
+        )
     }
 
     private fun addItem(item: DummyItem) {
@@ -38,7 +68,10 @@ object CategoryDummyContent {
     }
 
     public fun createDummyItem(position: Int): DummyItem {
-        return DummyItem(position, "Item " + position)
+        return DummyItem(
+            position,
+            "Item " + position
+        )
     }
 
     /**

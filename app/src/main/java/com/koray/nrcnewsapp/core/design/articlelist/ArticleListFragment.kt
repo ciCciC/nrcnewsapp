@@ -7,12 +7,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.koray.nrcnewsapp.R
-import com.koray.nrcnewsapp.core.design.dummy.ArticleListDummyContent
 
-import com.koray.nrcnewsapp.core.design.dummy.ArticleListDummyContent.DummyItem
+import com.koray.nrcnewsapp.core.design.articlelist.ArticleListDummyContent.DummyItem
 import com.koray.nrcnewsapp.core.network.viewmodel.CategorySelectionModel
 
 /**
@@ -43,16 +41,21 @@ class ArticleListFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_article_list, container, false)
 
-        // Set the adapter
-        if (view is RecyclerView) {
-            with(view) {
-                layoutManager = when {
-                    columnCount <= 1 -> LinearLayoutManager(context)
-                    else -> GridLayoutManager(context, columnCount)
-                }
-                adapter = MyArticleListRecyclerViewAdapter(ArticleListDummyContent.ITEMS, listener)
-            }
-        }
+        val recyclerView = view.findViewById<RecyclerView>(R.id.articleListFragmentLayout)
+        recyclerView.layoutManager = LinearLayoutManager(context)
+
+//        // Set the adapter
+//        if (view is RecyclerView) {
+//            with(view) {
+//                layoutManager = when {
+//                    columnCount <= 1 -> LinearLayoutManager(context)
+//                    else -> GridLayoutManager(context, columnCount)
+//                }
+//                adapter = MyArticleListRecyclerViewAdapter(ArticleListDummyContent.ITEMS, listener)
+//            }
+//        }
+
+        recyclerView.adapter = ArticleListRecyclerViewAdapter(ArticleListDummyContent.ITEMS, listener)
 
         return view
     }
