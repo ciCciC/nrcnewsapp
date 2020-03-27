@@ -57,7 +57,7 @@ class ArticleListRecyclerViewAdapter(
 
     inner class ViewHolder(val mView: View) : RecyclerView.ViewHolder(mView) {
         //        val mIdView: TextView = mView.item_number
-        val mContentView: TextView = mView.article_item_content
+        val mContentView: TextView = mView.article_item_title
 
         override fun toString(): String {
             return super.toString() + " '" + mContentView.text + "'"
