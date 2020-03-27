@@ -68,7 +68,7 @@ class NrcActivity : AppCompatActivity(),
 
     // TODO
     private fun initNewsPageFragment() {
-        val newsPageFragment: NewsPageFragment = NewsPageFragment.newInstance(1)
+        val newsPageFragment: NewsPageFragment = NewsPageFragment.newInstance()
         FragmentAnimation.rightBottomToLeftTop(supportFragmentManager)
             .add(
                 R.id.news_page_container,
