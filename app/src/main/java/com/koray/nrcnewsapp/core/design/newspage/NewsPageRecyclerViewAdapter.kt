@@ -9,12 +9,14 @@ import com.koray.nrcnewsapp.R
 import com.koray.nrcnewsapp.core.design.newspage.NewsPageFragment.CategoryOnListInteractionListener
 import com.koray.nrcnewsapp.core.design.newspage.NewsPageFragment.OnListFragmentInteractionListener
 import com.koray.nrcnewsapp.core.design.newspage.dummy.NewsPageDummyContent.DummyItem
+import com.koray.nrcnewsapp.core.design.util.ImageManager
 import com.koray.nrcnewsapp.core.design.viewholders.ArticleViewHolder
 import com.koray.nrcnewsapp.core.design.viewholders.BaseViewHolder
 import com.koray.nrcnewsapp.core.design.viewholders.CategoryViewHolder
 import com.koray.nrcnewsapp.core.domain.ArticleItemModel
 import com.koray.nrcnewsapp.core.domain.CategoryItemModel
 import com.koray.nrcnewsapp.core.domain.NewsPageItemModel
+import com.squareup.picasso.Picasso
 
 /**
  * [RecyclerView.Adapter] that can display a [DummyItem] and makes a call to the
@@ -72,6 +74,7 @@ class NewsPageRecyclerViewAdapter(
             }
             is ArticleViewHolder -> {
                 if(item is ArticleItemModel){
+                    ImageManager.loadImage(holder.mView, holder.articleItemImg, item.imageLink!!)
                     holder.topic.text = item.topic?.toUpperCase()
                     holder.title.text = item.title
                     holder.teaser.text = item.teaser
