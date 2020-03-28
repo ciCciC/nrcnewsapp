@@ -16,7 +16,7 @@ import kotlinx.android.synthetic.main.fragment_category_item.view.*
  */
 class CategoryItemRecyclerViewAdapter(
     private val mValues: List<CategoryItemModel>,
-    private val mListener: NewsPageFragment.CategoryOnListInteractionListener?
+    private val mListener: CategoryOnListInteractionListener?
 ) : RecyclerView.Adapter<CategoryItemRecyclerViewAdapter.ViewHolder>() {
 
     private val mOnClickListener: View.OnClickListener

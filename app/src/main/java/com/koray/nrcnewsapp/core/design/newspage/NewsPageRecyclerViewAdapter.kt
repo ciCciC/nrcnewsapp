@@ -6,9 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.koray.nrcnewsapp.R
-import com.koray.nrcnewsapp.core.design.newspage.NewsPageFragment.CategoryOnListInteractionListener
-import com.koray.nrcnewsapp.core.design.newspage.NewsPageFragment.OnListFragmentInteractionListener
-import com.koray.nrcnewsapp.core.design.newspage.dummy.NewsPageDummyContent.DummyItem
+import com.koray.nrcnewsapp.core.design.category.CategoryOnListInteractionListener
 import com.koray.nrcnewsapp.core.design.util.ImageManager
 import com.koray.nrcnewsapp.core.design.viewholders.ArticleViewHolder
 import com.koray.nrcnewsapp.core.design.viewholders.BaseViewHolder
@@ -16,17 +14,16 @@ import com.koray.nrcnewsapp.core.design.viewholders.CategoryViewHolder
 import com.koray.nrcnewsapp.core.domain.ArticleItemModel
 import com.koray.nrcnewsapp.core.domain.CategoryItemModel
 import com.koray.nrcnewsapp.core.domain.NewsPageItemModel
-import com.squareup.picasso.Picasso
 
 /**
  * [RecyclerView.Adapter] that can display a [DummyItem] and makes a call to the
- * specified [OnListFragmentInteractionListener].
+ * specified [NewsPageOnListFragmentInteractionListener].
  * TODO: Replace the implementation with code for your data type.
  */
 class NewsPageRecyclerViewAdapter(
     private val mValues: List<NewsPageItemModel>,
     private val mValuesMap: Map<NewsPageItemModel.ItemType, Any>,
-    private val mListener: OnListFragmentInteractionListener?,
+    private val mListenerNewsPage: NewsPageOnListFragmentInteractionListener?,
     private val mCategoryListener: CategoryOnListInteractionListener?
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -37,7 +34,7 @@ class NewsPageRecyclerViewAdapter(
     init {
         mOnClickListener = View.OnClickListener { v ->
             val item = v.tag as NewsPageItemModel
-            mListener?.onListFragmentInteraction(item)
+            mListenerNewsPage?.onListFragmentInteraction(item)
         }
     }
 

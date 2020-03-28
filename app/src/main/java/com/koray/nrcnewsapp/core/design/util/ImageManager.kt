@@ -1,6 +1,5 @@
 package com.koray.nrcnewsapp.core.design.util
 
-import android.content.Context
 import android.graphics.*
 import android.view.View
 import android.widget.ImageView
@@ -14,25 +13,27 @@ object ImageManager {
     fun loadImage(view: View, image: ImageView, imgUrl: String) {
         Picasso.with(view.context)
             .load(imgUrl)
-            .error(R.drawable.noimage)
-            .transform(RoundTransformation(20f, 0f))
+            .error(R.drawable.test_deadstranding)
+            .transform(BottomRoundTransformation(80f, 0f))
             .centerCrop()
             .fit()
             .into(image)
     }
 
-    fun loadImage(context: Context, image: ImageView, imgUrl: String) {
-        Picasso.with(context)
-            .load(imgUrl)
-            .error(R.drawable.noimage)
-            .centerCrop()
-            .fit()
-            .into(image)
-    }
+//    fun loadImage(view: View, image: ImageView, imgUrl: String, transformation: Transformation) {
+//        Picasso.with(view.context)
+//            .load(imgUrl)
+//            .error(R.drawable.test_deadstranding)
+//            .transform(transformation)
+//            .centerCrop()
+//            .fit()
+//            .into(image)
+//    }
 
-    private class RoundTransformation(val radius: Float, val margin: Float) : Transformation {
+    private class BottomRoundTransformation(val radius: Float, val margin: Float) : Transformation {
 
         override fun transform(source: Bitmap): Bitmap {
+
             val paint = Paint()
             paint.isAntiAlias = true
             paint.shader = BitmapShader(
@@ -44,21 +45,15 @@ object ImageManager {
                 source.width, source.height,
                 Bitmap.Config.ARGB_8888
             )
+
             val canvas = Canvas(output)
 
             val right: Float = source.width - margin
-            val mDiameter = radius * 2
+            val diameter = radius * 2
             val bottom = source.height - margin
 
-            canvas.drawRoundRect(
-                RectF(
-                    margin, margin, source.width - margin,
-                    source.height - margin
-                ), radius, radius, paint
-            )
-
-//            drawBottomLeftRoundRect(canvas, paint, right, bottom, mDiameter)
-//            drawBottomRightRoundRect(canvas, paint, right, bottom, mDiameter)
+            drawBottomLeftRoundRect(canvas, paint, right, bottom, diameter)
+            drawBottomRightRoundRect(canvas, paint, right, bottom, diameter)
 
             if (source !== output) {
                 source.recycle()
@@ -78,17 +73,23 @@ object ImageManager {
                 radius, radius, paint
             )
             canvas.drawRect(RectF(margin, margin, margin + mDiameter, bottom - radius), paint)
-//            canvas.drawRect(RectF(margin + radius, margin, right, bottom), paint)
+            canvas.drawRect(RectF(margin + radius, margin, right / 2, bottom), paint)
         }
 
-        fun drawBottomRightRoundRect(canvas: Canvas, paint: Paint, right: Float, bottom: Float, mDiameter: Float) {
+        fun drawBottomRightRoundRect(
+            canvas: Canvas,
+            paint: Paint,
+            right: Float,
+            bottom: Float,
+            mDiameter: Float
+        ) {
             canvas.drawRoundRect(
                 RectF(right - mDiameter, bottom - mDiameter, right, bottom), radius,
                 radius, paint
             )
-//            canvas.drawRect(RectF(margin, margin, right - radius, bottom), paint)
+            canvas.drawRect(RectF((right / 2), margin, right - radius, bottom), paint)
             canvas.drawRect(
-                RectF(right - radius, margin, right, bottom - radius),
+                RectF((right - radius), margin, right, bottom - radius),
                 paint
             )
         }

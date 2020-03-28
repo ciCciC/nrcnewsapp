@@ -8,26 +8,22 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.koray.nrcnewsapp.R
+import com.koray.nrcnewsapp.core.design.category.CategoryOnListInteractionListener
 import com.koray.nrcnewsapp.core.design.util.inject
 import com.koray.nrcnewsapp.core.domain.*
 import com.koray.nrcnewsapp.core.network.repository.ArticleRepository
 import com.koray.nrcnewsapp.core.network.repository.CategoryRepository
 import com.koray.nrcnewsapp.core.network.viewmodel.CategorySelectionModel
-import com.koray.nrcnewsapp.core.network.viewmodel.CustomViewModelFactory
-import com.koray.nrcnewsapp.core.network.viewmodel.LiveArticlesModel
-import com.koray.nrcnewsapp.core.network.viewmodel.LiveCategoriesModel
 import java.util.*
 import kotlin.collections.ArrayList
 
 
 class NewsPageFragment : Fragment() {
 
-    private var listener: OnListFragmentInteractionListener? = null
+    private var listenerNewsPage: NewsPageOnListFragmentInteractionListener? = null
     private var categoryListener: CategoryOnListInteractionListener? = null
 
     private val categoryRepository: CategoryRepository by inject()
@@ -59,7 +55,7 @@ class NewsPageFragment : Fragment() {
                 adapter = NewsPageRecyclerViewAdapter(
                     newsPageItemList,
                     newsPageItemMap,
-                    listener,
+                    listenerNewsPage,
                     categoryListener
                 )
             }
@@ -132,28 +128,20 @@ class NewsPageFragment : Fragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
-        if (context is OnListFragmentInteractionListener)
-            listener = context
+        if (context is NewsPageOnListFragmentInteractionListener)
+            listenerNewsPage = context
 
         if (context is CategoryOnListInteractionListener)
             categoryListener = context
 
-        if (context !is OnListFragmentInteractionListener || (context !is CategoryOnListInteractionListener))
+        if (context !is NewsPageOnListFragmentInteractionListener || (context !is CategoryOnListInteractionListener))
             throw RuntimeException("$context must implement OnListFragmentInteractionListener")
     }
 
     override fun onDetach() {
         super.onDetach()
-        listener = null
+        listenerNewsPage = null
         categoryListener = null
-    }
-
-    interface OnListFragmentInteractionListener {
-        fun onListFragmentInteraction(newsPageItem: NewsPageItemModel?)
-    }
-
-    interface CategoryOnListInteractionListener {
-        fun onListFragmentInteraction(category: CategoryItemModel?)
     }
 
     companion object {
