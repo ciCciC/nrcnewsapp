@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.activityViewModels
+import com.koray.nrcnewsapp.core.design.articlepage.ArticlePageFragment
 import com.koray.nrcnewsapp.core.design.category.CategoryItemFragment
 import com.koray.nrcnewsapp.core.design.category.CategoryOnListInteractionListener
 import com.koray.nrcnewsapp.core.design.newspage.NewsPageFragment
@@ -16,6 +18,7 @@ import com.koray.nrcnewsapp.core.domain.CategoryItemModel
 import com.koray.nrcnewsapp.core.domain.NewsPageItemModel
 import com.koray.nrcnewsapp.core.network.repository.ArticleRepository
 import com.koray.nrcnewsapp.core.network.repository.CategoryRepository
+import com.koray.nrcnewsapp.core.network.viewmodel.ArticleSelectionModel
 import com.koray.nrcnewsapp.core.network.viewmodel.CategorySelectionModel
 import javax.inject.Singleton
 
@@ -32,6 +35,7 @@ class NrcActivity : AppCompatActivity(),
     }
 
     private val categorySelectionModel: CategorySelectionModel by viewModels()
+    private val articleItemSelectionModel: ArticleSelectionModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,6 +79,18 @@ class NrcActivity : AppCompatActivity(),
             .commit()
     }
 
+    private fun initArticlePageFragment() {
+        val articlePageFragment: ArticlePageFragment = ArticlePageFragment.newInstance()
+        FragmentAnimation.rightBottomToLeftTop(supportFragmentManager)
+            .add(
+                R.id.news_page_container,
+                articlePageFragment,
+                ArticlePageFragment.getTagName()
+            )
+            .addToBackStack(null)
+            .commit()
+    }
+
     private fun showFillInMsgUiThread(msg: String) {
         this.runOnUiThread {
             initToastMsg(
@@ -95,7 +111,9 @@ class NrcActivity : AppCompatActivity(),
     }
 
     override fun onListFragmentInteraction(newsPageItem: NewsPageItemModel?) {
-        if (newsPageItem is ArticleItemModel)
-            showFillInMsgUiThread(newsPageItem.teaser.toString())
+        if (newsPageItem is ArticleItemModel) {
+            articleItemSelectionModel.setArticleItemModel(newsPageItem)
+            initArticlePageFragment()
+        }
     }
 }

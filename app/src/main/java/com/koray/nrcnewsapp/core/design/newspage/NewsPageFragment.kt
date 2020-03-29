@@ -16,6 +16,7 @@ import com.koray.nrcnewsapp.core.design.util.inject
 import com.koray.nrcnewsapp.core.domain.*
 import com.koray.nrcnewsapp.core.network.repository.ArticleRepository
 import com.koray.nrcnewsapp.core.network.repository.CategoryRepository
+import com.koray.nrcnewsapp.core.network.viewmodel.ArticleSelectionModel
 import com.koray.nrcnewsapp.core.network.viewmodel.CategorySelectionModel
 import java.util.*
 import kotlin.collections.ArrayList
