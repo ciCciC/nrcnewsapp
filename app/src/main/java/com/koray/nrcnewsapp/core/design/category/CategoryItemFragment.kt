@@ -25,7 +25,7 @@ import com.koray.nrcnewsapp.core.network.viewmodel.LiveCategoriesModel
  */
 class CategoryItemFragment : Fragment() {
 
-    private var listener: NewsPageFragment.CategoryOnListInteractionListener? = null
+    private var listener: CategoryOnListInteractionListener? = null
 
     private val categoryRepository: CategoryRepository by inject()
 
@@ -68,7 +68,7 @@ class CategoryItemFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if (context is NewsPageFragment.CategoryOnListInteractionListener) {
+        if (context is CategoryOnListInteractionListener) {
             listener = context
         } else {
             throw RuntimeException("$context must implement OnListFragmentInteractionListener")

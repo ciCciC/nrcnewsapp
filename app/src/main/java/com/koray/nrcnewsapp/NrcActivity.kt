@@ -5,29 +5,25 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import com.koray.nrcnewsapp.core.design.category.CategoryItemFragment
+import com.koray.nrcnewsapp.core.design.category.CategoryOnListInteractionListener
 import com.koray.nrcnewsapp.core.design.newspage.NewsPageFragment
+import com.koray.nrcnewsapp.core.design.newspage.NewsPageOnListFragmentInteractionListener
 import com.koray.nrcnewsapp.core.design.util.FragmentAnimation
 import com.koray.nrcnewsapp.core.design.util.inject
 import com.koray.nrcnewsapp.core.domain.ArticleItemModel
-import com.koray.nrcnewsapp.core.domain.ArticleItemTestModel
 import com.koray.nrcnewsapp.core.domain.CategoryItemModel
 import com.koray.nrcnewsapp.core.domain.NewsPageItemModel
 import com.koray.nrcnewsapp.core.network.repository.ArticleRepository
 import com.koray.nrcnewsapp.core.network.repository.CategoryRepository
 import com.koray.nrcnewsapp.core.network.viewmodel.CategorySelectionModel
-import com.koray.nrcnewsapp.core.network.viewmodel.CustomViewModelFactory
-import com.koray.nrcnewsapp.core.network.viewmodel.LiveArticlesModel
-import com.koray.nrcnewsapp.core.network.viewmodel.LiveCategoriesModel
 import javax.inject.Singleton
 
 
 @Singleton
 class NrcActivity : AppCompatActivity(),
-    NewsPageFragment.CategoryOnListInteractionListener,
-    NewsPageFragment.OnListFragmentInteractionListener {
+    CategoryOnListInteractionListener,
+    NewsPageOnListFragmentInteractionListener {
 
     private val articleRepository: ArticleRepository by inject()
     private val categoryRepository: CategoryRepository by inject()

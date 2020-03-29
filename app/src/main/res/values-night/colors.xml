@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#FF323232</color>
     <color name="colorPrimaryDark">#FF323232</color>
-    <color name="colorTextPrimary">#D81B60</color>
+    <color name="colorTextPrimary">#FFFFFF</color>
     <color name="colorTextBar">#D50000</color>
     <color name="colorTextTopic">#D50000</color>
 </resources>
