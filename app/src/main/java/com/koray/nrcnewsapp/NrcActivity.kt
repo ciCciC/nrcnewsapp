@@ -28,11 +28,11 @@ class NrcActivity : AppCompatActivity(),
     CategoryOnListInteractionListener,
     NewsPageOnListFragmentInteractionListener {
 
-    private val articleRepository: ArticleRepository by inject()
-    private val categoryRepository: CategoryRepository by inject()
-    private val categoryItemFragment: CategoryItemFragment by lazy {
-        CategoryItemFragment.newInstance()
-    }
+//    private val articleRepository: ArticleRepository by inject()
+//    private val categoryRepository: CategoryRepository by inject()
+//    private val categoryItemFragment: CategoryItemFragment by lazy {
+//        CategoryItemFragment.newInstance()
+//    }
 
     private val categorySelectionModel: CategorySelectionModel by viewModels()
     private val articleItemSelectionModel: ArticleSelectionModel by viewModels()
@@ -51,20 +51,8 @@ class NrcActivity : AppCompatActivity(),
             } // Night mode is active, we're using dark theme
         }
 
-//        initCategoryListFragment()
         initNewsPageFragment()
-//        initArticleRandomListFragment()
     }
-
-//    private fun initArticleRandomListFragment(){
-//        val articleListFragment: ArticleListFragment = ArticleListFragment.newInstance(1)
-//        FragmentAnimation.rightBottomToLeftTop(supportFragmentManager)
-//            .add(R.id.article_random_list_container,
-//                articleListFragment,
-//                ArticleListFragment.getTagName())
-//            .addToBackStack(null)
-//            .commit()
-//    }
 
     // TODO
     private fun initNewsPageFragment() {
@@ -106,8 +94,8 @@ class NrcActivity : AppCompatActivity(),
 
     override fun onListFragmentInteraction(category: CategoryItemModel?) {
         categorySelectionModel.setCategory(category?.name.toString())
-        showFillInMsgUiThread(category?.name.toString())
-        println("Clicked category")
+//        showFillInMsgUiThread(category?.name.toString())
+        println("Clicked category: $category")
     }
 
     override fun onListFragmentInteraction(newsPageItem: NewsPageItemModel?) {

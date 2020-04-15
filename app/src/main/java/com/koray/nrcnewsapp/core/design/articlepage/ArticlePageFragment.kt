@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import com.koray.nrcnewsapp.R
 import com.koray.nrcnewsapp.core.design.viewholders.ArticlePageViewHolder
 import com.koray.nrcnewsapp.core.domain.ArticleItemModel
@@ -27,6 +26,7 @@ class ArticlePageFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_article_page, container, false)
 
         val articleItemSelectionModel: ArticleSelectionModel by activityViewModels()
+
         articleItemSelectionModel.getArticleItemModel().observe(viewLifecycleOwner, Observer { articleItem ->
             initArticlePage(view, articleItem)
         })

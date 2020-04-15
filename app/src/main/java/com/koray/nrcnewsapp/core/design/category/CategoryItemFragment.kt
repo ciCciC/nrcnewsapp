@@ -18,11 +18,7 @@ import com.koray.nrcnewsapp.core.network.repository.CategoryRepository
 import com.koray.nrcnewsapp.core.network.viewmodel.CustomViewModelFactory
 import com.koray.nrcnewsapp.core.network.viewmodel.LiveCategoriesModel
 
-/**
- * A fragment representing a list of Items.
- * Activities containing this fragment MUST implement the
- * [CategoryItemFragment.OnListFragmentInteractionListener] interface.
- */
+
 class CategoryItemFragment : Fragment() {
 
     private var listener: CategoryOnListInteractionListener? = null
@@ -58,11 +54,10 @@ class CategoryItemFragment : Fragment() {
     }
 
     private fun fetchCategories() {
-
         val model = ViewModelProviders.of(this, CustomViewModelFactory(categoryRepository)).get(
             LiveCategoriesModel::class.java)
-        model.getCategories().observe(viewLifecycleOwner, Observer<List<CategoryItemModel>> { model ->
-            model.forEach { x -> categoriesList.add(x) }
+        model.getCategories().observe(viewLifecycleOwner, Observer { categoryModel ->
+            categoryModel.forEach { x -> categoriesList.add(x) }
         })
     }
 
@@ -80,20 +75,14 @@ class CategoryItemFragment : Fragment() {
         listener = null
     }
 
-    interface OnListFragmentInteractionListener {
-        fun onListFragmentInteraction(category: String?)
-    }
+//    interface OnListFragmentInteractionListener {
+//        fun onListFragmentInteraction(category: String?)
+//    }
 
     companion object {
-        // TODO: Customize parameter initialization
         @JvmStatic
         fun newInstance() =
             CategoryItemFragment()
-//            CategoryItemFragment().apply {
-//                arguments = Bundle().apply {
-//                    putInt(ARG_COLUMN_COUNT, columnCount)
-//                }
-//            }
 
         fun getTagName(): String? {
             return CategoryItemFragment::class.java.name

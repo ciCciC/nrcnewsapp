@@ -14,12 +14,9 @@ import com.koray.nrcnewsapp.core.design.viewholders.CategoryViewHolder
 import com.koray.nrcnewsapp.core.domain.ArticleItemModel
 import com.koray.nrcnewsapp.core.domain.CategoryItemModel
 import com.koray.nrcnewsapp.core.domain.NewsPageItemModel
+import java.util.*
 
-/**
- * [RecyclerView.Adapter] that can display a [DummyItem] and makes a call to the
- * specified [NewsPageOnListFragmentInteractionListener].
- * TODO: Replace the implementation with code for your data type.
- */
+
 class NewsPageRecyclerViewAdapter(
     private val mValues: List<NewsPageItemModel>,
     private val mValuesMap: Map<NewsPageItemModel.ItemType, Any>,
@@ -72,7 +69,7 @@ class NewsPageRecyclerViewAdapter(
             is ArticleViewHolder -> {
                 if(item is ArticleItemModel){
                     ImageManager.loadImage(holder.mView, holder.articleItemImg, item.imageLink!!)
-                    holder.topic.text = item.topic?.toUpperCase()
+                    holder.topic.text = item.topic?.toUpperCase(Locale.ROOT)
                     holder.title.text = item.title
                     holder.teaser.text = item.teaser
                     with(holder.mView) {

@@ -47,7 +47,7 @@ class NewsPageFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_news_page_list, container, false)
 
         fetchCategoryNames()
-        fetchArticles()
+//        fetchArticles()
 
         // Set the adapter
         if (view is RecyclerView) {
@@ -122,8 +122,10 @@ class NewsPageFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         categorySelectionModel.getCategory().observe(viewLifecycleOwner, Observer { category ->
-            println("Selected: $category")
+            println("Selected DERP: $category")
         })
+
+        fetchArticles()
     }
 
     override fun onAttach(context: Context) {
