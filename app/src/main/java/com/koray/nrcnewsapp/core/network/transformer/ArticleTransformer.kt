@@ -1,9 +1,12 @@
-package com.koray.nrcnewsapp.core.network.dto
+package com.koray.nrcnewsapp.core.network.transformer
 
 import com.koray.nrcnewsapp.core.domain.ArticleItemModel
-import com.koray.nrcnewsapp.core.domain.ArticleModel
+import com.koray.nrcnewsapp.core.domain.ArticlePageModel
+import com.koray.nrcnewsapp.core.domain.NewsPageItemModel
+import com.koray.nrcnewsapp.core.network.dto.ArticleItemDto
+import com.koray.nrcnewsapp.core.network.dto.ArticlePageDto
 
-object Transformer {
+object ArticleTransformer {
 
     fun toModel(articleItemDto: ArticleItemDto): ArticleItemModel {
         return ArticleItemModel(
@@ -11,12 +14,13 @@ object Transformer {
             articleItemDto.imageLink,
             articleItemDto.topic,
             articleItemDto.title,
-            articleItemDto.teaser
+            articleItemDto.teaser,
+            NewsPageItemModel.ItemType.ARTICLE
         )
     }
 
-    fun toModel(articleDto: ArticleDto): ArticleModel {
-        return ArticleModel(
+    fun toModel(articleDto: ArticlePageDto): ArticlePageModel {
+        return ArticlePageModel(
             articleDto.sectionList,
             articleDto.pageLink,
             articleDto.imageLink,
@@ -36,14 +40,14 @@ object Transformer {
         )
     }
 
-    fun toDto(articleModel: ArticleModel): ArticleDto {
-        return ArticleDto(
-            articleModel.sectionList,
+    fun toDto(articleModel: ArticlePageModel): ArticlePageDto {
+        return ArticlePageDto(
             articleModel.pageLink,
             articleModel.imageLink,
             articleModel.topic,
             articleModel.title,
-            articleModel.teaser
+            articleModel.teaser,
+            articleModel.sectionList
         )
     }
 }

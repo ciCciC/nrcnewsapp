@@ -1,16 +1,14 @@
 package com.koray.nrcnewsapp.core.design.articlelist
 
-import androidx.recyclerview.widget.RecyclerView
+
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
 import com.koray.nrcnewsapp.R
-
-
 import com.koray.nrcnewsapp.core.design.articlelist.ArticleListFragment.OnListFragmentInteractionListener
-import com.koray.nrcnewsapp.core.design.dummy.ArticleListDummyContent.DummyItem
-
+import com.koray.nrcnewsapp.core.design.articlelist.ArticleListDummyContent.DummyItem
 import kotlinx.android.synthetic.main.fragment_article_item.view.*
 
 /**
@@ -18,12 +16,14 @@ import kotlinx.android.synthetic.main.fragment_article_item.view.*
  * specified [OnListFragmentInteractionListener].
  * TODO: Replace the implementation with code for your data type.
  */
-class MyArticleListRecyclerViewAdapter(
-        private val mValues: List<DummyItem>,
-        private val mListener: OnListFragmentInteractionListener?)
-    : RecyclerView.Adapter<MyArticleListRecyclerViewAdapter.ViewHolder>() {
+class ArticleListRecyclerViewAdapter(
+    private val mValues: List<DummyItem>,
+    private val mListener: OnListFragmentInteractionListener?
+) : RecyclerView.Adapter<ArticleListRecyclerViewAdapter.ViewHolder>() {
 
     private val mOnClickListener: View.OnClickListener
+//    private val CATEGORY = 1
+//    private val ARTICLE = 2
 
     init {
         mOnClickListener = View.OnClickListener { v ->
@@ -36,12 +36,14 @@ class MyArticleListRecyclerViewAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.fragment_article_item, parent, false)
+            .inflate(R.layout.fragment_article_item, parent, false)
+
         return ViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = mValues[position]
+
 //        holder.mIdView.text = item.id
         holder.mContentView.text = item.content
 
@@ -54,8 +56,8 @@ class MyArticleListRecyclerViewAdapter(
     override fun getItemCount(): Int = mValues.size
 
     inner class ViewHolder(val mView: View) : RecyclerView.ViewHolder(mView) {
-//        val mIdView: TextView = mView.item_number
-        val mContentView: TextView = mView.content
+        //        val mIdView: TextView = mView.item_number
+        val mContentView: TextView = mView.article_item_title
 
         override fun toString(): String {
             return super.toString() + " '" + mContentView.text + "'"
