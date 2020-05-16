@@ -7,14 +7,6 @@ class CategorySelectionModel : ViewModel() {
 
     private val category = MutableLiveData<String>()
 
-    init {
-        category.value = ""
-    }
-
-    fun isEmpty(): Boolean {
-        return category.value!!.isEmpty()
-    }
-
     fun getCategory(): MutableLiveData<String> {
         return this.category
     }

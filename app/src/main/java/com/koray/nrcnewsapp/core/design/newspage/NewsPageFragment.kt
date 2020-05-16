@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.koray.nrcnewsapp.R
@@ -16,8 +17,9 @@ import com.koray.nrcnewsapp.core.design.util.inject
 import com.koray.nrcnewsapp.core.domain.*
 import com.koray.nrcnewsapp.core.network.repository.ArticleRepository
 import com.koray.nrcnewsapp.core.network.repository.CategoryRepository
-import com.koray.nrcnewsapp.core.network.viewmodel.ArticleSelectionModel
 import com.koray.nrcnewsapp.core.network.viewmodel.CategorySelectionModel
+import com.koray.nrcnewsapp.core.network.viewmodel.CustomViewModelFactory
+import com.koray.nrcnewsapp.core.network.viewmodel.LiveArticlesModel
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -36,6 +38,11 @@ class NewsPageFragment : Fragment() {
     private val newsPageItemMap: MutableMap<NewsPageItemModel.ItemType, Any> =
         EnumMap(NewsPageItemModel.ItemType::class.java)
 
+    private lateinit var newsPagerAdapter: NewsPageRecyclerViewAdapter
+
+    private lateinit var categoryList: List<CategoryItemModel>
+    private var selectedCategory = "";
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -47,18 +54,18 @@ class NewsPageFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_news_page_list, container, false)
 
         fetchCategoryNames()
-//        fetchArticles()
 
         // Set the adapter
         if (view is RecyclerView) {
+            newsPagerAdapter = NewsPageRecyclerViewAdapter(
+                newsPageItemList,
+                newsPageItemMap,
+                listenerNewsPage,
+                categoryListener
+            )
             with(view) {
                 layoutManager = LinearLayoutManager(context)
-                adapter = NewsPageRecyclerViewAdapter(
-                    newsPageItemList,
-                    newsPageItemMap,
-                    listenerNewsPage,
-                    categoryListener
-                )
+                adapter = newsPagerAdapter
             }
         }
         return view
@@ -84,10 +91,8 @@ class NewsPageFragment : Fragment() {
     }
 
     private fun fetchDummyCategoryNames() {
-        val categoryList =
+        categoryList =
             arrayListOf("games", "physics", "technology").map { x -> CategoryItemModel(x) }
-                .toMutableList()
-        categoryList.addAll((1..10).map { CategoryItemModel("Lolz") })
 
         val categoryListItemModel =
             CategoryListItemModel(categoryList, NewsPageItemModel.ItemType.CATEGORY)
@@ -95,11 +100,21 @@ class NewsPageFragment : Fragment() {
         newsPageItemMap[NewsPageItemModel.ItemType.CATEGORY] = categoryList
     }
 
-    private fun fetchArticles() {
-        fetchDummyArticleItems()
-//        val model = ViewModelProviders.of(this, CustomViewModelFactory(articleRepository))
-//            .get(LiveArticlesModel::class.java)
-//        model.getArticleItems().observe(viewLifecycleOwner, Observer { models ->
+    private fun fetchArticles(category: String) {
+//        fetchDummyArticleItems()
+
+        val articlesModel = ViewModelProviders.of(this, CustomViewModelFactory(articleRepository))
+            .get(LiveArticlesModel::class.java)
+
+        // With chosen category
+        articlesModel.getAllByCategory(category).observe(viewLifecycleOwner, Observer { models ->
+            newsPageItemList.removeAll { item -> item.itemType!! == NewsPageItemModel.ItemType.ARTICLE }
+            newsPageItemList.addAll(models)
+            newsPagerAdapter.notifyDataSetChanged()
+        })
+
+//         Without chosen category
+//        articlesModel.getArticleItems().observe(viewLifecycleOwner, Observer { models ->
 //            newsPageItemList.addAll(models)
 //        })
     }
@@ -123,9 +138,19 @@ class NewsPageFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         categorySelectionModel.getCategory().observe(viewLifecycleOwner, Observer { category ->
             println("Selected DERP: $category")
+            selectedCategory = category
+            fetchArticles(category)
         })
 
-        fetchArticles()
+        if(selectedCategory.isEmpty()){
+            fetchInitArticles()
+        }
+    }
+
+    fun fetchInitArticles() {
+        val initCategory = categoryList[0].name.toString()
+        fetchArticles(initCategory)
+        categorySelectionModel.setCategory(initCategory)
     }
 
     override fun onAttach(context: Context) {

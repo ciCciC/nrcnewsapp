@@ -26,9 +26,9 @@ class ArticleRepository: BaseRepository {
         return data
     }
 
-    fun getArticle(articleItemDto: ArticleItemDto): LiveData<ArticlePageDto> {
+    fun getArticle(articleItemDto: ArticleItemDto, category: String): LiveData<ArticlePageDto> {
         val data = MutableLiveData<ArticlePageDto>()
-        data.value = this.nrcScraperClient.getArticle(articleItemDto)
+        data.value = this.nrcScraperClient.getArticle(articleItemDto, category)
         return data
     }
 

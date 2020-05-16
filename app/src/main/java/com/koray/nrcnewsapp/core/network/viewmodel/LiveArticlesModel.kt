@@ -23,12 +23,12 @@ class LiveArticlesModel @Inject constructor(
         return transform(this.articleRepository.getAllByCategory(category))
     }
 
-    fun getArticle(articleItemModel: ArticleItemModel): MutableLiveData<ArticlePageModel> {
+    fun getArticle(articleItemModel: ArticleItemModel, category: String): MutableLiveData<ArticlePageModel> {
         val dto = ArticleTransformer.toDto(articleItemModel)
 
         val mutableLiveData = MutableLiveData<ArticlePageModel>()
         val retrieved =
-            this.articleRepository.getArticle(dto).value!! // TODO replace with better null check
+            this.articleRepository.getArticle(dto, category).value!! // TODO replace with better null check
         mutableLiveData.value = ArticleTransformer.toModel(retrieved)
         return mutableLiveData
     }

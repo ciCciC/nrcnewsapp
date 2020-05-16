@@ -25,7 +25,9 @@ class NrcScraperClient(
 
     fun getAllByCategory(category: String): List<ArticleItemDto> {
         val req = HttpRequest.GET<Any>("/" + ApiStore.CATEGORY + "/" + category)
-        return this.httpClient.toBlocking().retrieve(req, Argument.listOf(ArticleItemDto::class.java))
+        return this.httpClient
+            .toBlocking()
+            .retrieve(req, Argument.listOf(ArticleItemDto::class.java))
     }
 
     fun getCategories(): List<String> {
@@ -33,8 +35,8 @@ class NrcScraperClient(
         return this.httpClient.toBlocking().retrieve(req, Argument.listOf(String::class.java))
     }
 
-    fun getArticle(articleItemDto: ArticleItemDto): ArticlePageDto {
-        val req = HttpRequest.POST<Any>("/" + ApiStore.CATEGORY + "/" + ApiStore.ARTICLE, articleItemDto)
+    fun getArticle(articleItemDto: ArticleItemDto, category: String): ArticlePageDto {
+        val req = HttpRequest.POST<Any>("/" + ApiStore.CATEGORY + "/" + category + "/" + ApiStore.ARTICLE, articleItemDto)
         return this.httpClient.toBlocking().retrieve(req, ArticlePageDto::class.java)
     }
 

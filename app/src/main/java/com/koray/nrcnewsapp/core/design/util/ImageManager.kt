@@ -11,24 +11,36 @@ import com.squareup.picasso.Transformation
 object ImageManager {
 
     fun loadImage(view: View, image: ImageView, imgUrl: String) {
-        Picasso.with(view.context)
-            .load(imgUrl)
+        loadImage(view, image, imgUrl, false)
+    }
+
+    fun loadImage(view: View, image: ImageView, imgUrl: String, roundImage: Boolean) {
+
+        val picasso = Picasso.with(view.context)
+
+        if(imgUrl.isEmpty()) {
+            picasso.load(R.drawable.test_deadstranding)
+        } else {
+            picasso.load(imgUrl)
+        }
+
             .error(R.drawable.test_deadstranding)
-            .transform(BottomRoundTransformation(80f, 0f))
+            .transform(if(roundImage) BottomRoundTransformation(80f, 0f) else NoRoundTransformation())
             .centerCrop()
             .fit()
             .into(image)
     }
 
-//    fun loadImage(view: View, image: ImageView, imgUrl: String, transformation: Transformation) {
-//        Picasso.with(view.context)
-//            .load(imgUrl)
-//            .error(R.drawable.test_deadstranding)
-//            .transform(transformation)
-//            .centerCrop()
-//            .fit()
-//            .into(image)
-//    }
+    private class NoRoundTransformation(): Transformation {
+        override fun key(): String {
+            return "noRound"
+        }
+
+        override fun transform(source: Bitmap?): Bitmap {
+            return source!!
+        }
+
+    }
 
     private class BottomRoundTransformation(val radius: Float, val margin: Float) : Transformation {
 
@@ -95,7 +107,7 @@ object ImageManager {
         }
 
         override fun key(): String {
-            return "square()"
+            return "bottomRound"
         }
     }
 }

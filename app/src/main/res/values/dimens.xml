@@ -2,4 +2,5 @@
 <resources>
     <dimen name="text_margin">16dp</dimen>
     <dimen name="article_margin">16dp</dimen>
+    <dimen name="article_content_margin">12dp</dimen>
 </resources>

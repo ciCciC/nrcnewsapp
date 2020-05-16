@@ -42,12 +42,12 @@ object ArticleTransformer {
 
     fun toDto(articleModel: ArticlePageModel): ArticlePageDto {
         return ArticlePageDto(
-            articleModel.sectionList,
             articleModel.pageLink,
             articleModel.imageLink,
             articleModel.topic,
             articleModel.title,
-            articleModel.teaser
+            articleModel.teaser,
+            articleModel.sectionList
         )
     }
 }

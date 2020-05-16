@@ -40,7 +40,6 @@ class NewsPageRecyclerViewAdapter(
             CATEGORY else ARTICLE
     }
 
-    // TODO
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder {
         val view: View
 
@@ -68,7 +67,7 @@ class NewsPageRecyclerViewAdapter(
             }
             is ArticleViewHolder -> {
                 if(item is ArticleItemModel){
-                    ImageManager.loadImage(holder.mView, holder.articleItemImg, item.imageLink!!)
+                    ImageManager.loadImage(holder.mView, holder.articleItemImg, item.imageLink.toString(), true)
                     holder.topic.text = item.topic?.toUpperCase(Locale.ROOT)
                     holder.title.text = item.title
                     holder.teaser.text = item.teaser
