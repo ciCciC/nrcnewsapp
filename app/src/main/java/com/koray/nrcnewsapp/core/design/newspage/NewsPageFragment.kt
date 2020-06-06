@@ -11,6 +11,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.fasterxml.jackson.databind.util.ClassUtil
+import com.koray.nrcnewsapp.NrcActivity
 import com.koray.nrcnewsapp.R
 import com.koray.nrcnewsapp.core.design.category.CategoryOnListInteractionListener
 import com.koray.nrcnewsapp.core.design.util.inject
@@ -91,9 +93,13 @@ class NewsPageFragment : Fragment() {
     }
 
     private fun fetchDummyCategoryNames() {
-        val currentImg = resources.getDrawable(R.drawable.test_deadstranding, null).current
         categoryList =
-            arrayListOf("games", "physics", "technology").map { categoryName -> CategoryItemModel(categoryName, currentImg) }
+            arrayListOf("games", "physics", "technology").map { categoryName ->
+                var backgroundImgIdentifier = resources.getIdentifier(categoryName, "drawable",
+                    context?.packageName)
+
+                CategoryItemModel(categoryName, backgroundImgIdentifier)
+            }
 
         val categoryListItemModel =
             CategoryListItemModel(categoryList, NewsPageItemModel.ItemType.CATEGORY)

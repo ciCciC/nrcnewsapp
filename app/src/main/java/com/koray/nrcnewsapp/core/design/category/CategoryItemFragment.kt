@@ -21,8 +21,12 @@ import com.koray.nrcnewsapp.core.network.viewmodel.LiveCategoriesModel
 import kotlinx.android.synthetic.main.fragment_category_item.view.*
 
 
-// Deze fragment wordt niet gebruikt, in plaats daarvan worden de categorieen
-// als lijst in de vorm van View weergegeven in NewsPageFragment
+/**
+ * This fragment is not used, instead the categories are
+ * as a list in the form of View displayed in NewsPageFragment.
+ *
+ */
+@Deprecated("CategoryItemFragment is not been used anymore. Instead use CategoryListViewHolder as View.")
 class CategoryItemFragment : Fragment() {
 
 //    private var listener: CategoryOnListInteractionListener? = null

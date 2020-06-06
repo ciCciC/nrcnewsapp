@@ -12,7 +12,9 @@ import com.koray.nrcnewsapp.core.domain.CategoryItemModel
 import kotlinx.android.synthetic.main.fragment_category_item.view.*
 
 /**
- * Hier wordt de adapter voor Category list afgehandeld
+ *
+ * This is where the adapter for Category list is handled.
+ *
  */
 class CategoryItemRecyclerViewAdapter(
     private val mValues: List<CategoryItemModel>,
@@ -37,7 +39,7 @@ class CategoryItemRecyclerViewAdapter(
     override fun onBindViewHolder(holder: CategoryItemViewHolder, position: Int) {
         val item = mValues[position]
         holder.mContentView.text = item.name
-        holder.mImage.setBackgroundResource(R.drawable.test_deadstranding)
+        holder.mImage.setBackgroundResource(if(item.img == null) R.drawable.test_deadstranding else item.img!!)
 
         with(holder.mView) {
             tag = item
@@ -47,7 +49,9 @@ class CategoryItemRecyclerViewAdapter(
 
     override fun getItemCount(): Int = mValues.size
 
-    // Deze is alleen voor categorie item dus vergis je niet met die in NewsPageRecyclerViewAdapter
+    /**
+     * This is for category item only so don't be mistaken with the one in NewsPageRecyclerViewAdapter.
+     */
     inner class CategoryItemViewHolder(val mView: View) : RecyclerView.ViewHolder(mView) {
 //        val mIdView: TextView = mView.item_number
         val mContentView: TextView = mView.category_name

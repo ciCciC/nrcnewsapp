@@ -16,6 +16,7 @@ import kotlinx.android.synthetic.main.fragment_article_item.view.*
  * specified [OnListFragmentInteractionListener].
  * TODO: Replace the implementation with code for your data type.
  */
+@Deprecated("Instead use NewsPageRecyclerViewAdapter.")
 class ArticleListRecyclerViewAdapter(
     private val mValues: List<DummyItem>,
     private val mListener: OnListFragmentInteractionListener?

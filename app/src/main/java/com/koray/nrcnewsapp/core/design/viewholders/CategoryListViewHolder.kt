@@ -8,6 +8,10 @@ import com.koray.nrcnewsapp.core.design.category.CategoryItemRecyclerViewAdapter
 import com.koray.nrcnewsapp.core.design.category.CategoryOnListInteractionListener
 import com.koray.nrcnewsapp.core.domain.CategoryItemModel
 
+/***
+ * Handles the Category list View in NewsPage.
+ *
+ */
 class CategoryListViewHolder(
     mView: View,
     categoriesList: MutableList<CategoryItemModel>,
