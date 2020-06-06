@@ -4,10 +4,10 @@ package com.koray.nrcnewsapp.core.design.category
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.koray.nrcnewsapp.R
-import com.koray.nrcnewsapp.core.design.newspage.NewsPageFragment
 import com.koray.nrcnewsapp.core.domain.CategoryItemModel
 import kotlinx.android.synthetic.main.fragment_category_item.view.*
 
@@ -17,7 +17,7 @@ import kotlinx.android.synthetic.main.fragment_category_item.view.*
 class CategoryItemRecyclerViewAdapter(
     private val mValues: List<CategoryItemModel>,
     private val mListener: CategoryOnListInteractionListener?
-) : RecyclerView.Adapter<CategoryItemRecyclerViewAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<CategoryItemRecyclerViewAdapter.CategoryItemViewHolder>() {
 
     private val mOnClickListener: View.OnClickListener
 
@@ -28,15 +28,16 @@ class CategoryItemRecyclerViewAdapter(
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryItemViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.fragment_category_item, parent, false)
-        return ViewHolder(view)
+        return CategoryItemViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: CategoryItemViewHolder, position: Int) {
         val item = mValues[position]
         holder.mContentView.text = item.name
+        holder.mImage.setBackgroundResource(R.drawable.test_deadstranding)
 
         with(holder.mView) {
             tag = item
@@ -47,9 +48,10 @@ class CategoryItemRecyclerViewAdapter(
     override fun getItemCount(): Int = mValues.size
 
     // Deze is alleen voor categorie item dus vergis je niet met die in NewsPageRecyclerViewAdapter
-    inner class ViewHolder(val mView: View) : RecyclerView.ViewHolder(mView) {
+    inner class CategoryItemViewHolder(val mView: View) : RecyclerView.ViewHolder(mView) {
 //        val mIdView: TextView = mView.item_number
         val mContentView: TextView = mView.category_name
+        val mImage: ImageView = mView.category_item_image
 
         override fun toString(): String {
             return super.toString() + " '" + mContentView.text + "'"

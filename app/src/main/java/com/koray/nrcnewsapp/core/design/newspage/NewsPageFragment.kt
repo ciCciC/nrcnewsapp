@@ -91,8 +91,9 @@ class NewsPageFragment : Fragment() {
     }
 
     private fun fetchDummyCategoryNames() {
+        val currentImg = resources.getDrawable(R.drawable.test_deadstranding, null).current
         categoryList =
-            arrayListOf("games", "physics", "technology").map { x -> CategoryItemModel(x) }
+            arrayListOf("games", "physics", "technology").map { categoryName -> CategoryItemModel(categoryName, currentImg) }
 
         val categoryListItemModel =
             CategoryListItemModel(categoryList, NewsPageItemModel.ItemType.CATEGORY)
@@ -113,10 +114,6 @@ class NewsPageFragment : Fragment() {
             newsPagerAdapter.notifyDataSetChanged()
         })
 
-//         Without chosen category
-//        articlesModel.getArticleItems().observe(viewLifecycleOwner, Observer { models ->
-//            newsPageItemList.addAll(models)
-//        })
     }
 
     private fun fetchDummyArticleItems() {
@@ -147,7 +144,7 @@ class NewsPageFragment : Fragment() {
         }
     }
 
-    fun fetchInitArticles() {
+    private fun fetchInitArticles() {
         val initCategory = categoryList[0].name.toString()
         fetchArticles(initCategory)
         categorySelectionModel.setCategory(initCategory)

@@ -8,7 +8,7 @@ import com.koray.nrcnewsapp.core.design.category.CategoryItemRecyclerViewAdapter
 import com.koray.nrcnewsapp.core.design.category.CategoryOnListInteractionListener
 import com.koray.nrcnewsapp.core.domain.CategoryItemModel
 
-class CategoryViewHolder(
+class CategoryListViewHolder(
     mView: View,
     categoriesList: MutableList<CategoryItemModel>,
     listener: CategoryOnListInteractionListener?)
@@ -17,7 +17,7 @@ class CategoryViewHolder(
     init {
         val recyclerView: RecyclerView = mView.findViewById(R.id.category_fragment_list)
         recyclerView.layoutManager =
-            LinearLayoutManager(mView.context, RecyclerView.HORIZONTAL, false) as RecyclerView.LayoutManager?
+            LinearLayoutManager(mView.context, RecyclerView.HORIZONTAL, false)
 
         recyclerView.adapter = CategoryItemRecyclerViewAdapter(
             categoriesList,

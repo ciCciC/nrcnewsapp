@@ -7,7 +7,8 @@ object CategoryTransformer {
 
     fun toModel(category: String): CategoryItemModel {
         return CategoryItemModel(
-            category
+            category,
+            null
         )
     }
 }

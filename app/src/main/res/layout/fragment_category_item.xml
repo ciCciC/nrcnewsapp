@@ -1,20 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="60dp"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/category_item_layout"
+    android:layout_width="150dp"
+    android:layout_height="100dp"
     android:layout_marginEnd="5dp"
     android:layout_marginStart="5dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="2dp"
+    app:cardPreventCornerOverlap="true"
+    app:cardUseCompatPadding="true"
     android:background="@drawable/rectangle_category">
+
+    <ImageView
+        android:id="@+id/category_item_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:adjustViewBounds="true"
+        android:maxHeight="200dp"
+        android:layout_gravity="center"
+        android:scaleType="centerCrop"
+        android:contentDescription="Image of product"/>
 
     <TextView
         android:id="@+id/category_name"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_margin="@dimen/text_margin"
-        android:gravity="center"
+        android:gravity="bottom"
         android:textColor="@color/colorWhite"
+        android:textStyle="bold"
         android:elevation="10dp"
         android:translationZ="10dp"
         android:textAppearance="?attr/textAppearanceListItem" />
 
-</LinearLayout>
+</androidx.cardview.widget.CardView>
