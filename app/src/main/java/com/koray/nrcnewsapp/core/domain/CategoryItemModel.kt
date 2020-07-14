@@ -4,6 +4,7 @@ import com.koray.nrcnewsapp.core.abstraction.Category
 
 class CategoryItemModel(
     override var name: String?,
-    var img: Int?
+    var img: Int?,
+    var selected: Boolean = false
 ) : Category {
 }

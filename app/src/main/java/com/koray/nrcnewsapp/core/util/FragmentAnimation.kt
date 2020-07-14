@@ -1,9 +1,8 @@
-package com.koray.nrcnewsapp.core.design.util
+package com.koray.nrcnewsapp.core.util
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
-import androidx.lifecycle.Lifecycle
 import com.koray.nrcnewsapp.R
 
 object FragmentAnimation {

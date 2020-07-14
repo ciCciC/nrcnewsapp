@@ -13,8 +13,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.koray.nrcnewsapp.R
 import com.koray.nrcnewsapp.core.abstraction.Ctype
-import com.koray.nrcnewsapp.core.design.util.ImageManager
-import com.koray.nrcnewsapp.core.design.util.inject
+import com.koray.nrcnewsapp.core.util.ImageManager
+import com.koray.nrcnewsapp.core.util.inject
 import com.koray.nrcnewsapp.core.design.viewholders.ArticlePageViewHolder
 import com.koray.nrcnewsapp.core.domain.ArticleItemModel
 import com.koray.nrcnewsapp.core.domain.ArticlePageModel

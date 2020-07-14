@@ -26,6 +26,7 @@ class CategoryItemRecyclerViewAdapter(
     init {
         mOnClickListener = View.OnClickListener { v ->
             val item = v.tag as CategoryItemModel
+            println("Selected LOLZ: " + item.name)
             mListener?.onListFragmentInteraction(item)
         }
     }
@@ -56,6 +57,8 @@ class CategoryItemRecyclerViewAdapter(
 //        val mIdView: TextView = mView.item_number
         val mContentView: TextView = mView.category_name
         val mImage: ImageView = mView.category_item_image
+
+
 
         override fun toString(): String {
             return super.toString() + " '" + mContentView.text + "'"

@@ -1,4 +1,4 @@
-package com.koray.nrcnewsapp.core.design.util
+package com.koray.nrcnewsapp.core.util
 
 import android.graphics.*
 import android.view.View

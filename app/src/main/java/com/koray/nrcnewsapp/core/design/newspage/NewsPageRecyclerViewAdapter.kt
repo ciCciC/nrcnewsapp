@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.koray.nrcnewsapp.R
 import com.koray.nrcnewsapp.core.design.category.CategoryOnListInteractionListener
-import com.koray.nrcnewsapp.core.design.util.ImageManager
+import com.koray.nrcnewsapp.core.util.ImageManager
 import com.koray.nrcnewsapp.core.design.viewholders.ArticleViewHolder
 import com.koray.nrcnewsapp.core.design.viewholders.BaseViewHolder
 import com.koray.nrcnewsapp.core.design.viewholders.CategoryListViewHolder

@@ -11,11 +11,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.fasterxml.jackson.databind.util.ClassUtil
-import com.koray.nrcnewsapp.NrcActivity
 import com.koray.nrcnewsapp.R
 import com.koray.nrcnewsapp.core.design.category.CategoryOnListInteractionListener
-import com.koray.nrcnewsapp.core.design.util.inject
+import com.koray.nrcnewsapp.core.util.inject
 import com.koray.nrcnewsapp.core.domain.*
 import com.koray.nrcnewsapp.core.network.repository.ArticleRepository
 import com.koray.nrcnewsapp.core.network.repository.CategoryRepository
@@ -93,13 +91,15 @@ class NewsPageFragment : Fragment() {
     }
 
     private fun fetchDummyCategoryNames() {
-        categoryList =
-            arrayListOf("games", "physics", "technology").map { categoryName ->
+        val dummyCategoryList = arrayListOf("games", "physics", "technology")
+        categoryList = dummyCategoryList.map { categoryName ->
                 var backgroundImgIdentifier = resources.getIdentifier(categoryName, "drawable",
                     context?.packageName)
 
                 CategoryItemModel(categoryName, backgroundImgIdentifier)
             }
+
+        categorySelectionModel.setCashCategories(categoryList)
 
         val categoryListItemModel =
             CategoryListItemModel(categoryList, NewsPageItemModel.ItemType.CATEGORY)
@@ -140,7 +140,7 @@ class NewsPageFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         categorySelectionModel.getCategory().observe(viewLifecycleOwner, Observer { category ->
-            println("Selected DERP: $category")
+//            println("Selected DERP: $category")
             selectedCategory = category
             fetchArticles(category)
         })
