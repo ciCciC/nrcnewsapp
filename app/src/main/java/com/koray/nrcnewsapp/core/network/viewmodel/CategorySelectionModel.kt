@@ -20,9 +20,10 @@ class CategorySelectionModel : ViewModel() {
 
     fun setCategory(selectedCategory: String) {
         this.CASHED_CATEGORIES.value?.forEach { cashedCategory ->
-            run {
-                cashedCategory.selected = cashedCategory.name.equals(selectedCategory)
-            }
+            cashedCategory.selected = cashedCategory.name.equals(selectedCategory)
+//            run {
+//                cashedCategory.selected = cashedCategory.name.equals(selectedCategory)
+//            }
         }
         this.category.value = selectedCategory
     }

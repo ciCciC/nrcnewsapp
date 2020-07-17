@@ -1,24 +1,6 @@
 package com.koray.nrcnewsapp.core.design.category
 
-import android.content.Context
-import android.content.res.Resources
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.koray.nrcnewsapp.R
-import com.koray.nrcnewsapp.core.design.newspage.NewsPageFragment
-import com.koray.nrcnewsapp.core.design.util.inject
-import com.koray.nrcnewsapp.core.domain.CategoryItemModel
-import com.koray.nrcnewsapp.core.network.repository.CategoryRepository
-import com.koray.nrcnewsapp.core.network.viewmodel.CustomViewModelFactory
-import com.koray.nrcnewsapp.core.network.viewmodel.LiveCategoriesModel
-import kotlinx.android.synthetic.main.fragment_category_item.view.*
 
 
 /**
