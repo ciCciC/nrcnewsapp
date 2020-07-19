@@ -68,7 +68,7 @@ class NrcActivity : AppCompatActivity(),
 
     private fun initArticlePageFragment() {
         val articlePageFragment: ArticlePageFragment = ArticlePageFragment.newInstance()
-        FragmentAnimation.rightBottomToLeftTop(supportFragmentManager)
+        FragmentAnimation.rightToLeftAnim(supportFragmentManager)
             .add(
                 R.id.news_page_container,
                 articlePageFragment,
@@ -79,6 +79,7 @@ class NrcActivity : AppCompatActivity(),
     }
 
     override fun onListFragmentInteraction(category: CategoryItemModel?) {
+        println("Selected: " + category?.name)
         categorySelectionModel.setCategory(category?.name.toString())
     }
 

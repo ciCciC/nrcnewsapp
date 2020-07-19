@@ -14,6 +14,10 @@ class CategorySelectionModel : ViewModel() {
         this.CASHED_CATEGORIES.value = categories
     }
 
+    fun getCashedCategories(): MutableLiveData<List<CategoryItemModel>> {
+        return this.CASHED_CATEGORIES
+    }
+
     fun getCategory(): MutableLiveData<String> {
         return this.category
     }

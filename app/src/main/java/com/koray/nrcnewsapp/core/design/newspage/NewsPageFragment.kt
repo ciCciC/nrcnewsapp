@@ -20,6 +20,7 @@ import com.koray.nrcnewsapp.core.network.repository.CategoryRepository
 import com.koray.nrcnewsapp.core.network.viewmodel.CategorySelectionModel
 import com.koray.nrcnewsapp.core.network.viewmodel.CustomViewModelFactory
 import com.koray.nrcnewsapp.core.network.viewmodel.LiveArticlesModel
+import com.koray.nrcnewsapp.core.network.viewmodel.LiveCategoriesModel
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -40,7 +41,6 @@ class NewsPageFragment : Fragment() {
 
     private lateinit var newsPagerAdapter: NewsPageRecyclerViewAdapter
 
-    private lateinit var categoryList: List<CategoryItemModel>
     private var selectedCategory = "";
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,26 +73,30 @@ class NewsPageFragment : Fragment() {
 
     private fun fetchCategoryNames() {
         fetchDummyCategoryNames()
-//        val model = ViewModelProviders.of(
-//            this,
-//            CustomViewModelFactory(categoryRepository)
-//        ).get(LiveCategoriesModel::class.java)
+
+//        val model = ViewModelProviders.of(this, CustomViewModelFactory(categoryRepository))
+//            .get(LiveCategoriesModel::class.java)
 //
-//        model.getCategories()
-//            .observe(viewLifecycleOwner, Observer { categoryList ->
+//        model.getCategories().observe(viewLifecycleOwner, Observer { categoryList ->
 //                newsPageItemList.add(
 //                    CategoryListItemModel(
-//                        categoryList,
+//                        categoryList.map { categoryItemModel ->
+//                            var bgId = resources.getIdentifier(categoryItemModel.name, "drawable",
+//                                context?.packageName)
+//                            categoryItemModel.img = bgId
+//                            categoryItemModel
+//                        },
 //                        NewsPageItemModel.ItemType.CATEGORY
 //                    )
 //                )
+//                categorySelectionModel.setCashCategories(categoryList)
 //                newsPageItemMap[NewsPageItemModel.ItemType.CATEGORY] = categoryList
 //            })
     }
 
     private fun fetchDummyCategoryNames() {
         val dummyCategoryList = arrayListOf("games", "physics", "technology")
-        categoryList = dummyCategoryList.map { categoryName ->
+        val categoryList = dummyCategoryList.map { categoryName ->
                 var backgroundImgIdentifier = resources.getIdentifier(categoryName, "drawable",
                     context?.packageName)
 
@@ -112,17 +116,18 @@ class NewsPageFragment : Fragment() {
 
 //        val articlesModel = ViewModelProviders.of(this, CustomViewModelFactory(articleRepository))
 //            .get(LiveArticlesModel::class.java)
-
-        // With chosen category
+//
+//        // With chosen category
 //        articlesModel.getAllByCategory(category).observe(viewLifecycleOwner, Observer { models ->
 //            newsPageItemList.removeAll { item -> item.itemType!! == NewsPageItemModel.ItemType.ARTICLE }
 //            newsPageItemList.addAll(models)
 //            newsPagerAdapter.notifyDataSetChanged()
 //        })
-
     }
 
     private fun fetchDummyArticleItems() {
+        newsPageItemList.removeAll { item -> item.itemType!! == NewsPageItemModel.ItemType.ARTICLE }
+
         (1..10).forEach { _ ->
             newsPageItemList.add(
                 ArticleItemModel(
@@ -135,25 +140,29 @@ class NewsPageFragment : Fragment() {
                 )
             )
         }
+
+        newsPagerAdapter.notifyDataSetChanged()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         categorySelectionModel.getCategory().observe(viewLifecycleOwner, Observer { category ->
-//            println("Selected DERP: $category")
             selectedCategory = category
             fetchArticles(category)
         })
 
         if(selectedCategory.isEmpty()){
-            fetchInitArticles()
+            autoLoadArticles()
         }
     }
 
-    private fun fetchInitArticles() {
-        val initCategory = categoryList[0].name.toString()
-        fetchArticles(initCategory)
-        categorySelectionModel.setCategory(initCategory)
+    private fun autoLoadArticles() {
+        categorySelectionModel.getCashedCategories().observe(viewLifecycleOwner, Observer { categoryList ->
+            val initCategory = categoryList.getOrElse(0){CategoryItemModel("", 0)}.name!!
+            fetchArticles(initCategory)
+            categorySelectionModel.setCategory(initCategory)
+            selectedCategory = initCategory
+        })
     }
 
     override fun onAttach(context: Context) {

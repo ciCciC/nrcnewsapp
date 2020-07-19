@@ -7,6 +7,7 @@ import com.koray.nrcnewsapp.R
 import com.koray.nrcnewsapp.core.design.category.CategoryItemRecyclerViewAdapter
 import com.koray.nrcnewsapp.core.design.category.CategoryOnListInteractionListener
 import com.koray.nrcnewsapp.core.domain.CategoryItemModel
+import com.koray.nrcnewsapp.core.util.AnimationEffect
 
 /***
  * Handles the Category list View in NewsPage.

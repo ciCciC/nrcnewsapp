@@ -11,14 +11,6 @@
     android:gravity="center"
     android:layout_gravity="center">
 
-<!--    <TextView-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="@string/app_name"-->
-<!--        android:textColor="@color/colorTextBar"-->
-<!--        android:background="@color/colorBgBar"-->
-<!--        />-->
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/category_fragment_list"
         android:name="com.koray.nrcnewsapp.core.design.category.CategoryItemFragment"
@@ -30,7 +22,6 @@
         android:layout_gravity="center"
         android:orientation="horizontal"
         app:layoutManager="LinearLayoutManager"
-        tools:context=".core.design.category.CategoryItemFragment"
         tools:listitem="@layout/fragment_category_item"/>
 
 </LinearLayout>
