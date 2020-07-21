@@ -23,5 +23,7 @@ class ArticlePageDto(
     override var sectionList: Array<SectionDto>?
 
 ) : ArticlePage {
-
+    override fun toString(): String {
+        return "ArticlePageDto(pageLink=$pageLink, imageLink=$imageLink, topic=$topic, title=$title, teaser=$teaser, sectionList=${sectionList?.contentToString()})"
+    }
 }

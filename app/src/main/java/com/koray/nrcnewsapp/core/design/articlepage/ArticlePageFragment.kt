@@ -2,9 +2,12 @@ package com.koray.nrcnewsapp.core.design.articlepage
 
 import android.graphics.Typeface
 import android.os.Bundle
+import android.transition.ChangeBounds
+import android.transition.TransitionManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnticipateOvershootInterpolator
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
@@ -13,16 +16,20 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.koray.nrcnewsapp.R
 import com.koray.nrcnewsapp.core.abstraction.Ctype
-import com.koray.nrcnewsapp.core.design.util.ImageManager
-import com.koray.nrcnewsapp.core.design.util.inject
+import com.koray.nrcnewsapp.core.util.ImageManager
+import com.koray.nrcnewsapp.core.util.inject
 import com.koray.nrcnewsapp.core.design.viewholders.ArticlePageViewHolder
 import com.koray.nrcnewsapp.core.domain.ArticleItemModel
 import com.koray.nrcnewsapp.core.domain.ArticlePageModel
+import com.koray.nrcnewsapp.core.network.dto.ContentBodyDto
+import com.koray.nrcnewsapp.core.network.dto.SectionDto
 import com.koray.nrcnewsapp.core.network.repository.ArticleRepository
 import com.koray.nrcnewsapp.core.network.viewmodel.ArticleSelectionModel
 import com.koray.nrcnewsapp.core.network.viewmodel.CategorySelectionModel
 import com.koray.nrcnewsapp.core.network.viewmodel.CustomViewModelFactory
 import com.koray.nrcnewsapp.core.network.viewmodel.LiveArticlesModel
+import com.koray.nrcnewsapp.core.util.AnimationEffect
+import com.koray.nrcnewsapp.core.util.ViewUtil
 
 
 class ArticlePageFragment : Fragment() {
@@ -52,6 +59,8 @@ class ArticlePageFragment : Fragment() {
     }
 
     private fun initArticlePage(view: View, articleItemModel: ArticleItemModel) {
+//        fakeArticlePage(view, articleItemModel)
+
         val articlesModel = ViewModelProviders.of(this, CustomViewModelFactory(articleRepository))
             .get(LiveArticlesModel::class.java)
 
@@ -63,6 +72,25 @@ class ArticlePageFragment : Fragment() {
             .observe(viewLifecycleOwner, Observer { articlePage ->
                 populateArticlePage(view, articlePage)
             })
+    }
+
+    private fun fakeArticlePage(view: View, articleItemModel: ArticleItemModel) {
+        val articlepageModel = ArticlePageModel(
+            arrayOf(SectionDto(
+                "title",
+                arrayOf(ContentBodyDto(
+                    "content",
+                    Ctype.p.name
+                ))
+            )),
+            articleItemModel.pageLink,
+            articleItemModel.imageLink,
+            articleItemModel.topic,
+            articleItemModel.title,
+            articleItemModel.teaser
+
+        )
+        populateArticlePage(view, articlepageModel)
     }
 
     private fun populateArticlePage(view: View, articlePageModel: ArticlePageModel) {
@@ -78,6 +106,8 @@ class ArticlePageFragment : Fragment() {
         articlePageViewHolder.topic.text = articlePageModel.topic
         articlePageViewHolder.title.text = articlePageModel.title
         articlePageViewHolder.teaser.text = articlePageModel.teaser
+
+        ViewUtil.hideWhenEmpty(articlePageViewHolder.topic.text, articlePageViewHolder.topic)
 
         populateArticleContent(view, articlePageModel, articlePageViewHolder)
     }

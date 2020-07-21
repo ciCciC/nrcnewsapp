@@ -13,13 +13,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.koray.nrcnewsapp.R
 import com.koray.nrcnewsapp.core.design.category.CategoryOnListInteractionListener
-import com.koray.nrcnewsapp.core.design.util.inject
+import com.koray.nrcnewsapp.core.util.inject
 import com.koray.nrcnewsapp.core.domain.*
 import com.koray.nrcnewsapp.core.network.repository.ArticleRepository
 import com.koray.nrcnewsapp.core.network.repository.CategoryRepository
 import com.koray.nrcnewsapp.core.network.viewmodel.CategorySelectionModel
 import com.koray.nrcnewsapp.core.network.viewmodel.CustomViewModelFactory
 import com.koray.nrcnewsapp.core.network.viewmodel.LiveArticlesModel
+import com.koray.nrcnewsapp.core.network.viewmodel.LiveCategoriesModel
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -40,7 +41,6 @@ class NewsPageFragment : Fragment() {
 
     private lateinit var newsPagerAdapter: NewsPageRecyclerViewAdapter
 
-    private lateinit var categoryList: List<CategoryItemModel>
     private var selectedCategory = "";
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,26 +73,37 @@ class NewsPageFragment : Fragment() {
 
     private fun fetchCategoryNames() {
         fetchDummyCategoryNames()
-//        val model = ViewModelProviders.of(
-//            this,
-//            CustomViewModelFactory(categoryRepository)
-//        ).get(LiveCategoriesModel::class.java)
+
+//        val model = ViewModelProviders.of(this, CustomViewModelFactory(categoryRepository))
+//            .get(LiveCategoriesModel::class.java)
 //
-//        model.getCategories()
-//            .observe(viewLifecycleOwner, Observer { categoryList ->
+//        model.getCategories().observe(viewLifecycleOwner, Observer { categoryList ->
 //                newsPageItemList.add(
 //                    CategoryListItemModel(
-//                        categoryList,
+//                        categoryList.map { categoryItemModel ->
+//                            var bgId = resources.getIdentifier(categoryItemModel.name, "drawable",
+//                                context?.packageName)
+//                            categoryItemModel.img = bgId
+//                            categoryItemModel
+//                        },
 //                        NewsPageItemModel.ItemType.CATEGORY
 //                    )
 //                )
+//                categorySelectionModel.setCashCategories(categoryList)
 //                newsPageItemMap[NewsPageItemModel.ItemType.CATEGORY] = categoryList
 //            })
     }
 
     private fun fetchDummyCategoryNames() {
-        categoryList =
-            arrayListOf("games", "physics", "technology").map { x -> CategoryItemModel(x) }
+        val dummyCategoryList = arrayListOf("games", "physics", "technology")
+        val categoryList = dummyCategoryList.map { categoryName ->
+                var backgroundImgIdentifier = resources.getIdentifier(categoryName, "drawable",
+                    context?.packageName)
+
+                CategoryItemModel(categoryName, backgroundImgIdentifier)
+            }
+
+        categorySelectionModel.setCashCategories(categoryList)
 
         val categoryListItemModel =
             CategoryListItemModel(categoryList, NewsPageItemModel.ItemType.CATEGORY)
@@ -100,31 +111,28 @@ class NewsPageFragment : Fragment() {
         newsPageItemMap[NewsPageItemModel.ItemType.CATEGORY] = categoryList
     }
 
-    private fun fetchArticles(category: String) {
-//        fetchDummyArticleItems()
+    private fun fetchArticleItems(category: String) {
+        fetchDummyArticleItems()
 
-        val articlesModel = ViewModelProviders.of(this, CustomViewModelFactory(articleRepository))
-            .get(LiveArticlesModel::class.java)
-
-        // With chosen category
-        articlesModel.getAllByCategory(category).observe(viewLifecycleOwner, Observer { models ->
-            newsPageItemList.removeAll { item -> item.itemType!! == NewsPageItemModel.ItemType.ARTICLE }
-            newsPageItemList.addAll(models)
-            newsPagerAdapter.notifyDataSetChanged()
-        })
-
-//         Without chosen category
-//        articlesModel.getArticleItems().observe(viewLifecycleOwner, Observer { models ->
+//        val articlesModel = ViewModelProviders.of(this, CustomViewModelFactory(articleRepository))
+//            .get(LiveArticlesModel::class.java)
+//
+//        // With chosen category
+//        articlesModel.getAllByCategory(category).observe(viewLifecycleOwner, Observer { models ->
+//            newsPageItemList.removeAll { item -> item.itemType!! == NewsPageItemModel.ItemType.ARTICLE }
 //            newsPageItemList.addAll(models)
+//            newsPagerAdapter.notifyDataSetChanged()
 //        })
     }
 
     private fun fetchDummyArticleItems() {
+        newsPageItemList.removeAll { item -> item.itemType!! == NewsPageItemModel.ItemType.ARTICLE }
+
         (1..10).forEach { _ ->
             newsPageItemList.add(
                 ArticleItemModel(
                     "http://www.nrc.nl/nieuws/2020/03/20/vreedzaam-leven-met-cyborgs-a3994387",
-                    "https://images.nrc.nl/UBptTebL0NGY2WXHE0lFHBfJguE=/640x384/smart/filters:no_upscale()/s3/static.nrc.nl/bvhw/files/2020/03/data56631545-f25ac3.jpg",
+                    "",
                     "Cyborgs",
                     "In gesprek met James Lovelock, de profeet van moeder aarde",
                     "Met kunstmatige intelligentie kunnen we de aarde redden, denkt James Lovelock. In de jaren zeventig ontwikkelde de 100-jarige chemicus de Gaia-hypothese, over de aarde als zelfregulerend systeem. Klimaatverandering bedreigt dat mechanisme.",
@@ -132,25 +140,29 @@ class NewsPageFragment : Fragment() {
                 )
             )
         }
+
+        newsPagerAdapter.notifyDataSetChanged()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         categorySelectionModel.getCategory().observe(viewLifecycleOwner, Observer { category ->
-            println("Selected DERP: $category")
             selectedCategory = category
-            fetchArticles(category)
+            fetchArticleItems(category)
         })
 
         if(selectedCategory.isEmpty()){
-            fetchInitArticles()
+            autoLoadArticles()
         }
     }
 
-    fun fetchInitArticles() {
-        val initCategory = categoryList[0].name.toString()
-        fetchArticles(initCategory)
-        categorySelectionModel.setCategory(initCategory)
+    private fun autoLoadArticles() {
+        categorySelectionModel.getCashedCategories().observe(viewLifecycleOwner, Observer { categoryList ->
+            val initCategory = categoryList.getOrElse(0){CategoryItemModel("", 0)}.name!!
+            fetchArticleItems(initCategory)
+            categorySelectionModel.setCategory(initCategory)
+            selectedCategory = initCategory
+        })
     }
 
     override fun onAttach(context: Context) {

@@ -7,13 +7,14 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.koray.nrcnewsapp.R
 import com.koray.nrcnewsapp.core.design.category.CategoryOnListInteractionListener
-import com.koray.nrcnewsapp.core.design.util.ImageManager
+import com.koray.nrcnewsapp.core.util.ImageManager
 import com.koray.nrcnewsapp.core.design.viewholders.ArticleViewHolder
 import com.koray.nrcnewsapp.core.design.viewholders.BaseViewHolder
-import com.koray.nrcnewsapp.core.design.viewholders.CategoryViewHolder
+import com.koray.nrcnewsapp.core.design.viewholders.CategoryListViewHolder
 import com.koray.nrcnewsapp.core.domain.ArticleItemModel
 import com.koray.nrcnewsapp.core.domain.CategoryItemModel
 import com.koray.nrcnewsapp.core.domain.NewsPageItemModel
+import com.koray.nrcnewsapp.core.util.ViewUtil
 import java.util.*
 
 
@@ -46,7 +47,7 @@ class NewsPageRecyclerViewAdapter(
         return if(viewType == CATEGORY) {
             view = LayoutInflater.from(parent.context)
                 .inflate(R.layout.fragment_category_list, parent, false)
-            CategoryViewHolder(view,
+            CategoryListViewHolder(view,
                 (mValuesMap[NewsPageItemModel.ItemType.CATEGORY] as MutableList<CategoryItemModel>),
                 mCategoryListener)
         } else {
@@ -60,7 +61,7 @@ class NewsPageRecyclerViewAdapter(
         val item = mValues[position]
 
         when (holder) {
-            is CategoryViewHolder -> {
+            is CategoryListViewHolder -> {
                 with(holder.mView) {
                     tag = item
                 }
@@ -71,6 +72,9 @@ class NewsPageRecyclerViewAdapter(
                     holder.topic.text = item.topic?.toUpperCase(Locale.ROOT)
                     holder.title.text = item.title
                     holder.teaser.text = item.teaser
+
+                    ViewUtil.hideWhenEmpty(holder.topic.text, holder.topic)
+
                     with(holder.mView) {
                         tag = item
                         setOnClickListener(mOnClickListener)

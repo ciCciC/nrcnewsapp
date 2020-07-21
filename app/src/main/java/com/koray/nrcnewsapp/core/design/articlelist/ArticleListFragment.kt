@@ -18,6 +18,7 @@ import com.koray.nrcnewsapp.core.network.viewmodel.CategorySelectionModel
  * Activities containing this fragment MUST implement the
  * [ArticleListFragment.OnListFragmentInteractionListener] interface.
  */
+@Deprecated("Instead use NewsPageFragment.")
 class ArticleListFragment : Fragment() {
 
     // TODO: Customize parameters

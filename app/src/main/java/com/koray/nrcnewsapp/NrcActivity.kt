@@ -1,25 +1,21 @@
 package com.koray.nrcnewsapp
 
-import android.content.res.Configuration
 import android.os.Bundle
-import android.widget.Toast
+import android.widget.TextView
 import androidx.activity.viewModels
+import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import com.koray.nrcnewsapp.core.design.articlepage.ArticlePageFragment
-import com.koray.nrcnewsapp.core.design.category.CategoryItemFragment
 import com.koray.nrcnewsapp.core.design.category.CategoryOnListInteractionListener
 import com.koray.nrcnewsapp.core.design.newspage.NewsPageFragment
 import com.koray.nrcnewsapp.core.design.newspage.NewsPageOnListFragmentInteractionListener
-import com.koray.nrcnewsapp.core.design.util.FragmentAnimation
-import com.koray.nrcnewsapp.core.design.util.inject
 import com.koray.nrcnewsapp.core.domain.ArticleItemModel
 import com.koray.nrcnewsapp.core.domain.CategoryItemModel
 import com.koray.nrcnewsapp.core.domain.NewsPageItemModel
-import com.koray.nrcnewsapp.core.network.repository.ArticleRepository
-import com.koray.nrcnewsapp.core.network.repository.CategoryRepository
 import com.koray.nrcnewsapp.core.network.viewmodel.ArticleSelectionModel
 import com.koray.nrcnewsapp.core.network.viewmodel.CategorySelectionModel
+import com.koray.nrcnewsapp.core.util.FragmentAnimation
 import javax.inject.Singleton
 
 
@@ -28,30 +24,33 @@ class NrcActivity : AppCompatActivity(),
     CategoryOnListInteractionListener,
     NewsPageOnListFragmentInteractionListener {
 
-//    private val articleRepository: ArticleRepository by inject()
-//    private val categoryRepository: CategoryRepository by inject()
-//    private val categoryItemFragment: CategoryItemFragment by lazy {
-//        CategoryItemFragment.newInstance()
-//    }
-
     private val categorySelectionModel: CategorySelectionModel by viewModels()
     private val articleItemSelectionModel: ArticleSelectionModel by viewModels()
+    private lateinit var toolbarText: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        // TODO: custom toolbar
-//        setSupportActionBar(findViewById(R.id.my_toolbar))
+        setCustomToolbar()
 
-        when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
-            Configuration.UI_MODE_NIGHT_NO -> {
-            } // Night mode is not active, we're using the light theme
-            Configuration.UI_MODE_NIGHT_YES -> {
-
-            } // Night mode is active, we're using dark theme
-        }
+//        when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
+//            Configuration.UI_MODE_NIGHT_NO -> {
+//            } // Night mode is not active, we're using the light theme
+//            Configuration.UI_MODE_NIGHT_YES -> {
+//
+//            } // Night mode is active, we're using dark theme
+//        }
 
         initNewsPageFragment()
+    }
+
+    private fun setCustomToolbar() {
+        supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
+        supportActionBar?.setCustomView(R.layout.toolbar_app)
+
+        toolbarText = findViewById(R.id.toolbar_title)
+        categorySelectionModel.getCategory()
+            .observe(this, Observer { selected -> toolbarText.text = selected })
     }
 
     // TODO
@@ -69,7 +68,7 @@ class NrcActivity : AppCompatActivity(),
 
     private fun initArticlePageFragment() {
         val articlePageFragment: ArticlePageFragment = ArticlePageFragment.newInstance()
-        FragmentAnimation.rightBottomToLeftTop(supportFragmentManager)
+        FragmentAnimation.rightToLeftAnim(supportFragmentManager)
             .add(
                 R.id.news_page_container,
                 articlePageFragment,
@@ -79,23 +78,9 @@ class NrcActivity : AppCompatActivity(),
             .commit()
     }
 
-    private fun showFillInMsgUiThread(msg: String) {
-        this.runOnUiThread {
-            initToastMsg(
-                msg,
-                Toast.LENGTH_LONG
-            )
-        }
-    }
-
-    private fun initToastMsg(msg: String, length: Int) {
-        Toast.makeText(this, msg, length).show()
-    }
-
     override fun onListFragmentInteraction(category: CategoryItemModel?) {
+        println("Selected: " + category?.name)
         categorySelectionModel.setCategory(category?.name.toString())
-//        showFillInMsgUiThread(category?.name.toString())
-        println("Clicked category: $category")
     }
 
     override fun onListFragmentInteraction(newsPageItem: NewsPageItemModel?) {

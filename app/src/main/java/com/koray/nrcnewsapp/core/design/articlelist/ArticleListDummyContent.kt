@@ -8,6 +8,7 @@ import java.util.*
  *
  * TODO: Replace all uses of this class before publishing your app.
  */
+@Deprecated("Instead use NewsPageItemModel.")
 object ArticleListDummyContent {
 
     /**
