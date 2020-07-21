@@ -111,7 +111,7 @@ class NewsPageFragment : Fragment() {
         newsPageItemMap[NewsPageItemModel.ItemType.CATEGORY] = categoryList
     }
 
-    private fun fetchArticles(category: String) {
+    private fun fetchArticleItems(category: String) {
         fetchDummyArticleItems()
 
 //        val articlesModel = ViewModelProviders.of(this, CustomViewModelFactory(articleRepository))
@@ -148,7 +148,7 @@ class NewsPageFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         categorySelectionModel.getCategory().observe(viewLifecycleOwner, Observer { category ->
             selectedCategory = category
-            fetchArticles(category)
+            fetchArticleItems(category)
         })
 
         if(selectedCategory.isEmpty()){
@@ -159,7 +159,7 @@ class NewsPageFragment : Fragment() {
     private fun autoLoadArticles() {
         categorySelectionModel.getCashedCategories().observe(viewLifecycleOwner, Observer { categoryList ->
             val initCategory = categoryList.getOrElse(0){CategoryItemModel("", 0)}.name!!
-            fetchArticles(initCategory)
+            fetchArticleItems(initCategory)
             categorySelectionModel.setCategory(initCategory)
             selectedCategory = initCategory
         })

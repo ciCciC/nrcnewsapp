@@ -29,6 +29,7 @@ import com.koray.nrcnewsapp.core.network.viewmodel.CategorySelectionModel
 import com.koray.nrcnewsapp.core.network.viewmodel.CustomViewModelFactory
 import com.koray.nrcnewsapp.core.network.viewmodel.LiveArticlesModel
 import com.koray.nrcnewsapp.core.util.AnimationEffect
+import com.koray.nrcnewsapp.core.util.ViewUtil
 
 
 class ArticlePageFragment : Fragment() {
@@ -105,6 +106,8 @@ class ArticlePageFragment : Fragment() {
         articlePageViewHolder.topic.text = articlePageModel.topic
         articlePageViewHolder.title.text = articlePageModel.title
         articlePageViewHolder.teaser.text = articlePageModel.teaser
+
+        ViewUtil.hideWhenEmpty(articlePageViewHolder.topic.text, articlePageViewHolder.topic)
 
         populateArticleContent(view, articlePageModel, articlePageViewHolder)
     }

@@ -46,8 +46,4 @@ class NrcScraperClient(
             .toBlocking()
             .retrieve(req, Argument.of(String::class.java))
     }
-
-    fun getTest(): String {
-        return "Lolz"
-    }
 }
