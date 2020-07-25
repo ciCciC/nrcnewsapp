@@ -1,6 +1,7 @@
 package com.koray.nrcnewsapp
 
 import android.os.Bundle
+import android.view.Menu
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBar
@@ -49,8 +50,15 @@ class NrcActivity : AppCompatActivity(),
         supportActionBar?.setCustomView(R.layout.toolbar_app)
 
         toolbarText = findViewById(R.id.toolbar_title)
+
         categorySelectionModel.getCategory()
             .observe(this, Observer { selected -> toolbarText.text = selected })
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val inflater = menuInflater
+        inflater.inflate(R.menu.menu_toolbar, menu)
+        return true
     }
 
     // TODO
