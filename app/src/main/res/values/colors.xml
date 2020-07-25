@@ -2,8 +2,12 @@
 <resources>
     <color name="colorPrimary">#FFFFFF</color>
     <color name="colorPrimaryDark">#FF1744</color>
-    <color name="colorWhite">#FFFFFF</color>
     <color name="colorTextPrimary">#555555</color>
     <color name="colorTextBar">#000000</color>
     <color name="colorTextTopic">#FF1744</color>
+
+    <color name="colorNrcLogo">#FF1744</color>
+    <color name="colorMenuIcons">#FF1744</color>
+
+    <color name="colorWhite">#FFFFFF</color>
 </resources>
