@@ -3,4 +3,4 @@ A simple NRC Android app which makes use of the NRC Scraper API (Golang) for pop
 
 Home page             |  Article view
 :-------------------------:|:-------------------------:
-![](../master/sc0.jpg)  |  ![](../master/sc1.jpg)
+![](../master/sc00.jpg)  |  ![](../master/sc1.jpg)
