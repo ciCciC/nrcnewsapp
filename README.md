@@ -1,5 +1,5 @@
 # nrcnewsapp
-A simple NRC Android app which makes use of the NRC Scraper API (Golang) for populating the front end.
+A simple NRC Android app which makes use of the [NRC Scraper API](https://github.com/ciCciC/nrcnewsapi) for populating the front end.
 
 Home page (Day)            |   Home page (Night)         |  Article view
 :-------------------------:|:-------------------------:|:-------------------------:
