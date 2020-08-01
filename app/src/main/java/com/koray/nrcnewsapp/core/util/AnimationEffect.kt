@@ -5,7 +5,9 @@ import android.animation.ObjectAnimator
 import android.animation.PropertyValuesHolder
 import android.content.Context
 import android.view.View
+import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import android.view.animation.RotateAnimation
 import android.widget.ImageView
 import com.koray.nrcnewsapp.R
 
@@ -117,5 +119,14 @@ object AnimationEffect {
         for (view in views) {
             fadeIn(view)
         }
+    }
+
+    fun rotate(repeatCount: Int = 0, duration: Long = 2 * 1000): RotateAnimation{
+        val r = RotateAnimation(0.0f, -10.0f * 360.0f,
+            Animation.RELATIVE_TO_SELF, 0.5f,
+            Animation.RELATIVE_TO_SELF, 0.5f)
+        r.duration = duration
+        r.repeatCount = repeatCount
+        return r
     }
 }

@@ -7,6 +7,10 @@ import com.koray.nrcnewsapp.R
 
 object FragmentAnimation {
 
+    fun noAnimation(fragmentManager: FragmentManager):FragmentTransaction {
+        return fragmentManager.beginTransaction()
+    }
+
     fun rightToLeftAnim(fragmentManager: FragmentManager): FragmentTransaction {
         return fragmentManager.beginTransaction()
             .setCustomAnimations(
@@ -45,5 +49,25 @@ object FragmentAnimation {
             )
             .show(fragment)
             .commit()
+    }
+
+    fun slideAndfade(fragmentManager: FragmentManager):FragmentTransaction {
+        return fragmentManager.beginTransaction()
+            .setCustomAnimations(
+                R.anim.slide_in,
+                R.anim.slide_out,
+                android.R.animator.fade_in,
+                android.R.animator.fade_out
+            )
+    }
+
+    fun slide(fragmentManager: FragmentManager):FragmentTransaction {
+        return fragmentManager.beginTransaction()
+            .setCustomAnimations(
+                R.anim.slide_in,
+                R.anim.slide_out,
+                R.anim.slide_in,
+                R.anim.slide_out
+            )
     }
 }

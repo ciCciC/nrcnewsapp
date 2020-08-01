@@ -6,10 +6,21 @@
         motion:constraintSetStart="@+id/start"
         motion:constraintSetEnd="@+id/end"
         motion:duration="1000">
-        <OnSwipe
-            motion:touchAnchorId="@+id/button"
-            motion:touchAnchorSide="right"
-            motion:dragDirection="dragRight" />
+        <OnClick
+            motion:targetId="@+id/button"
+            motion:clickAction="transitionToEnd" />
+
+        <KeyFrameSet>
+            <KeyAttribute
+                android:rotation="-5"
+                motion:framePosition="10"
+                motion:motionTarget="@id/button" />
+            <KeyPosition
+                motion:keyPositionType="pathRelative"
+                motion:percentY="0.2"
+                motion:framePosition="10"
+                motion:motionTarget="@id/button"/>
+        </KeyFrameSet>
     </Transition>
 
     <ConstraintSet android:id="@+id/start">

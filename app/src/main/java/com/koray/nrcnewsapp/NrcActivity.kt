@@ -2,13 +2,18 @@ package com.koray.nrcnewsapp
 
 import android.os.Bundle
 import android.view.Menu
+import android.view.MenuItem
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import com.koray.nrcnewsapp.core.design.articlepage.ArticlePageFragment
 import com.koray.nrcnewsapp.core.design.category.CategoryOnListInteractionListener
+import com.koray.nrcnewsapp.core.design.info.MenuItemInfoFragment
 import com.koray.nrcnewsapp.core.design.newspage.NewsPageFragment
 import com.koray.nrcnewsapp.core.design.newspage.NewsPageOnListFragmentInteractionListener
 import com.koray.nrcnewsapp.core.domain.ArticleItemModel
@@ -29,6 +34,9 @@ class NrcActivity : AppCompatActivity(),
     private val articleItemSelectionModel: ArticleSelectionModel by viewModels()
     private lateinit var toolbarText: TextView
 
+    private val menuItemInfoFragment: MenuItemInfoFragment = MenuItemInfoFragment.newInstance()
+    private val newsPageFragment: NewsPageFragment = NewsPageFragment.newInstance()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -42,7 +50,9 @@ class NrcActivity : AppCompatActivity(),
 //            } // Night mode is active, we're using dark theme
 //        }
 
-        initNewsPageFragment()
+        if(savedInstanceState == null){
+            initNewsPageFragment()
+        }
     }
 
     private fun setCustomToolbar() {
@@ -61,27 +71,44 @@ class NrcActivity : AppCompatActivity(),
         return true
     }
 
-    // TODO
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+
+        return when (item?.itemId) {
+            R.id.menu_info -> {
+                if(!menuItemInfoFragment.isVisible){initInfoFragment()}
+                return true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun initInfoFragment() {
+        val slide = FragmentAnimation.slide(supportFragmentManager)
+        commitFragment(slide, menuItemInfoFragment, MenuItemInfoFragment.getTagName())
+    }
+
     private fun initNewsPageFragment() {
-        val newsPageFragment: NewsPageFragment = NewsPageFragment.newInstance()
-        FragmentAnimation.rightBottomToLeftTop(supportFragmentManager)
-            .add(
-                R.id.news_page_container,
-                newsPageFragment,
-                NewsPageFragment.getTagName()
-            )
-            .addToBackStack(null)
-            .commit()
+        val rightBottomToLeftTop = FragmentAnimation.rightBottomToLeftTop(supportFragmentManager)
+        commitFragment(rightBottomToLeftTop, newsPageFragment, ArticlePageFragment.getTagName())
     }
 
     private fun initArticlePageFragment() {
         val articlePageFragment: ArticlePageFragment = ArticlePageFragment.newInstance()
-        FragmentAnimation.rightToLeftAnim(supportFragmentManager)
-            .add(
-                R.id.news_page_container,
-                articlePageFragment,
-                ArticlePageFragment.getTagName()
-            )
+        val rightToLeftAnim = FragmentAnimation.rightToLeftAnim(supportFragmentManager)
+        commitFragment(rightToLeftAnim, articlePageFragment, ArticlePageFragment.getTagName())
+    }
+
+    private fun commitFragment(
+        fragmentTransaction: FragmentTransaction,
+        fragment: Fragment,
+        fragmentTag: String,
+        containerId: Int = R.id.news_page_container
+    ) {
+        fragmentTransaction.add(
+            containerId,
+            fragment,
+            fragmentTag
+        )
             .addToBackStack(null)
             .commit()
     }

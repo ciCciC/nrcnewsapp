@@ -73,26 +73,26 @@ class NewsPageFragment : Fragment() {
     }
 
     private fun fetchCategoryNames() {
-//        fetchDummyCategoryNames()
+        fetchDummyCategoryNames()
 
-        val model = ViewModelProvider(this, CustomViewModelFactory(categoryRepository))
-            .get(LiveCategoriesModel::class.java)
-
-        model.getCategories().observe(viewLifecycleOwner, Observer { categoryList ->
-                newsPageItemList.add(
-                    CategoryListItemModel(
-                        categoryList.map { categoryItemModel ->
-                            var bgId = resources.getIdentifier(categoryItemModel.name, "drawable",
-                                context?.packageName)
-                            categoryItemModel.img = bgId
-                            categoryItemModel
-                        },
-                        NewsPageItemModel.ItemType.CATEGORY
-                    )
-                )
-                categorySelectionModel.setCashCategories(categoryList)
-                newsPageItemMap[NewsPageItemModel.ItemType.CATEGORY] = categoryList
-            })
+//        val model = ViewModelProvider(this, CustomViewModelFactory(categoryRepository))
+//            .get(LiveCategoriesModel::class.java)
+//
+//        model.getCategories().observe(viewLifecycleOwner, Observer { categoryList ->
+//                newsPageItemList.add(
+//                    CategoryListItemModel(
+//                        categoryList.map { categoryItemModel ->
+//                            var bgId = resources.getIdentifier(categoryItemModel.name, "drawable",
+//                                context?.packageName)
+//                            categoryItemModel.img = bgId
+//                            categoryItemModel
+//                        },
+//                        NewsPageItemModel.ItemType.CATEGORY
+//                    )
+//                )
+//                categorySelectionModel.setCashCategories(categoryList)
+//                newsPageItemMap[NewsPageItemModel.ItemType.CATEGORY] = categoryList
+//            })
     }
 
     private fun fetchDummyCategoryNames() {
@@ -113,17 +113,17 @@ class NewsPageFragment : Fragment() {
     }
 
     private fun fetchArticleItems(category: String) {
-//        fetchDummyArticleItems()
+        fetchDummyArticleItems()
 
-        val articlesModel = ViewModelProvider(this, CustomViewModelFactory(articleRepository))
-            .get(LiveArticlesModel::class.java)
-
-        // With chosen category
-        articlesModel.getAllByCategory(category).observe(viewLifecycleOwner, Observer { models ->
-            newsPageItemList.removeAll { item -> item.itemType!! == NewsPageItemModel.ItemType.ARTICLE }
-            newsPageItemList.addAll(models)
-            newsPagerAdapter.notifyDataSetChanged()
-        })
+//        val articlesModel = ViewModelProvider(this, CustomViewModelFactory(articleRepository))
+//            .get(LiveArticlesModel::class.java)
+//
+//        // With chosen category
+//        articlesModel.getAllByCategory(category).observe(viewLifecycleOwner, Observer { models ->
+//            newsPageItemList.removeAll { item -> item.itemType!! == NewsPageItemModel.ItemType.ARTICLE }
+//            newsPageItemList.addAll(models)
+//            newsPagerAdapter.notifyDataSetChanged()
+//        })
     }
 
     private fun fetchDummyArticleItems() {
