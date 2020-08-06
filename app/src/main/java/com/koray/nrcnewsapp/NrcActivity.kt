@@ -1,9 +1,15 @@
 package com.koray.nrcnewsapp
 
+import android.content.Context
 import android.os.Bundle
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
@@ -21,6 +27,8 @@ import com.koray.nrcnewsapp.core.domain.CategoryItemModel
 import com.koray.nrcnewsapp.core.domain.NewsPageItemModel
 import com.koray.nrcnewsapp.core.network.viewmodel.ArticleSelectionModel
 import com.koray.nrcnewsapp.core.network.viewmodel.CategorySelectionModel
+import com.koray.nrcnewsapp.core.network.viewmodel.LiveToolbarArrow
+import com.koray.nrcnewsapp.core.util.AnimationEffect
 import com.koray.nrcnewsapp.core.util.FragmentAnimation
 import javax.inject.Singleton
 
@@ -32,7 +40,9 @@ class NrcActivity : AppCompatActivity(),
 
     private val categorySelectionModel: CategorySelectionModel by viewModels()
     private val articleItemSelectionModel: ArticleSelectionModel by viewModels()
+    private val liveToolbarArrow: LiveToolbarArrow by viewModels()
     private lateinit var toolbarText: TextView
+    private lateinit var toolbarArrow: ImageView
 
     private val menuItemInfoFragment: MenuItemInfoFragment = MenuItemInfoFragment.newInstance()
     private val newsPageFragment: NewsPageFragment = NewsPageFragment.newInstance()
@@ -60,9 +70,21 @@ class NrcActivity : AppCompatActivity(),
         supportActionBar?.setCustomView(R.layout.toolbar_app)
 
         toolbarText = findViewById(R.id.toolbar_title)
+        toolbarArrow = findViewById(R.id.toolbar_arrow)
+        toolbarArrow.visibility = View.INVISIBLE
+
+        val rotate = AnimationEffect.rotate(duration = 2 * 200)
+
+        toolbarArrow.setOnClickListener {
+            it.startAnimation(rotate)
+            onBackPress()
+        }
+
+        liveToolbarArrow.getStatus()
+            .observe(this, Observer { status -> toolbarArrow.visibility =  status})
 
         categorySelectionModel.getCategory()
-            .observe(this, Observer { selected -> toolbarText.text = selected })
+            .observe(this, Observer { selected -> toolbarText.text = "[ ${selected[0].toUpperCase() + selected.substring(1)} ]" })
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -75,7 +97,10 @@ class NrcActivity : AppCompatActivity(),
 
         return when (item?.itemId) {
             R.id.menu_info -> {
-                if(!menuItemInfoFragment.isVisible){initInfoFragment()}
+                if(!menuItemInfoFragment.isVisible){
+                    initInfoFragment()
+                    liveToolbarArrow.showArrow()
+                }
                 return true
             }
             else -> super.onOptionsItemSelected(item)
@@ -122,6 +147,23 @@ class NrcActivity : AppCompatActivity(),
         if (newsPageItem is ArticleItemModel) {
             articleItemSelectionModel.setArticleItemModel(newsPageItem)
             initArticlePageFragment()
+            liveToolbarArrow.showArrow()
+        }
+    }
+
+    override fun onBackPressed() {
+        onBackPress()
+    }
+
+    private fun onBackPress() {
+        val backStackCount = supportFragmentManager.backStackEntryCount
+
+        if(backStackCount > 1) {
+            supportFragmentManager.popBackStack()
+        }
+
+        if (backStackCount == 2) {
+            liveToolbarArrow.hideArrow()
         }
     }
 }
