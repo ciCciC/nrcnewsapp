@@ -96,7 +96,7 @@ class NewsPageFragment : Fragment() {
     }
 
     private fun fetchDummyCategoryNames() {
-        val dummyCategoryList = arrayListOf("games", "physics", "technology")
+        val dummyCategoryList = arrayListOf("games", "physics", "technology", "astronomy")
         val categoryList = dummyCategoryList.map { categoryName ->
                 val backgroundImgIdentifier = resources.getIdentifier(categoryName, "drawable",
                     context?.packageName)
@@ -113,17 +113,17 @@ class NewsPageFragment : Fragment() {
     }
 
     private fun fetchArticleItems(category: String) {
-        fetchDummyArticleItems()
+//        fetchDummyArticleItems()
 
-//        val articlesModel = ViewModelProvider(this, CustomViewModelFactory(articleRepository))
-//            .get(LiveArticlesModel::class.java)
-//
-//        // With chosen category
-//        articlesModel.getAllByCategory(category).observe(viewLifecycleOwner, Observer { models ->
-//            newsPageItemList.removeAll { item -> item.itemType!! == NewsPageItemModel.ItemType.ARTICLE }
-//            newsPageItemList.addAll(models)
-//            newsPagerAdapter.notifyDataSetChanged()
-//        })
+        val articlesModel = ViewModelProvider(this, CustomViewModelFactory(articleRepository))
+            .get(LiveArticlesModel::class.java)
+
+        // With chosen category
+        articlesModel.getAllByCategory(category).observe(viewLifecycleOwner, Observer { models ->
+            newsPageItemList.removeAll { item -> item.itemType!! == NewsPageItemModel.ItemType.ARTICLE }
+            newsPageItemList.addAll(models)
+            newsPagerAdapter.notifyDataSetChanged()
+        })
     }
 
     private fun fetchDummyArticleItems() {

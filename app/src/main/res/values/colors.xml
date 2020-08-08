@@ -6,9 +6,12 @@
     <color name="colorTextBar">#000000</color>
     <color name="colorTextTopic">#FF1744</color>
 
-    <color name="colorNrcLogo">#FF1744</color>
-    <color name="colorShareLogo">#FF1744</color>
-    <color name="colorMenuIcons">#FF1744</color>
+    <color name="genericColorHigh">#FF1744</color>
+    <color name="colorNrcLogo">@color/genericColorHigh</color>
+    <color name="colorShareLogo">@color/genericColorHigh</color>
+    <color name="colorMenuIcons">@color/genericColorHigh</color>
+    <color name="colorToolbarArrow">@color/genericColorHigh</color>
 
     <color name="colorWhite">#FFFFFF</color>
+    <color name="colorTransparant">@android:color/transparent</color>
 </resources>
