@@ -13,4 +13,5 @@
     <color name="colorToolbarArrow">@color/genericColorHigh</color>
 
     <color name="colorWhite">#FFFFFF</color>
+    <color name="colorTransparant">@android:color/transparent</color>
 </resources>

@@ -1,11 +1,15 @@
 package com.koray.nrcnewsapp
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.content.res.Resources
+import android.graphics.Color
 import android.os.Bundle
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.view.Menu
 import android.view.MenuItem
+import android.view.MotionEvent
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -29,6 +33,7 @@ import com.koray.nrcnewsapp.core.network.viewmodel.ArticleSelectionModel
 import com.koray.nrcnewsapp.core.network.viewmodel.CategorySelectionModel
 import com.koray.nrcnewsapp.core.network.viewmodel.LiveToolbarArrow
 import com.koray.nrcnewsapp.core.util.AnimationEffect
+import com.koray.nrcnewsapp.core.util.ChangeBackgroundOnTouch
 import com.koray.nrcnewsapp.core.util.FragmentAnimation
 import javax.inject.Singleton
 
@@ -65,6 +70,7 @@ class NrcActivity : AppCompatActivity(),
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private fun setCustomToolbar() {
         supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
         supportActionBar?.setCustomView(R.layout.toolbar_app)
@@ -79,6 +85,8 @@ class NrcActivity : AppCompatActivity(),
             it.startAnimation(rotate)
             onBackPress()
         }
+
+        toolbarArrow.setOnTouchListener(ChangeBackgroundOnTouch(resources))
 
         liveToolbarArrow.getStatus()
             .observe(this, Observer { status -> toolbarArrow.visibility =  status})
