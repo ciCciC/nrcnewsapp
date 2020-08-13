@@ -13,7 +13,6 @@ object ArticlePageService: Cache<String, ArticlePageDto> {
     private val cacheMap = HashMap<String, ArticlePageDto>()
 
     override fun add(key: String, value: ArticlePageDto) {
-        this.javaClass.classLoader?.getResourceAsStream("application.yml")
         if(cacheMap.size == 0) {
             println("Caching...")
             cleanupInterval.schedule(object: TimerTask() {
