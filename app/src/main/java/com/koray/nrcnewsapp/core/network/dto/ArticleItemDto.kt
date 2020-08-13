@@ -16,6 +16,11 @@ data class ArticleItemDto(
     @JsonProperty("teaser")
     override var teaser: String? = ""
 ): ArticleItem {
+
+    override fun hashCode(): Int {
+        return (topic + title).hashCode()
+    }
+
     override fun toString(): String {
         return "ArticleItemDto(pageLink=$pageLink, imageLink=$imageLink, topic=$topic, title=$title, teaser=$teaser)"
     }
