@@ -1,24 +1,16 @@
 package com.koray.nrcnewsapp
 
 import android.annotation.SuppressLint
-import android.content.Context
-import android.content.res.Resources
-import android.graphics.Color
 import android.os.Bundle
-import android.os.VibrationEffect
-import android.os.Vibrator
 import android.view.Menu
 import android.view.MenuItem
-import android.view.MotionEvent
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import com.koray.nrcnewsapp.core.design.articlepage.ArticlePageFragment
@@ -92,7 +84,13 @@ class NrcActivity : AppCompatActivity(),
             .observe(this, Observer { status -> toolbarArrow.visibility =  status})
 
         categorySelectionModel.getCategory()
-            .observe(this, Observer { selected -> toolbarText.text = "[ ${selected[0].toUpperCase() + selected.substring(1)} ]" })
+            .observe(this, Observer { categoryItem ->
+                run {
+                    val categoryDisplay = categoryItem.display!!
+                    toolbarText.text = "* ${categoryDisplay[0].toUpperCase() + categoryDisplay.substring(1)} *"
+                }
+            }
+            )
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -147,8 +145,8 @@ class NrcActivity : AppCompatActivity(),
     }
 
     override fun onListFragmentInteraction(category: CategoryItemModel?) {
-        println("Selected: " + category?.name)
-        categorySelectionModel.setCategory(category?.name.toString())
+        println("Selected: " + category?.topic)
+        categorySelectionModel.setCategory(category!!)
     }
 
     override fun onListFragmentInteraction(newsPageItem: NewsPageItemModel?) {

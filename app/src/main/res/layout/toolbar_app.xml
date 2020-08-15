@@ -3,9 +3,14 @@
 <androidx.appcompat.widget.Toolbar
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/toolbar_app"
     android:layout_width="match_parent"
     android:layout_height="56dp"
+    android:contentInsetLeft="0dp"
+    android:contentInsetStart="0dp"
+    app:contentInsetLeft="0dp"
+    app:contentInsetStart="0dp"
     android:background="@color/colorPrimary"
     android:minHeight="?attr/actionBarSize"
     android:theme="?attr/actionBarTheme">
@@ -18,7 +23,7 @@
 
             <ImageView
                 android:id="@+id/toolbar_arrow"
-                android:layout_width="45dp"
+                android:layout_width="30dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
                 android:contentDescription="@string/default_content_desc"

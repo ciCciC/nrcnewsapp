@@ -3,6 +3,7 @@ package com.koray.nrcnewsapp.core.network
 import com.koray.nrcnewsapp.core.network.caching.ArticlePageService
 import com.koray.nrcnewsapp.core.network.dto.ArticlePageDto
 import com.koray.nrcnewsapp.core.network.dto.ArticleItemDto
+import com.koray.nrcnewsapp.core.network.dto.CategoryDto
 import io.micronaut.core.annotation.Introspected
 import io.micronaut.core.type.Argument
 import io.micronaut.http.HttpRequest
@@ -33,9 +34,9 @@ class NrcScraperClient(
             .retrieve(req, Argument.listOf(ArticleItemDto::class.java))
     }
 
-    fun getCategories(): List<String> {
+    fun getCategories(): List<CategoryDto> {
         val req = HttpRequest.GET<Any>("/" + ApiStore.CATEGORY_ITEMS)
-        return this.httpClient.toBlocking().retrieve(req, Argument.listOf(String::class.java))
+        return this.httpClient.toBlocking().retrieve(req, Argument.listOf(CategoryDto::class.java))
     }
 
     fun getArticle(articleItemDto: ArticleItemDto, category: String): ArticlePageDto {
