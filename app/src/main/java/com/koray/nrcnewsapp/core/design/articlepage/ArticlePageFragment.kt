@@ -25,7 +25,6 @@ import com.koray.nrcnewsapp.core.network.viewmodel.CategorySelectionModel
 import com.koray.nrcnewsapp.core.network.viewmodel.CustomViewModelFactory
 import com.koray.nrcnewsapp.core.network.viewmodel.LiveArticlesModel
 import com.koray.nrcnewsapp.core.util.ImageManager
-import com.koray.nrcnewsapp.core.util.ViewUtil
 import com.koray.nrcnewsapp.core.util.inject
 import java.util.*
 
@@ -104,8 +103,6 @@ class ArticlePageFragment : Fragment() {
         articlePageViewHolder.topic.text = articlePageModel.topic?.toUpperCase(Locale.ROOT)
         articlePageViewHolder.title.text = articlePageModel.title
         articlePageViewHolder.teaser.text = articlePageModel.teaser
-
-        ViewUtil.hideWhenEmpty(articlePageViewHolder.topic.text, articlePageViewHolder.topic)
 
         populateArticleContent(view, articlePageModel, articlePageViewHolder)
     }

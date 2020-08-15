@@ -20,11 +20,11 @@
             <ImageView
                 android:id="@+id/articlepage_headerImage"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="300dp"
                 android:layout_gravity="center"
                 android:adjustViewBounds="true"
                 android:contentDescription="header image"
-                android:maxHeight="200dp"
+                android:maxHeight="300dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/test_deadstranding"
                 app:layout_constraintEnd_toEndOf="parent"

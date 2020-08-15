@@ -16,8 +16,6 @@ object ImageManager {
 
     fun loadImage(view: View, image: ImageView, imgUrl: String, roundImage: Boolean) {
 
-        val roundImageX = false
-
         val picasso = Picasso.with(view.context)
 
         if(imgUrl.isEmpty()) {
@@ -27,7 +25,7 @@ object ImageManager {
         }
 
             .error(R.drawable.test_deadstranding)
-            .transform(if(roundImageX) BottomRoundTransformation(80f, 0f) else NoRoundTransformation())
+            .transform(if(roundImage) BottomRoundTransformation(80f, 0f) else NoRoundTransformation())
             .centerCrop()
             .fit()
             .into(image)

@@ -14,7 +14,6 @@ import com.koray.nrcnewsapp.core.design.viewholders.CategoryListViewHolder
 import com.koray.nrcnewsapp.core.domain.ArticleItemModel
 import com.koray.nrcnewsapp.core.domain.CategoryItemModel
 import com.koray.nrcnewsapp.core.domain.NewsPageItemModel
-import com.koray.nrcnewsapp.core.util.ViewUtil
 import java.util.*
 
 
@@ -68,12 +67,10 @@ class NewsPageRecyclerViewAdapter(
             }
             is ArticleViewHolder -> {
                 if(item is ArticleItemModel){
-                    ImageManager.loadImage(holder.mView, holder.articleItemImg, item.imageLink.toString(), true)
+                    ImageManager.loadImage(holder.mView, holder.articleItemImg, item.imageLink.toString())
                     holder.topic.text = item.topic?.toUpperCase(Locale.ROOT)
                     holder.title.text = item.title
                     holder.teaser.text = item.teaser
-
-                    ViewUtil.hideWhenEmpty(holder.topic.text, holder.topic)
 
                     with(holder.mView) {
                         tag = item
