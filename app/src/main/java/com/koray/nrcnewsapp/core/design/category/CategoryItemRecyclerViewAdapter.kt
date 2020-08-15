@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.koray.nrcnewsapp.R
 import com.koray.nrcnewsapp.core.domain.CategoryItemModel
 import com.koray.nrcnewsapp.core.util.AnimationEffect
@@ -31,8 +32,12 @@ class CategoryItemRecyclerViewAdapter(
     override fun onBindViewHolder(holder: CategoryItemViewHolder, position: Int) {
         val item = mValues[position]
         holder.categoryItemModel = item
-        holder.mContentView.text = item.name
-        holder.mImage.setBackgroundResource(if (item.img == null) R.drawable.test_deadstranding else item.img!!)
+        holder.mContentView.text = item.display
+
+        Glide
+            .with(holder.mView)
+            .load(if (item.img == null) R.drawable.test_deadstranding else item.img)
+            .into(holder.mImage)
 
         with(holder.mView) {
             tag = item
@@ -48,7 +53,6 @@ class CategoryItemRecyclerViewAdapter(
         val mView: View,
         private val categoryListener: CategoryOnListInteractionListener?
     ) : RecyclerView.ViewHolder(mView), View.OnClickListener {
-        //        val mIdView: TextView = mView.item_number
         val mContentView: TextView = mView.category_name
         val mImage: ImageView = mView.category_item_image
         lateinit var categoryItemModel: CategoryItemModel

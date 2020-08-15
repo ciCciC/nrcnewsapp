@@ -2,12 +2,9 @@ package com.koray.nrcnewsapp.core.design.articlepage
 
 import android.graphics.Typeface
 import android.os.Bundle
-import android.transition.ChangeBounds
-import android.transition.TransitionManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AnticipateOvershootInterpolator
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
@@ -16,11 +13,10 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.koray.nrcnewsapp.R
 import com.koray.nrcnewsapp.core.abstraction.Ctype
-import com.koray.nrcnewsapp.core.util.ImageManager
-import com.koray.nrcnewsapp.core.util.inject
 import com.koray.nrcnewsapp.core.design.viewholders.ArticlePageViewHolder
 import com.koray.nrcnewsapp.core.domain.ArticleItemModel
 import com.koray.nrcnewsapp.core.domain.ArticlePageModel
+import com.koray.nrcnewsapp.core.domain.CategoryItemModel
 import com.koray.nrcnewsapp.core.network.dto.ContentBodyDto
 import com.koray.nrcnewsapp.core.network.dto.SectionDto
 import com.koray.nrcnewsapp.core.network.repository.ArticleRepository
@@ -28,15 +24,17 @@ import com.koray.nrcnewsapp.core.network.viewmodel.ArticleSelectionModel
 import com.koray.nrcnewsapp.core.network.viewmodel.CategorySelectionModel
 import com.koray.nrcnewsapp.core.network.viewmodel.CustomViewModelFactory
 import com.koray.nrcnewsapp.core.network.viewmodel.LiveArticlesModel
-import com.koray.nrcnewsapp.core.util.AnimationEffect
+import com.koray.nrcnewsapp.core.util.ImageManager
 import com.koray.nrcnewsapp.core.util.ViewUtil
+import com.koray.nrcnewsapp.core.util.inject
+import java.util.*
 
 
 class ArticlePageFragment : Fragment() {
 
     private val articleRepository: ArticleRepository by inject()
     private val categorySelectionModel: CategorySelectionModel by activityViewModels()
-    private var selectedCategory = ""
+    private lateinit var selectedCategory: CategoryItemModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,7 +66,7 @@ class ArticlePageFragment : Fragment() {
             selectedCategory = category
         })
 
-        articlesModel.getArticle(articleItemModel, selectedCategory)
+        articlesModel.getArticle(articleItemModel, selectedCategory.topic!!)
             .observe(viewLifecycleOwner, Observer { articlePage ->
                 populateArticlePage(view, articlePage)
             })
@@ -103,7 +101,7 @@ class ArticlePageFragment : Fragment() {
             true
         )
 
-        articlePageViewHolder.topic.text = articlePageModel.topic
+        articlePageViewHolder.topic.text = articlePageModel.topic?.toUpperCase(Locale.ROOT)
         articlePageViewHolder.title.text = articlePageModel.title
         articlePageViewHolder.teaser.text = articlePageModel.teaser
 

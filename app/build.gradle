@@ -68,9 +68,6 @@ dependencies {
     implementation "android.arch.lifecycle:extensions:1.1.1"
     implementation "android.arch.lifecycle:viewmodel:1.1.1"
 
-    // GIF animations
-    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.19'
-
     // Micronaut
     implementation "io.micronaut:micronaut-runtime:${micronautVersion}"
     implementation "io.micronaut:micronaut-http-client:${micronautVersion}"
@@ -83,6 +80,10 @@ dependencies {
 
     // Picasso for image manipulation
     implementation group: 'com.squareup.picasso', name: 'picasso', version: '2.5.2'
+
+    // Glide for GIF and image manipulation
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
 
     // Test
     // https://mvnrepository.com/artifact/org.slf4j/slf4j-log4j12
