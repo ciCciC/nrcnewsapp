@@ -49,15 +49,7 @@ class NrcActivity : AppCompatActivity(),
         setContentView(R.layout.activity_main)
         setCustomToolbar()
 
-//        when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
-//            Configuration.UI_MODE_NIGHT_NO -> {
-//            } // Night mode is not active, we're using the light theme
-//            Configuration.UI_MODE_NIGHT_YES -> {
-//
-//            } // Night mode is active, we're using dark theme
-//        }
-
-        if(savedInstanceState == null){
+        if (savedInstanceState == null) {
             initNewsPageFragment()
         }
     }
@@ -81,13 +73,14 @@ class NrcActivity : AppCompatActivity(),
         toolbarArrow.setOnTouchListener(ChangeBackgroundOnTouch(resources))
 
         liveToolbarArrow.getStatus()
-            .observe(this, Observer { status -> toolbarArrow.visibility =  status})
+            .observe(this, Observer { status -> toolbarArrow.visibility = status })
 
         categorySelectionModel.getCategory()
             .observe(this, Observer { categoryItem ->
                 run {
                     val categoryDisplay = categoryItem.display!!
-                    toolbarText.text = "* ${categoryDisplay[0].toUpperCase() + categoryDisplay.substring(1)} *"
+                    toolbarText.text =
+                        "* ${categoryDisplay[0].toUpperCase() + categoryDisplay.substring(1)} *"
                 }
             }
             )
@@ -103,7 +96,7 @@ class NrcActivity : AppCompatActivity(),
 
         return when (item?.itemId) {
             R.id.menu_info -> {
-                if(!menuItemInfoFragment.isVisible){
+                if (!menuItemInfoFragment.isVisible) {
                     initInfoFragment()
                     liveToolbarArrow.showArrow()
                 }
@@ -145,7 +138,6 @@ class NrcActivity : AppCompatActivity(),
     }
 
     override fun onListFragmentInteraction(category: CategoryItemModel?) {
-        println("Selected: " + category?.topic)
         categorySelectionModel.setCategory(category!!)
     }
 
@@ -164,7 +156,7 @@ class NrcActivity : AppCompatActivity(),
     private fun onBackPress() {
         val backStackCount = supportFragmentManager.backStackEntryCount
 
-        if(backStackCount > 1) {
+        if (backStackCount > 1) {
             supportFragmentManager.popBackStack()
         }
 

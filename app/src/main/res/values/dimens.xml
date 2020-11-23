@@ -3,4 +3,6 @@
     <dimen name="text_margin">16dp</dimen>
     <dimen name="article_margin">16dp</dimen>
     <dimen name="article_content_margin">12dp</dimen>
+    <dimen name="floating_button_size">50dp</dimen>
+    <dimen name="floating_button_image_size">40dp</dimen>
 </resources>
