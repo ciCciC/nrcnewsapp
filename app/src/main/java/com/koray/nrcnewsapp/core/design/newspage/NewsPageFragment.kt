@@ -11,15 +11,19 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.koray.nrcnewsapp.R
 import com.koray.nrcnewsapp.core.design.category.CategoryOnListInteractionListener
-import com.koray.nrcnewsapp.core.util.inject
-import com.koray.nrcnewsapp.core.domain.*
+import com.koray.nrcnewsapp.core.domain.ArticleItemModel
+import com.koray.nrcnewsapp.core.domain.CategoryItemModel
+import com.koray.nrcnewsapp.core.domain.CategoryListItemModel
+import com.koray.nrcnewsapp.core.domain.NewsPageItemModel
 import com.koray.nrcnewsapp.core.network.repository.ArticleRepository
 import com.koray.nrcnewsapp.core.network.repository.CategoryRepository
 import com.koray.nrcnewsapp.core.network.viewmodel.CategorySelectionModel
 import com.koray.nrcnewsapp.core.network.viewmodel.CustomViewModelFactory
 import com.koray.nrcnewsapp.core.network.viewmodel.LiveArticlesModel
+import com.koray.nrcnewsapp.core.util.inject
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -38,7 +42,7 @@ class NewsPageFragment : Fragment() {
     private val newsPageItemMap: MutableMap<NewsPageItemModel.ItemType, Any> =
         EnumMap(NewsPageItemModel.ItemType::class.java)
 
-    private lateinit var newsPagerAdapter: NewsPageRecyclerViewAdapter
+    private var newsPagerAdapter: NewsPageRecyclerViewAdapter? = null
 
     private lateinit var selectedCategory: CategoryItemModel
 
@@ -51,21 +55,24 @@ class NewsPageFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_news_page_list, container, false)
+        val scrollUpButton = view.findViewById<FloatingActionButton>(R.id.buttonScrollUp)
+        val recyclerView = view.findViewById<RecyclerView>(R.id.list)
 
         fetchCategoryNames()
 
         // Set the adapter
-        if (view is RecyclerView) {
-            newsPagerAdapter = NewsPageRecyclerViewAdapter(
-                newsPageItemList,
-                newsPageItemMap,
-                listenerNewsPage,
-                categoryListener
-            )
-            with(view) {
-                layoutManager = LinearLayoutManager(context)
-                adapter = newsPagerAdapter
-            }
+        newsPagerAdapter = NewsPageRecyclerViewAdapter(
+            newsPageItemList,
+            newsPageItemMap,
+            listenerNewsPage,
+            categoryListener
+        )
+
+        recyclerView.layoutManager = LinearLayoutManager(context)
+        recyclerView.adapter = newsPagerAdapter
+
+        scrollUpButton.setOnClickListener { v ->
+            recyclerView.smoothScrollToPosition(0)
         }
         return view
     }
@@ -102,12 +109,14 @@ class NewsPageFragment : Fragment() {
             CategoryItemModel("astronomy", "astronomy", 0)
         )
         val categoryList = dummyCategoryList.map { cat ->
-                val backgroundImgIdentifier = resources.getIdentifier(cat.topic, "drawable",
-                    context?.packageName)
+            val backgroundImgIdentifier = resources.getIdentifier(
+                cat.topic, "drawable",
+                context?.packageName
+            )
 
-                cat.img = backgroundImgIdentifier
-                cat
-            }
+            cat.img = backgroundImgIdentifier
+            cat
+        }
 
         categorySelectionModel.setCashCategories(categoryList)
 
@@ -124,11 +133,12 @@ class NewsPageFragment : Fragment() {
             .get(LiveArticlesModel::class.java)
 
         // With chosen category
-        articlesModel.getAllByCategory(category.topic!!).observe(viewLifecycleOwner, Observer { models ->
-            newsPageItemList.removeAll { item -> item.itemType!! == NewsPageItemModel.ItemType.ARTICLE }
-            newsPageItemList.addAll(models)
-            newsPagerAdapter.notifyDataSetChanged()
-        })
+        articlesModel.getAllByCategory(category.topic!!)
+            .observe(viewLifecycleOwner, Observer { models ->
+                newsPageItemList.removeAll { item -> item.itemType!! == NewsPageItemModel.ItemType.ARTICLE }
+                newsPageItemList.addAll(models)
+                newsPagerAdapter?.notifyDataSetChanged()
+            })
     }
 
     private fun fetchDummyArticleItems() {
@@ -147,7 +157,7 @@ class NewsPageFragment : Fragment() {
             )
         }
 
-        newsPagerAdapter.notifyDataSetChanged()
+        newsPagerAdapter?.notifyDataSetChanged()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -157,7 +167,7 @@ class NewsPageFragment : Fragment() {
             fetchArticleItems(category)
         })
 
-        if(!this::selectedCategory.isInitialized){
+        if (!this::selectedCategory.isInitialized) {
             autoLoadArticles()
         }
     }
@@ -165,7 +175,7 @@ class NewsPageFragment : Fragment() {
     private fun autoLoadArticles() {
 
         val initCategory = categorySelectionModel.getCashedCategories().values.toList()
-            .getOrElse(0){CategoryItemModel("latest news", "news", 0)}
+            .getOrElse(0) { CategoryItemModel("latest news", "news", 0) }
 
         fetchArticleItems(initCategory)
         categorySelectionModel.setCategory(initCategory)
