@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import com.koray.nrcnewsapp.core.design.articlepage.ArticlePageFragment
+import com.koray.nrcnewsapp.core.design.category.CategoryItemRecyclerViewAdapter
 import com.koray.nrcnewsapp.core.design.category.CategoryOnListInteractionListener
 import com.koray.nrcnewsapp.core.design.info.MenuItemInfoFragment
 import com.koray.nrcnewsapp.core.design.newspage.NewsPageFragment

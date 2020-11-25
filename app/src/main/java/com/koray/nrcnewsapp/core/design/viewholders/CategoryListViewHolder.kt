@@ -7,7 +7,7 @@ import com.koray.nrcnewsapp.R
 import com.koray.nrcnewsapp.core.design.category.CategoryItemRecyclerViewAdapter
 import com.koray.nrcnewsapp.core.design.category.CategoryOnListInteractionListener
 import com.koray.nrcnewsapp.core.domain.CategoryItemModel
-import com.koray.nrcnewsapp.core.util.AnimationEffect
+import com.koray.nrcnewsapp.core.network.viewmodel.CategorySelectionModel
 
 /***
  * Handles the Category list View in NewsPage.
@@ -16,7 +16,9 @@ import com.koray.nrcnewsapp.core.util.AnimationEffect
 class CategoryListViewHolder(
     mView: View,
     categoriesList: MutableList<CategoryItemModel>,
-    listener: CategoryOnListInteractionListener?)
+    listener: CategoryOnListInteractionListener?,
+    categoryLiveData: CategorySelectionModel
+)
     : BaseViewHolder(mView) {
 
     init {
@@ -26,7 +28,8 @@ class CategoryListViewHolder(
 
         recyclerView.adapter = CategoryItemRecyclerViewAdapter(
             categoriesList,
-            listener
+            listener,
+            categoryLiveData
         )
     }
 }
