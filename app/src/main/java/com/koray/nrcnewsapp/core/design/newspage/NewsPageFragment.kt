@@ -170,9 +170,9 @@ class NewsPageFragment : Fragment() {
             categorySelectionModel.getCategoryMapsViewHolder().forEach { (t, u) ->
                 run {
                     if (t == category.hashCode()) {
-                        u.mImage.colorFilter = null
+                        u.mImage.alpha = 1F
                     } else {
-                        u.mImage.setColorFilter(Color.GRAY, PorterDuff.Mode.SCREEN)
+                        u.mImage.alpha = 0.27F
                     }
                 }
             }

@@ -68,6 +68,9 @@ dependencies {
     implementation "android.arch.lifecycle:extensions:1.1.1"
     implementation "android.arch.lifecycle:viewmodel:1.1.1"
 
+    // reactive
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+
     // Micronaut
     implementation "io.micronaut:micronaut-runtime:${micronautVersion}"
     implementation "io.micronaut:micronaut-http-client:${micronautVersion}"
@@ -76,6 +79,7 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation 'com.google.android.material:material:1.2.1'
+
     kapt platform("io.micronaut:micronaut-bom:$micronautVersion")
     kapt "io.micronaut:micronaut-inject-java"
 

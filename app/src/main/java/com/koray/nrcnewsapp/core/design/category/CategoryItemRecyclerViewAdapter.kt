@@ -44,7 +44,7 @@ class CategoryItemRecyclerViewAdapter(
             .into(holder.mImage)
 
         if (!item.selected) {
-            holder.mImage.setColorFilter(Color.GRAY, PorterDuff.Mode.SCREEN)
+            holder.mImage.alpha = 0.27F
         }
 
         holder.categoryLiveData.addCategoryWithViewHolder(item.hashCode(), holder)
