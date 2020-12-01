@@ -1,8 +1,6 @@
 package com.koray.nrcnewsapp.core.design.newspage
 
 import android.content.Context
-import android.graphics.Color
-import android.graphics.PorterDuff
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.koray.nrcnewsapp.R
+import com.koray.nrcnewsapp.core.design.category.CategoryItemRecyclerViewAdapter
 import com.koray.nrcnewsapp.core.design.category.CategoryOnListInteractionListener
 import com.koray.nrcnewsapp.core.domain.ArticleItemModel
 import com.koray.nrcnewsapp.core.domain.CategoryItemModel
@@ -167,21 +166,26 @@ class NewsPageFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         categorySelectionModel.getCategory().observe(viewLifecycleOwner, Observer { category ->
             selectedCategory = category
-            categorySelectionModel.getCategoryMapsViewHolder().forEach { (t, u) ->
-                run {
-                    if (t == category.hashCode()) {
-                        u.mImage.alpha = 1F
-                    } else {
-                        u.mImage.alpha = 0.27F
-                    }
+            run {
+                categorySelectionModel.getCategoryMapsViewHolder().forEach { (nextId, mappedView) ->
+                    this.handleCategorySelectionView(category.hashCode(), nextId, mappedView)
                 }
             }
+
             fetchArticleItems(category)
         })
 
         if (!this::selectedCategory.isInitialized) {
             autoLoadArticles()
         }
+    }
+
+    private fun handleCategorySelectionView(
+        targetId: Int,
+        nextId: Int,
+        mappedView: CategoryItemRecyclerViewAdapter.CategoryItemViewHolder
+    ) {
+        mappedView.mImage.alpha = if (targetId == nextId.hashCode()) 1F else 0.27F
     }
 
     private fun autoLoadArticles() {
