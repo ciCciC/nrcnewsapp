@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.koray.nrcnewsapp.R
+import com.koray.nrcnewsapp.core.design.category.CategoryItemRecyclerViewAdapter
 import com.koray.nrcnewsapp.core.design.category.CategoryOnListInteractionListener
 import com.koray.nrcnewsapp.core.domain.ArticleItemModel
 import com.koray.nrcnewsapp.core.domain.CategoryItemModel
@@ -30,7 +31,7 @@ import kotlin.collections.ArrayList
 
 class NewsPageFragment : Fragment() {
 
-    private var listenerNewsPage: NewsPageOnListFragmentInteractionListener? = null
+    private var newsPageListener: NewsPageOnListFragmentInteractionListener? = null
     private var categoryListener: CategoryOnListInteractionListener? = null
 
     private val categoryRepository: CategoryRepository by inject()
@@ -64,8 +65,9 @@ class NewsPageFragment : Fragment() {
         newsPagerAdapter = NewsPageRecyclerViewAdapter(
             newsPageItemList,
             newsPageItemMap,
-            listenerNewsPage,
-            categoryListener
+            newsPageListener,
+            categoryListener,
+            categorySelectionModel
         )
 
         recyclerView.layoutManager = LinearLayoutManager(context)
@@ -102,7 +104,7 @@ class NewsPageFragment : Fragment() {
 
     private fun fetchDummyCategoryNames() {
         val dummyCategoryList = arrayListOf(
-            CategoryItemModel("latest news", "news", 0),
+            CategoryItemModel("latest news", "news", 0, selected = true),
             CategoryItemModel("games", "games", 0),
             CategoryItemModel("physics", "physics", 0),
             CategoryItemModel("technology", "technology", 0),
@@ -164,12 +166,26 @@ class NewsPageFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         categorySelectionModel.getCategory().observe(viewLifecycleOwner, Observer { category ->
             selectedCategory = category
+            run {
+                categorySelectionModel.getCategoryMapsViewHolder().forEach { (nextId, mappedView) ->
+                    this.handleCategorySelectionView(category.hashCode(), nextId, mappedView)
+                }
+            }
+
             fetchArticleItems(category)
         })
 
         if (!this::selectedCategory.isInitialized) {
             autoLoadArticles()
         }
+    }
+
+    private fun handleCategorySelectionView(
+        targetId: Int,
+        nextId: Int,
+        mappedView: CategoryItemRecyclerViewAdapter.CategoryItemViewHolder
+    ) {
+        mappedView.mImage.alpha = if (targetId == nextId.hashCode()) 1F else 0.27F
     }
 
     private fun autoLoadArticles() {
@@ -193,7 +209,7 @@ class NewsPageFragment : Fragment() {
         super.onAttach(context)
 
         if (context is NewsPageOnListFragmentInteractionListener)
-            listenerNewsPage = context
+            newsPageListener = context
 
         if (context is CategoryOnListInteractionListener)
             categoryListener = context
@@ -204,7 +220,7 @@ class NewsPageFragment : Fragment() {
 
     override fun onDetach() {
         super.onDetach()
-        listenerNewsPage = null
+        newsPageListener = null
         categoryListener = null
     }
 

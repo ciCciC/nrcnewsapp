@@ -7,13 +7,14 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.koray.nrcnewsapp.R
 import com.koray.nrcnewsapp.core.design.category.CategoryOnListInteractionListener
-import com.koray.nrcnewsapp.core.util.ImageManager
 import com.koray.nrcnewsapp.core.design.viewholders.ArticleViewHolder
 import com.koray.nrcnewsapp.core.design.viewholders.BaseViewHolder
 import com.koray.nrcnewsapp.core.design.viewholders.CategoryListViewHolder
 import com.koray.nrcnewsapp.core.domain.ArticleItemModel
 import com.koray.nrcnewsapp.core.domain.CategoryItemModel
 import com.koray.nrcnewsapp.core.domain.NewsPageItemModel
+import com.koray.nrcnewsapp.core.network.viewmodel.CategorySelectionModel
+import com.koray.nrcnewsapp.core.util.ImageManager
 import java.util.*
 
 
@@ -21,7 +22,8 @@ class NewsPageRecyclerViewAdapter(
     private val mValues: List<NewsPageItemModel>,
     private val mValuesMap: Map<NewsPageItemModel.ItemType, Any>,
     private val mListenerNewsPage: NewsPageOnListFragmentInteractionListener?,
-    private val mCategoryListener: CategoryOnListInteractionListener?
+    private val mCategoryListener: CategoryOnListInteractionListener?,
+    private val categoryLiveData: CategorySelectionModel
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val mOnClickListener: View.OnClickListener
@@ -48,7 +50,9 @@ class NewsPageRecyclerViewAdapter(
                 .inflate(R.layout.fragment_category_list, parent, false)
             CategoryListViewHolder(view,
                 (mValuesMap[NewsPageItemModel.ItemType.CATEGORY] as MutableList<CategoryItemModel>),
-                mCategoryListener)
+                mCategoryListener,
+                categoryLiveData
+            )
         } else {
             view = LayoutInflater.from(parent.context)
                 .inflate(R.layout.fragment_article_item, parent, false)

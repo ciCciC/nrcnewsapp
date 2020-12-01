@@ -7,8 +7,10 @@ import com.koray.nrcnewsapp.core.network.dto.CategoryDto
 import io.micronaut.core.annotation.Introspected
 import io.micronaut.core.type.Argument
 import io.micronaut.http.HttpRequest
+import io.micronaut.http.MutableHttpRequest
 import io.micronaut.http.client.RxHttpClient
 import io.micronaut.http.client.annotation.Client
+import io.reactivex.Observable
 import javax.inject.Singleton
 
 @Introspected
@@ -27,11 +29,17 @@ class NrcScraperClient(
             .retrieve(req, Argument.listOf(ArticleItemDto::class.java))
     }
 
-    fun getAllByCategory(category: String): List<ArticleItemDto> {
+    fun getArticlesByCategoryAsync(category: String): Observable<List<ArticleItemDto>> {
         val req = HttpRequest.GET<Any>("/" + ApiStore.CATEGORY + "/" + category)
+        val argumentType = Argument.listOf(ArticleItemDto::class.java)
+        return Observable.fromCallable { this.request(req, argumentType) }
+//        return Observable.just(this.getAllByCategory(category))
+    }
+
+    private fun <T> request(req: MutableHttpRequest<Any>, argument: Argument<T>): T {
         return this.httpClient
             .toBlocking()
-            .retrieve(req, Argument.listOf(ArticleItemDto::class.java))
+            .retrieve(req, argument)
     }
 
     fun getCategories(): List<CategoryDto> {
@@ -48,7 +56,7 @@ class NrcScraperClient(
         }
 
         val req = HttpRequest.POST<Any>("/" + ApiStore.CATEGORY + "/" + category + "/" + ApiStore.ARTICLE, articleItemDto)
-        val fetched = this.httpClient.toBlocking().retrieve(req, ArticlePageDto::class.java)
+        val fetched = this.httpClient.toBlocking().retrieve(req, Argument.of(ArticlePageDto::class.java))
         articlePageCache.add(key, fetched)
         return fetched
     }
