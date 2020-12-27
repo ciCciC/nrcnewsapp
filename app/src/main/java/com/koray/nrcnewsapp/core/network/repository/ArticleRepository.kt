@@ -25,19 +25,9 @@ class ArticleRepository : BaseRepository {
         return this.nrcScraperClient.getArticlesByCategoryAsync(category)
     }
 
-//    @SuppressLint("CheckResult")
-//    fun getAllByCategory(category: String): LiveData<List<ArticleItemDto>> {
-//        val data = MutableLiveData<List<ArticleItemDto>>()
-//        data.value = emptyList()
-//        this.nrcScraperClient
-//            .getAllByCategoryAsync(category)
-//            .subscribe(
-//                { value -> data.value = value },
-//                { error -> println("Error: $error") },
-//                { println("Completed!") }
-//            )
-//        return data
-//    }
+    fun getArticleTest(articleItemDto: ArticleItemDto, category: String): Observable<ArticlePageDto> {
+        return this.nrcScraperClient.getArticleAsync(articleItemDto, category)
+    }
 
     fun getArticle(articleItemDto: ArticleItemDto, category: String): LiveData<ArticlePageDto> {
         val data = MutableLiveData<ArticlePageDto>()

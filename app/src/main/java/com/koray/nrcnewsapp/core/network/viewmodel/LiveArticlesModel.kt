@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.koray.nrcnewsapp.core.domain.ArticleItemModel
 import com.koray.nrcnewsapp.core.domain.ArticlePageModel
+import com.koray.nrcnewsapp.core.network.caching.ArticlePageService
 import com.koray.nrcnewsapp.core.network.dto.ArticleItemDto
 import com.koray.nrcnewsapp.core.network.transformer.ArticleTransformer
 import com.koray.nrcnewsapp.core.network.repository.ArticleRepository
@@ -18,7 +19,9 @@ class LiveArticlesModel @Inject constructor(
     private var articleRepository: ArticleRepository
 ) : ViewModel() {
 
-    private val articlesByCategory = MutableLiveData<List<ArticleItemModel>>()
+    private val articlesByCategoryLiveData = MutableLiveData<List<ArticleItemModel>>()
+//    private val articleLiveData = MutableLiveData<ArticlePageModel>()
+    private val articlePageCache = ArticlePageService
 
 //    fun getArticleItems(): LiveData<List<ArticleItemModel>> {
 //        return transform(articleRepository.getAll());
@@ -26,29 +29,66 @@ class LiveArticlesModel @Inject constructor(
 
     @SuppressLint("CheckResult")
     fun getAllByCategory(category: String): LiveData<List<ArticleItemModel>> {
-        articlesByCategory.value = emptyList()
+        articlesByCategoryLiveData.value = emptyList()
         this.articleRepository.getAllByCategory(category)
             .subscribeOn(Schedulers.io())
             .map { data -> transform(data) }
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
-                { value -> articlesByCategory.value = value },
+                { value -> articlesByCategoryLiveData.value = value },
                 { error -> println("Error: $error") },
                 { println("Completed!") }
             )
-        return articlesByCategory
+        return articlesByCategoryLiveData
     }
 
 //    fun getAllByCategory(category: String): LiveData<List<ArticleItemModel>> {
 //        return transform(this.articleRepository.getAllByCategory(category))
 //    }
 
-    fun getArticle(articleItemModel: ArticleItemModel, category: String): MutableLiveData<ArticlePageModel> {
+    @SuppressLint("CheckResult")
+    fun getArticleTest(
+        articleItemModel: ArticleItemModel,
+        category: String
+    ): LiveData<ArticlePageModel> {
+        val mutableLiveData = MutableLiveData<ArticlePageModel>()
+
+        val articleItemDto = ArticleTransformer.toDto(articleItemModel)
+        val key = articleItemDto.hashCode().toString()
+        val articlePageDto = articlePageCache.get(key)
+
+        if (articlePageDto != null) {
+            mutableLiveData.value = ArticleTransformer.toModel(articlePageDto)
+            return mutableLiveData
+        }
+
+        this.articleRepository.getArticleTest(articleItemDto, category)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                { value ->
+                    mutableLiveData.value = ArticleTransformer.toModel(value)
+                    this.articlePageCache.add(key, value)
+                },
+                { error -> println("Error: $error") },
+                { println("Completed!") }
+            )
+
+        return mutableLiveData
+    }
+
+    fun getArticle(
+        articleItemModel: ArticleItemModel,
+        category: String
+    ): MutableLiveData<ArticlePageModel> {
         val dto = ArticleTransformer.toDto(articleItemModel)
 
         val mutableLiveData = MutableLiveData<ArticlePageModel>()
         val retrieved =
-            this.articleRepository.getArticle(dto, category).value!! // TODO replace with better null check
+            this.articleRepository.getArticle(
+                dto,
+                category
+            ).value!! // TODO replace with better null check
         mutableLiveData.value = ArticleTransformer.toModel(retrieved)
         return mutableLiveData
     }

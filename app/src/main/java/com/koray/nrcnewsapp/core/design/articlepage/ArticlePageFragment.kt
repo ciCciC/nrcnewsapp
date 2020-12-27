@@ -58,14 +58,19 @@ class ArticlePageFragment : Fragment() {
     private fun initArticlePage(view: View, articleItemModel: ArticleItemModel) {
 //        fakeArticlePage(view, articleItemModel)
 
-        val articlesModel = ViewModelProviders.of(this, CustomViewModelFactory(articleRepository))
+        val articleLiveModel = ViewModelProviders.of(this, CustomViewModelFactory(articleRepository))
             .get(LiveArticlesModel::class.java)
 
         categorySelectionModel.getCategory().observe(viewLifecycleOwner, Observer { category ->
             selectedCategory = category
         })
 
-        articlesModel.getArticle(articleItemModel, selectedCategory.topic!!)
+//        articleLiveModel.getArticle(articleItemModel, selectedCategory.topic!!)
+//            .observe(viewLifecycleOwner, Observer { articlePage ->
+//                populateArticlePage(view, articlePage)
+//            })
+
+        articleLiveModel.getArticleTest(articleItemModel, selectedCategory.topic!!)
             .observe(viewLifecycleOwner, Observer { articlePage ->
                 populateArticlePage(view, articlePage)
             })

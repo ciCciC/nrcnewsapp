@@ -36,6 +36,12 @@ class NrcScraperClient(
 //        return Observable.just(this.getAllByCategory(category))
     }
 
+    fun getArticleAsync(articleItemDto: ArticleItemDto, category: String): Observable<ArticlePageDto> {
+        val req = HttpRequest.POST<Any>("/" + ApiStore.CATEGORY + "/" + category + "/" + ApiStore.ARTICLE, articleItemDto)
+        val argumentType = Argument.of(ArticlePageDto::class.java)
+        return Observable.fromCallable { this.request(req, argumentType) }
+    }
+
     private fun <T> request(req: MutableHttpRequest<Any>, argument: Argument<T>): T {
         return this.httpClient
             .toBlocking()
