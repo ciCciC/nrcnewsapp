@@ -8,7 +8,7 @@ import com.koray.nrcnewsapp.core.network.dto.ArticlePageDto
 
 object ArticleTransformer {
 
-    fun toModel(articleItemDto: ArticleItemDto): ArticleItemModel {
+    fun apply(articleItemDto: ArticleItemDto): ArticleItemModel {
         return ArticleItemModel(
             articleItemDto.pageLink,
             articleItemDto.imageLink,
@@ -19,7 +19,7 @@ object ArticleTransformer {
         )
     }
 
-    fun toModel(articleDto: ArticlePageDto): ArticlePageModel {
+    fun apply(articleDto: ArticlePageDto): ArticlePageModel {
         return ArticlePageModel(
             articleDto.sectionList,
             articleDto.pageLink,
@@ -30,24 +30,13 @@ object ArticleTransformer {
         )
     }
 
-    fun toDto(articleItemModel: ArticleItemModel): ArticleItemDto {
+    fun apply(articleItemModel: ArticleItemModel): ArticleItemDto {
         return ArticleItemDto(
             articleItemModel.pageLink,
             articleItemModel.imageLink,
             articleItemModel.topic,
             articleItemModel.title,
             articleItemModel.teaser
-        )
-    }
-
-    fun toDto(articleModel: ArticlePageModel): ArticlePageDto {
-        return ArticlePageDto(
-            articleModel.pageLink,
-            articleModel.imageLink,
-            articleModel.topic,
-            articleModel.title,
-            articleModel.teaser,
-            articleModel.sectionList
         )
     }
 }

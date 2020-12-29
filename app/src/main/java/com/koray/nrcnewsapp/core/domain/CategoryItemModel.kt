@@ -6,7 +6,7 @@ import java.util.*
 class CategoryItemModel(
     override var display: String?,
     override var topic: String?,
-    var img: Int?,
+    var img: Int? = 0,
     var selected: Boolean = false
 ) : Category {
     override fun equals(other: Any?): Boolean {

@@ -10,7 +10,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.koray.nrcnewsapp.R
 import com.koray.nrcnewsapp.core.abstraction.Ctype
 import com.koray.nrcnewsapp.core.design.viewholders.ArticlePageViewHolder
@@ -58,7 +58,7 @@ class ArticlePageFragment : Fragment() {
     private fun initArticlePage(view: View, articleItemModel: ArticleItemModel) {
 //        fakeArticlePage(view, articleItemModel)
 
-        val articleLiveModel = ViewModelProviders.of(this, CustomViewModelFactory(articleRepository))
+        val articlePageLiveModel = ViewModelProvider(this, CustomViewModelFactory(articleRepository))
             .get(LiveArticlesModel::class.java)
 
         categorySelectionModel.getCategory().observe(viewLifecycleOwner, Observer { category ->
@@ -70,14 +70,14 @@ class ArticlePageFragment : Fragment() {
 //                populateArticlePage(view, articlePage)
 //            })
 
-        articleLiveModel.getArticleTest(articleItemModel, selectedCategory.topic!!)
+        articlePageLiveModel.getArticle(articleItemModel, selectedCategory.topic!!)
             .observe(viewLifecycleOwner, Observer { articlePage ->
                 populateArticlePage(view, articlePage)
             })
     }
 
     private fun fakeArticlePage(view: View, articleItemModel: ArticleItemModel) {
-        val articlepageModel = ArticlePageModel(
+        val articlePageModel = ArticlePageModel(
             arrayOf(SectionDto(
                 "title",
                 arrayOf(ContentBodyDto(
@@ -92,7 +92,7 @@ class ArticlePageFragment : Fragment() {
             articleItemModel.teaser
 
         )
-        populateArticlePage(view, articlepageModel)
+        populateArticlePage(view, articlePageModel)
     }
 
     private fun populateArticlePage(view: View, articlePageModel: ArticlePageModel) {

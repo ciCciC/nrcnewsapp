@@ -8,6 +8,7 @@ import com.koray.nrcnewsapp.core.domain.ArticleItemModel
 import com.koray.nrcnewsapp.core.domain.ArticlePageModel
 import com.koray.nrcnewsapp.core.network.caching.ArticlePageService
 import com.koray.nrcnewsapp.core.network.dto.ArticleItemDto
+import com.koray.nrcnewsapp.core.network.dto.ArticlePageDto
 import com.koray.nrcnewsapp.core.network.transformer.ArticleTransformer
 import com.koray.nrcnewsapp.core.network.repository.ArticleRepository
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -20,7 +21,6 @@ class LiveArticlesModel @Inject constructor(
 ) : ViewModel() {
 
     private val articlesByCategoryLiveData = MutableLiveData<List<ArticleItemModel>>()
-//    private val articleLiveData = MutableLiveData<ArticlePageModel>()
     private val articlePageCache = ArticlePageService
 
 //    fun getArticleItems(): LiveData<List<ArticleItemModel>> {
@@ -30,88 +30,58 @@ class LiveArticlesModel @Inject constructor(
     @SuppressLint("CheckResult")
     fun getAllByCategory(category: String): LiveData<List<ArticleItemModel>> {
         articlesByCategoryLiveData.value = emptyList()
-        this.articleRepository.getAllByCategory(category)
+        this.articleRepository.getAllItemsByCategory(category)
             .subscribeOn(Schedulers.io())
             .map { data -> transform(data) }
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
-                { value -> articlesByCategoryLiveData.value = value },
+                { response -> articlesByCategoryLiveData.value = response },
                 { error -> println("Error: $error") },
-                { println("Completed!") }
+                { println("Nothing returned!") }
             )
         return articlesByCategoryLiveData
     }
 
-//    fun getAllByCategory(category: String): LiveData<List<ArticleItemModel>> {
-//        return transform(this.articleRepository.getAllByCategory(category))
-//    }
-
     @SuppressLint("CheckResult")
-    fun getArticleTest(
+    fun getArticle(
         articleItemModel: ArticleItemModel,
         category: String
     ): LiveData<ArticlePageModel> {
         val mutableLiveData = MutableLiveData<ArticlePageModel>()
 
-        val articleItemDto = ArticleTransformer.toDto(articleItemModel)
+        val articleItemDto = transform(articleItemModel)
         val key = articleItemDto.hashCode().toString()
         val articlePageDto = articlePageCache.get(key)
 
         if (articlePageDto != null) {
-            mutableLiveData.value = ArticleTransformer.toModel(articlePageDto)
+            mutableLiveData.value = transform(articlePageDto)
             return mutableLiveData
         }
 
-        this.articleRepository.getArticleTest(articleItemDto, category)
+        this.articleRepository.getArticle(articleItemDto, category)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
-                { value ->
-                    mutableLiveData.value = ArticleTransformer.toModel(value)
-                    this.articlePageCache.add(key, value)
+                { response ->
+                    mutableLiveData.value = transform(response)
+                    this.articlePageCache.add(key, response)
                 },
-                { error -> println("Error: $error") },
-                { println("Completed!") }
+                { error -> println("Error: this is my error!, ${error.message}") },
+                { println("Nothing returned!") }
             )
 
         return mutableLiveData
     }
 
-    fun getArticle(
-        articleItemModel: ArticleItemModel,
-        category: String
-    ): MutableLiveData<ArticlePageModel> {
-        val dto = ArticleTransformer.toDto(articleItemModel)
-
-        val mutableLiveData = MutableLiveData<ArticlePageModel>()
-        val retrieved =
-            this.articleRepository.getArticle(
-                dto,
-                category
-            ).value!! // TODO replace with better null check
-        mutableLiveData.value = ArticleTransformer.toModel(retrieved)
-        return mutableLiveData
-    }
-
     private fun transform(data: List<ArticleItemDto>): List<ArticleItemModel> {
-        return data.map(ArticleTransformer::toModel)
+        return data.map(ArticleTransformer::apply)
     }
 
-//    private fun transform(data: LiveData<List<ArticleItemDto>>): MutableLiveData<List<ArticleItemModel>> {
-//        val transformed = MutableLiveData<List<ArticleItemModel>>()
-//        transformed.value = data.value?.map(ArticleTransformer::toModel)
-//        return transformed
-//    }
+    private fun transform(data: ArticlePageDto): ArticlePageModel {
+        return ArticleTransformer.apply(data)
+    }
 
-//    private fun <I, R> transformCollection(data: LiveData<List<I>>): MutableLiveData<List<R>> {
-//        val transformed = MutableLiveData<List<R>>()
-//        transformed.value = data.value?.map{i ->  Transformer.toModel(i)}
-//        return transformed
-//    }
-//
-//    private fun <I : Transformer<R>, R> transform(aa: LiveData<I>): MutableLiveData<R> {
-//        val transformed = MutableLiveData<R>()
-//        transformed.value = data.value?.toModel()
-//        return transformed
-//    }
+    private fun transform(data: ArticleItemModel): ArticleItemDto {
+        return ArticleTransformer.apply(data)
+    }
 }

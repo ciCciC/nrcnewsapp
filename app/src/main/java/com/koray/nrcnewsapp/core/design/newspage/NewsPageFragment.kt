@@ -16,14 +16,15 @@ import com.koray.nrcnewsapp.R
 import com.koray.nrcnewsapp.core.design.category.CategoryItemRecyclerViewAdapter
 import com.koray.nrcnewsapp.core.design.category.CategoryOnListInteractionListener
 import com.koray.nrcnewsapp.core.domain.ArticleItemModel
+import com.koray.nrcnewsapp.core.domain.CategoryItemListModel
 import com.koray.nrcnewsapp.core.domain.CategoryItemModel
-import com.koray.nrcnewsapp.core.domain.CategoryListItemModel
 import com.koray.nrcnewsapp.core.domain.NewsPageItemModel
 import com.koray.nrcnewsapp.core.network.repository.ArticleRepository
 import com.koray.nrcnewsapp.core.network.repository.CategoryRepository
 import com.koray.nrcnewsapp.core.network.viewmodel.CategorySelectionModel
 import com.koray.nrcnewsapp.core.network.viewmodel.CustomViewModelFactory
 import com.koray.nrcnewsapp.core.network.viewmodel.LiveArticlesModel
+import com.koray.nrcnewsapp.core.network.viewmodel.LiveCategoriesModel
 import com.koray.nrcnewsapp.core.util.inject
 import java.util.*
 import kotlin.collections.ArrayList
@@ -80,26 +81,33 @@ class NewsPageFragment : Fragment() {
     }
 
     private fun fetchCategoryNames() {
-        fetchDummyCategoryNames()
+//        fetchDummyCategoryNames()
 
-//        val model = ViewModelProvider(this, CustomViewModelFactory(categoryRepository))
-//            .get(LiveCategoriesModel::class.java)
-//
-//        model.getCategories().observe(viewLifecycleOwner, Observer { categoryList ->
-//                newsPageItemList.add(
-//                    CategoryListItemModel(
-//                        categoryList.map { categoryItemModel ->
-//                            var bgId = resources.getIdentifier(categoryItemModel.name, "drawable",
-//                                context?.packageName)
-//                            categoryItemModel.img = bgId
-//                            categoryItemModel
-//                        },
-//                        NewsPageItemModel.ItemType.CATEGORY
-//                    )
-//                )
-//                categorySelectionModel.setCashCategories(categoryList)
-//                newsPageItemMap[NewsPageItemModel.ItemType.CATEGORY] = categoryList
-//            })
+        val model = ViewModelProvider(this, CustomViewModelFactory(categoryRepository))
+            .get(LiveCategoriesModel::class.java)
+
+        model.getCategories().observe(viewLifecycleOwner, Observer { categoryList ->
+            val categoryItemListModel = CategoryItemListModel(
+                categoryList.map { categoryItemModel ->
+                    if (categoryItemModel.topic.equals("news")) {
+                        categoryItemModel.selected = true
+                    }
+
+                    val backgroundImgIdentifier = resources.getIdentifier(
+                        categoryItemModel.topic, "drawable",
+                        context?.packageName
+                    )
+
+                    categoryItemModel.img = backgroundImgIdentifier
+                    categoryItemModel
+                },
+                NewsPageItemModel.ItemType.CATEGORY
+            )
+
+            categorySelectionModel.setCashCategories(categoryList)
+            newsPageItemList.add(categoryItemListModel)
+            newsPageItemMap[NewsPageItemModel.ItemType.CATEGORY] = categoryList
+        })
     }
 
     private fun fetchDummyCategoryNames() {
@@ -123,7 +131,7 @@ class NewsPageFragment : Fragment() {
         categorySelectionModel.setCashCategories(categoryList)
 
         val categoryListItemModel =
-            CategoryListItemModel(categoryList, NewsPageItemModel.ItemType.CATEGORY)
+            CategoryItemListModel(categoryList, NewsPageItemModel.ItemType.CATEGORY)
         newsPageItemList.add(categoryListItemModel)
         newsPageItemMap[NewsPageItemModel.ItemType.CATEGORY] = categoryList
     }
