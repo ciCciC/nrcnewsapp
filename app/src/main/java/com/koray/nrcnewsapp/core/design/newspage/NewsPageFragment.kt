@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
@@ -23,7 +25,7 @@ import com.koray.nrcnewsapp.core.network.repository.ArticleRepository
 import com.koray.nrcnewsapp.core.network.repository.CategoryRepository
 import com.koray.nrcnewsapp.core.network.viewmodel.CategorySelectionModel
 import com.koray.nrcnewsapp.core.network.viewmodel.CustomViewModelFactory
-import com.koray.nrcnewsapp.core.network.viewmodel.LiveArticlesModel
+import com.koray.nrcnewsapp.core.network.viewmodel.LiveArticleModel
 import com.koray.nrcnewsapp.core.network.viewmodel.LiveCategoriesModel
 import com.koray.nrcnewsapp.core.util.inject
 import java.util.*
@@ -59,6 +61,7 @@ class NewsPageFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_news_page_list, container, false)
         val scrollUpButton = view.findViewById<FloatingActionButton>(R.id.buttonScrollUp)
         val recyclerView = view.findViewById<RecyclerView>(R.id.list)
+        val loadingView = view.findViewById<LinearLayout>(R.id.included_progress_bar)
 
         fetchCategoryNames()
 
@@ -78,6 +81,31 @@ class NewsPageFragment : Fragment() {
             recyclerView.smoothScrollToPosition(0)
         }
         return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val liveArticleModel = ViewModelProvider(this, CustomViewModelFactory(articleRepository))
+            .get(LiveArticleModel::class.java)
+
+        categorySelectionModel.getCategory().observe(viewLifecycleOwner, Observer { category ->
+            selectedCategory = category
+            run {
+                categorySelectionModel.getCategoryMapsViewHolder().forEach { (nextId, mappedView) ->
+                    this.handleCategorySelectionView(category.hashCode(), nextId, mappedView)
+                }
+            }
+
+            // TODO: pre logic for loading bar
+            liveArticleModel.loading.value = true
+
+            fetchArticleItems(category)
+        })
+
+        if (!this::selectedCategory.isInitialized) {
+            autoLoadArticles()
+        }
     }
 
     private fun fetchCategoryNames() {
@@ -139,11 +167,12 @@ class NewsPageFragment : Fragment() {
     private fun fetchArticleItems(category: CategoryItemModel) {
 //        fetchDummyArticleItems()
 
-        val articlesModel = ViewModelProvider(this, CustomViewModelFactory(articleRepository))
-            .get(LiveArticlesModel::class.java)
+        val liveArticleModel = ViewModelProvider(this, CustomViewModelFactory(articleRepository))
+            .get(LiveArticleModel::class.java)
 
-        // With chosen category
-        articlesModel.getAllByCategory(category.topic!!)
+        liveArticleModel.requestArticlesByCategory(category.topic!!)
+
+        liveArticleModel.getArticlesByCategory()
             .observe(viewLifecycleOwner, Observer { models ->
                 newsPageItemList.removeAll { item -> item.itemType!! == NewsPageItemModel.ItemType.ARTICLE }
                 newsPageItemList.addAll(models)
@@ -168,24 +197,6 @@ class NewsPageFragment : Fragment() {
         }
 
         newsPagerAdapter?.notifyDataSetChanged()
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        categorySelectionModel.getCategory().observe(viewLifecycleOwner, Observer { category ->
-            selectedCategory = category
-            run {
-                categorySelectionModel.getCategoryMapsViewHolder().forEach { (nextId, mappedView) ->
-                    this.handleCategorySelectionView(category.hashCode(), nextId, mappedView)
-                }
-            }
-
-            fetchArticleItems(category)
-        })
-
-        if (!this::selectedCategory.isInitialized) {
-            autoLoadArticles()
-        }
     }
 
     private fun handleCategorySelectionView(

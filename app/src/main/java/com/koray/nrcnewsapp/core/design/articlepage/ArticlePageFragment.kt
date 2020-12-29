@@ -6,7 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
@@ -23,7 +25,7 @@ import com.koray.nrcnewsapp.core.network.repository.ArticleRepository
 import com.koray.nrcnewsapp.core.network.viewmodel.ArticleSelectionModel
 import com.koray.nrcnewsapp.core.network.viewmodel.CategorySelectionModel
 import com.koray.nrcnewsapp.core.network.viewmodel.CustomViewModelFactory
-import com.koray.nrcnewsapp.core.network.viewmodel.LiveArticlesModel
+import com.koray.nrcnewsapp.core.network.viewmodel.LiveArticleModel
 import com.koray.nrcnewsapp.core.util.ImageManager
 import com.koray.nrcnewsapp.core.util.inject
 import java.util.*
@@ -44,8 +46,21 @@ class ArticlePageFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_article_page, container, false)
+        val loadingView = view.findViewById<LinearLayout>(R.id.included_progress_bar)
+
+        val liveArticleModel = ViewModelProvider(this, CustomViewModelFactory(articleRepository))
+            .get(LiveArticleModel::class.java)
 
         val articleItemSelectionModel: ArticleSelectionModel by activityViewModels()
+
+        // TODO: pre logic for loading bar
+        liveArticleModel.loading.observe(viewLifecycleOwner, Observer { state ->
+            if (state) {
+                loadingView.visibility = View.VISIBLE
+            } else {
+                loadingView.visibility = View.GONE
+            }
+        })
 
         articleItemSelectionModel.getArticleItemModel()
             .observe(viewLifecycleOwner, Observer { articleItem ->
@@ -58,19 +73,16 @@ class ArticlePageFragment : Fragment() {
     private fun initArticlePage(view: View, articleItemModel: ArticleItemModel) {
 //        fakeArticlePage(view, articleItemModel)
 
-        val articlePageLiveModel = ViewModelProvider(this, CustomViewModelFactory(articleRepository))
-            .get(LiveArticlesModel::class.java)
+        val liveArticleModel = ViewModelProvider(this, CustomViewModelFactory(articleRepository))
+            .get(LiveArticleModel::class.java)
 
         categorySelectionModel.getCategory().observe(viewLifecycleOwner, Observer { category ->
             selectedCategory = category
         })
 
-//        articleLiveModel.getArticle(articleItemModel, selectedCategory.topic!!)
-//            .observe(viewLifecycleOwner, Observer { articlePage ->
-//                populateArticlePage(view, articlePage)
-//            })
+        liveArticleModel.requestArticlePage(articleItemModel, selectedCategory.topic!!)
 
-        articlePageLiveModel.getArticle(articleItemModel, selectedCategory.topic!!)
+        liveArticleModel.getArticlePage()
             .observe(viewLifecycleOwner, Observer { articlePage ->
                 populateArticlePage(view, articlePage)
             })
@@ -78,13 +90,17 @@ class ArticlePageFragment : Fragment() {
 
     private fun fakeArticlePage(view: View, articleItemModel: ArticleItemModel) {
         val articlePageModel = ArticlePageModel(
-            arrayOf(SectionDto(
-                "title",
-                arrayOf(ContentBodyDto(
-                    "content",
-                    Ctype.p.name
-                ))
-            )),
+            arrayOf(
+                SectionDto(
+                    "title",
+                    arrayOf(
+                        ContentBodyDto(
+                            "content",
+                            Ctype.p.name
+                        )
+                    )
+                )
+            ),
             articleItemModel.pageLink,
             articleItemModel.imageLink,
             articleItemModel.topic,
