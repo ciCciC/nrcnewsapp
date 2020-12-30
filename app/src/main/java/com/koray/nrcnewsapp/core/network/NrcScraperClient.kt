@@ -11,7 +11,7 @@ import io.micronaut.http.MutableHttpRequest
 import io.micronaut.http.client.RxHttpClient
 import io.micronaut.http.client.annotation.Client
 import io.micronaut.http.exceptions.HttpStatusException
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Observable
 import javax.inject.Singleton
 
 @Introspected

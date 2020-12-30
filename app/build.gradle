@@ -69,7 +69,9 @@ dependencies {
     implementation "android.arch.lifecycle:viewmodel:1.1.1"
 
     // reactive
-    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+//    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+
+    implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
 
     // Micronaut
     implementation "io.micronaut:micronaut-runtime:${micronautVersion}"

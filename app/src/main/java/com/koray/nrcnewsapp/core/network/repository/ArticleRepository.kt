@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import com.koray.nrcnewsapp.core.network.NrcScraperClient
 import com.koray.nrcnewsapp.core.network.dto.ArticleItemDto
 import com.koray.nrcnewsapp.core.network.dto.ArticlePageDto
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Observable
 import javax.inject.Inject
 import javax.inject.Singleton
 

@@ -8,28 +8,29 @@ import com.koray.nrcnewsapp.core.domain.CategoryItemModel
 import com.koray.nrcnewsapp.core.network.dto.CategoryDto
 import com.koray.nrcnewsapp.core.network.repository.CategoryRepository
 import com.koray.nrcnewsapp.core.network.transformer.CategoryTransformer
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.schedulers.Schedulers
 import javax.inject.Inject
 
 class LiveCategoriesModel @Inject constructor(
     private var categoryRepository: CategoryRepository
 ) : ViewModel() {
 
-    @SuppressLint("CheckResult")
-    fun getCategories(): LiveData<List<CategoryItemModel>> {
-        val mutableLiveData = MutableLiveData<List<CategoryItemModel>>()
+    private val categoriesLiveData = MutableLiveData<List<CategoryItemModel>>()
 
+    fun getCategories(): LiveData<List<CategoryItemModel>> {
+        return this.categoriesLiveData
+    }
+
+    @SuppressLint("CheckResult")
+    fun requestCategories() {
         this.categoryRepository.getAll()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
-                { response -> mutableLiveData.value = this.transform(response) },
-                { error -> println("Error: this is my error!") },
-                { println("Nothing returned!") }
+                { response -> this.categoriesLiveData.value = this.transform(response) },
+                { error -> println("Error: this is my error!, ${error.message}") }
             )
-
-        return mutableLiveData
     }
 
     private fun transform(data: List<CategoryDto>): List<CategoryItemModel> {

@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
@@ -41,6 +40,11 @@ class NewsPageFragment : Fragment() {
     private val articleRepository: ArticleRepository by inject()
 
     private val categorySelectionModel: CategorySelectionModel by activityViewModels()
+
+    private val liveArticleModel: LiveArticleModel by lazy {
+        ViewModelProvider(this, CustomViewModelFactory(articleRepository))
+        .get(LiveArticleModel::class.java)
+    }
 
     private val newsPageItemList: MutableList<NewsPageItemModel> = ArrayList()
     private val newsPageItemMap: MutableMap<NewsPageItemModel.ItemType, Any> =
@@ -86,8 +90,8 @@ class NewsPageFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val liveArticleModel = ViewModelProvider(this, CustomViewModelFactory(articleRepository))
-            .get(LiveArticleModel::class.java)
+//        val liveArticleModel = ViewModelProvider(this, CustomViewModelFactory(articleRepository))
+//            .get(LiveArticleModel::class.java)
 
         categorySelectionModel.getCategory().observe(viewLifecycleOwner, Observer { category ->
             selectedCategory = category
@@ -111,10 +115,12 @@ class NewsPageFragment : Fragment() {
     private fun fetchCategoryNames() {
 //        fetchDummyCategoryNames()
 
-        val model = ViewModelProvider(this, CustomViewModelFactory(categoryRepository))
+        val liveCategoriesModel = ViewModelProvider(this, CustomViewModelFactory(categoryRepository))
             .get(LiveCategoriesModel::class.java)
 
-        model.getCategories().observe(viewLifecycleOwner, Observer { categoryList ->
+        liveCategoriesModel.requestCategories()
+
+        liveCategoriesModel.getCategories().observe(viewLifecycleOwner, Observer { categoryList ->
             val categoryItemListModel = CategoryItemListModel(
                 categoryList.map { categoryItemModel ->
                     if (categoryItemModel.topic.equals("news")) {
@@ -167,8 +173,8 @@ class NewsPageFragment : Fragment() {
     private fun fetchArticleItems(category: CategoryItemModel) {
 //        fetchDummyArticleItems()
 
-        val liveArticleModel = ViewModelProvider(this, CustomViewModelFactory(articleRepository))
-            .get(LiveArticleModel::class.java)
+//        val liveArticleModel = ViewModelProvider(this, CustomViewModelFactory(articleRepository))
+//            .get(LiveArticleModel::class.java)
 
         liveArticleModel.requestArticlesByCategory(category.topic!!)
 

@@ -11,8 +11,8 @@ import com.koray.nrcnewsapp.core.network.dto.ArticleItemDto
 import com.koray.nrcnewsapp.core.network.dto.ArticlePageDto
 import com.koray.nrcnewsapp.core.network.transformer.ArticleTransformer
 import com.koray.nrcnewsapp.core.network.repository.ArticleRepository
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.schedulers.Schedulers
 import javax.inject.Inject
 
 
@@ -55,8 +55,7 @@ class LiveArticleModel @Inject constructor(
                     this.articlesByCategoryLiveData.value = response
                     this.loading.value = false
                 },
-                { error -> println("Error: $error") },
-                { println("Nothing returned!") }
+                { error -> println("Error: this is my error!, ${error.message}") }
             )
     }
 
@@ -82,8 +81,7 @@ class LiveArticleModel @Inject constructor(
                     this.articlePageCache.add(key, response)
                     this.loading.value = false
                 },
-                { error -> println("Error: this is my error!, ${error.message}") },
-                { println("Nothing returned!") }
+                { error -> println("Error: this is my error!, ${error.message}") }
             )
     }
 
