@@ -90,9 +90,6 @@ class NewsPageFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        val liveArticleModel = ViewModelProvider(this, CustomViewModelFactory(articleRepository))
-//            .get(LiveArticleModel::class.java)
-
         categorySelectionModel.getCategory().observe(viewLifecycleOwner, Observer { category ->
             selectedCategory = category
             run {
@@ -172,9 +169,6 @@ class NewsPageFragment : Fragment() {
 
     private fun fetchArticleItems(category: CategoryItemModel) {
 //        fetchDummyArticleItems()
-
-//        val liveArticleModel = ViewModelProvider(this, CustomViewModelFactory(articleRepository))
-//            .get(LiveArticleModel::class.java)
 
         liveArticleModel.requestArticlesByCategory(category.topic!!)
 
