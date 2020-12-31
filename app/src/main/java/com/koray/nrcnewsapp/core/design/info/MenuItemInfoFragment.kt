@@ -22,16 +22,16 @@ class MenuItemInfoFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_menu_item_info, container, false)
-        val shareIcon = view.findViewById<ImageView>(R.id.info_ic_share)
-        val yogaGif = view.findViewById<ImageView>(R.id.headerImage)
+        val shareIconView = view.findViewById<ImageView>(R.id.info_ic_share)
+        val yogaGifView = view.findViewById<ImageView>(R.id.headerImage)
 
         Glide
             .with(this)
             .load(R.drawable.animation_prayer)
-            .into(yogaGif)
+            .into(yogaGifView)
 
         val rotate = AnimationEffect.rotate(duration = 2 * 200)
-        shareIcon.setOnClickListener(fun(it: View) {
+        shareIconView.setOnClickListener(fun(it: View) {
             it.startAnimation(rotate)
         })
         return view

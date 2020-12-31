@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
@@ -16,14 +17,15 @@ import com.koray.nrcnewsapp.R
 import com.koray.nrcnewsapp.core.design.category.CategoryItemRecyclerViewAdapter
 import com.koray.nrcnewsapp.core.design.category.CategoryOnListInteractionListener
 import com.koray.nrcnewsapp.core.domain.ArticleItemModel
+import com.koray.nrcnewsapp.core.domain.CategoryItemListModel
 import com.koray.nrcnewsapp.core.domain.CategoryItemModel
-import com.koray.nrcnewsapp.core.domain.CategoryListItemModel
 import com.koray.nrcnewsapp.core.domain.NewsPageItemModel
 import com.koray.nrcnewsapp.core.network.repository.ArticleRepository
 import com.koray.nrcnewsapp.core.network.repository.CategoryRepository
 import com.koray.nrcnewsapp.core.network.viewmodel.CategorySelectionModel
 import com.koray.nrcnewsapp.core.network.viewmodel.CustomViewModelFactory
-import com.koray.nrcnewsapp.core.network.viewmodel.LiveArticlesModel
+import com.koray.nrcnewsapp.core.network.viewmodel.LiveArticleModel
+import com.koray.nrcnewsapp.core.network.viewmodel.LiveCategoriesModel
 import com.koray.nrcnewsapp.core.util.inject
 import java.util.*
 import kotlin.collections.ArrayList
@@ -38,6 +40,11 @@ class NewsPageFragment : Fragment() {
     private val articleRepository: ArticleRepository by inject()
 
     private val categorySelectionModel: CategorySelectionModel by activityViewModels()
+
+    private val liveArticleModel: LiveArticleModel by lazy {
+        ViewModelProvider(this, CustomViewModelFactory(articleRepository))
+        .get(LiveArticleModel::class.java)
+    }
 
     private val newsPageItemList: MutableList<NewsPageItemModel> = ArrayList()
     private val newsPageItemMap: MutableMap<NewsPageItemModel.ItemType, Any> =
@@ -58,6 +65,7 @@ class NewsPageFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_news_page_list, container, false)
         val scrollUpButton = view.findViewById<FloatingActionButton>(R.id.buttonScrollUp)
         val recyclerView = view.findViewById<RecyclerView>(R.id.list)
+        val loadingView = view.findViewById<LinearLayout>(R.id.included_progress_bar)
 
         fetchCategoryNames()
 
@@ -79,27 +87,58 @@ class NewsPageFragment : Fragment() {
         return view
     }
 
-    private fun fetchCategoryNames() {
-        fetchDummyCategoryNames()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-//        val model = ViewModelProvider(this, CustomViewModelFactory(categoryRepository))
-//            .get(LiveCategoriesModel::class.java)
-//
-//        model.getCategories().observe(viewLifecycleOwner, Observer { categoryList ->
-//                newsPageItemList.add(
-//                    CategoryListItemModel(
-//                        categoryList.map { categoryItemModel ->
-//                            var bgId = resources.getIdentifier(categoryItemModel.name, "drawable",
-//                                context?.packageName)
-//                            categoryItemModel.img = bgId
-//                            categoryItemModel
-//                        },
-//                        NewsPageItemModel.ItemType.CATEGORY
-//                    )
-//                )
-//                categorySelectionModel.setCashCategories(categoryList)
-//                newsPageItemMap[NewsPageItemModel.ItemType.CATEGORY] = categoryList
-//            })
+        categorySelectionModel.getCategory().observe(viewLifecycleOwner, Observer { category ->
+            selectedCategory = category
+            run {
+                categorySelectionModel.getCategoryMapsViewHolder().forEach { (nextId, mappedView) ->
+                    this.handleCategorySelectionView(category.hashCode(), nextId, mappedView)
+                }
+            }
+
+            // TODO: pre logic for loading bar
+            liveArticleModel.loading.value = true
+
+            fetchArticleItems(category)
+        })
+
+        if (!this::selectedCategory.isInitialized) {
+            autoLoadArticles()
+        }
+    }
+
+    private fun fetchCategoryNames() {
+//        fetchDummyCategoryNames()
+
+        val liveCategoriesModel = ViewModelProvider(this, CustomViewModelFactory(categoryRepository))
+            .get(LiveCategoriesModel::class.java)
+
+        liveCategoriesModel.requestCategories()
+
+        liveCategoriesModel.getCategories().observe(viewLifecycleOwner, Observer { categoryList ->
+            val categoryItemListModel = CategoryItemListModel(
+                categoryList.map { categoryItemModel ->
+                    if (categoryItemModel.topic.equals("news")) {
+                        categoryItemModel.selected = true
+                    }
+
+                    val backgroundImgIdentifier = resources.getIdentifier(
+                        categoryItemModel.topic, "drawable",
+                        context?.packageName
+                    )
+
+                    categoryItemModel.img = backgroundImgIdentifier
+                    categoryItemModel
+                },
+                NewsPageItemModel.ItemType.CATEGORY
+            )
+
+            categorySelectionModel.setCashCategories(categoryList)
+            newsPageItemList.add(categoryItemListModel)
+            newsPageItemMap[NewsPageItemModel.ItemType.CATEGORY] = categoryList
+        })
     }
 
     private fun fetchDummyCategoryNames() {
@@ -123,7 +162,7 @@ class NewsPageFragment : Fragment() {
         categorySelectionModel.setCashCategories(categoryList)
 
         val categoryListItemModel =
-            CategoryListItemModel(categoryList, NewsPageItemModel.ItemType.CATEGORY)
+            CategoryItemListModel(categoryList, NewsPageItemModel.ItemType.CATEGORY)
         newsPageItemList.add(categoryListItemModel)
         newsPageItemMap[NewsPageItemModel.ItemType.CATEGORY] = categoryList
     }
@@ -131,11 +170,9 @@ class NewsPageFragment : Fragment() {
     private fun fetchArticleItems(category: CategoryItemModel) {
 //        fetchDummyArticleItems()
 
-        val articlesModel = ViewModelProvider(this, CustomViewModelFactory(articleRepository))
-            .get(LiveArticlesModel::class.java)
+        liveArticleModel.requestArticlesByCategory(category.topic!!)
 
-        // With chosen category
-        articlesModel.getAllByCategory(category.topic!!)
+        liveArticleModel.getArticlesByCategory()
             .observe(viewLifecycleOwner, Observer { models ->
                 newsPageItemList.removeAll { item -> item.itemType!! == NewsPageItemModel.ItemType.ARTICLE }
                 newsPageItemList.addAll(models)
@@ -160,24 +197,6 @@ class NewsPageFragment : Fragment() {
         }
 
         newsPagerAdapter?.notifyDataSetChanged()
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        categorySelectionModel.getCategory().observe(viewLifecycleOwner, Observer { category ->
-            selectedCategory = category
-            run {
-                categorySelectionModel.getCategoryMapsViewHolder().forEach { (nextId, mappedView) ->
-                    this.handleCategorySelectionView(category.hashCode(), nextId, mappedView)
-                }
-            }
-
-            fetchArticleItems(category)
-        })
-
-        if (!this::selectedCategory.isInitialized) {
-            autoLoadArticles()
-        }
     }
 
     private fun handleCategorySelectionView(

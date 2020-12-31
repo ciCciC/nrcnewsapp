@@ -6,11 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.koray.nrcnewsapp.R
 import com.koray.nrcnewsapp.core.abstraction.Ctype
 import com.koray.nrcnewsapp.core.design.viewholders.ArticlePageViewHolder
@@ -23,7 +25,7 @@ import com.koray.nrcnewsapp.core.network.repository.ArticleRepository
 import com.koray.nrcnewsapp.core.network.viewmodel.ArticleSelectionModel
 import com.koray.nrcnewsapp.core.network.viewmodel.CategorySelectionModel
 import com.koray.nrcnewsapp.core.network.viewmodel.CustomViewModelFactory
-import com.koray.nrcnewsapp.core.network.viewmodel.LiveArticlesModel
+import com.koray.nrcnewsapp.core.network.viewmodel.LiveArticleModel
 import com.koray.nrcnewsapp.core.util.ImageManager
 import com.koray.nrcnewsapp.core.util.inject
 import java.util.*
@@ -44,8 +46,21 @@ class ArticlePageFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_article_page, container, false)
+        val loadingView = view.findViewById<LinearLayout>(R.id.included_progress_bar)
+
+        val liveArticleModel = ViewModelProvider(this, CustomViewModelFactory(articleRepository))
+            .get(LiveArticleModel::class.java)
 
         val articleItemSelectionModel: ArticleSelectionModel by activityViewModels()
+
+        // TODO: pre logic for loading bar
+        liveArticleModel.loading.observe(viewLifecycleOwner, Observer { state ->
+            if (state) {
+                loadingView.visibility = View.VISIBLE
+            } else {
+                loadingView.visibility = View.GONE
+            }
+        })
 
         articleItemSelectionModel.getArticleItemModel()
             .observe(viewLifecycleOwner, Observer { articleItem ->
@@ -58,28 +73,34 @@ class ArticlePageFragment : Fragment() {
     private fun initArticlePage(view: View, articleItemModel: ArticleItemModel) {
 //        fakeArticlePage(view, articleItemModel)
 
-        val articlesModel = ViewModelProviders.of(this, CustomViewModelFactory(articleRepository))
-            .get(LiveArticlesModel::class.java)
+        val liveArticleModel = ViewModelProvider(this, CustomViewModelFactory(articleRepository))
+            .get(LiveArticleModel::class.java)
 
         categorySelectionModel.getCategory().observe(viewLifecycleOwner, Observer { category ->
             selectedCategory = category
         })
 
-        articlesModel.getArticle(articleItemModel, selectedCategory.topic!!)
+        liveArticleModel.requestArticlePage(articleItemModel, selectedCategory.topic!!)
+
+        liveArticleModel.getArticlePage()
             .observe(viewLifecycleOwner, Observer { articlePage ->
                 populateArticlePage(view, articlePage)
             })
     }
 
     private fun fakeArticlePage(view: View, articleItemModel: ArticleItemModel) {
-        val articlepageModel = ArticlePageModel(
-            arrayOf(SectionDto(
-                "title",
-                arrayOf(ContentBodyDto(
-                    "content",
-                    Ctype.p.name
-                ))
-            )),
+        val articlePageModel = ArticlePageModel(
+            arrayOf(
+                SectionDto(
+                    "title",
+                    arrayOf(
+                        ContentBodyDto(
+                            "content",
+                            Ctype.p.name
+                        )
+                    )
+                )
+            ),
             articleItemModel.pageLink,
             articleItemModel.imageLink,
             articleItemModel.topic,
@@ -87,7 +108,7 @@ class ArticlePageFragment : Fragment() {
             articleItemModel.teaser
 
         )
-        populateArticlePage(view, articlepageModel)
+        populateArticlePage(view, articlePageModel)
     }
 
     private fun populateArticlePage(view: View, articlePageModel: ArticlePageModel) {

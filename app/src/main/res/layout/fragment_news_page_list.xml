@@ -34,4 +34,9 @@
         app:maxImageSize="@dimen/floating_button_image_size"
         android:contentDescription="@string/default_content_desc" />
 
+    <include
+        android:id="@+id/included_progress_bar"
+        android:visibility="gone"
+        layout="@layout/progress_bar"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
