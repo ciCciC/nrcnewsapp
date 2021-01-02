@@ -46,6 +46,11 @@ class NewsPageFragment : Fragment() {
         .get(LiveArticleModel::class.java)
     }
 
+    private val liveCategoriesModel: LiveCategoriesModel by lazy {
+        ViewModelProvider(this, CustomViewModelFactory(categoryRepository))
+            .get(LiveCategoriesModel::class.java)
+    }
+
     private val newsPageItemList: MutableList<NewsPageItemModel> = ArrayList()
     private val newsPageItemMap: MutableMap<NewsPageItemModel.ItemType, Any> =
         EnumMap(NewsPageItemModel.ItemType::class.java)
@@ -62,7 +67,12 @@ class NewsPageFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_news_page_list, container, false)
+        return inflater.inflate(R.layout.fragment_news_page_list, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         val scrollUpButton = view.findViewById<FloatingActionButton>(R.id.buttonScrollUp)
         val recyclerView = view.findViewById<RecyclerView>(R.id.list)
         val loadingView = view.findViewById<LinearLayout>(R.id.included_progress_bar)
@@ -84,11 +94,10 @@ class NewsPageFragment : Fragment() {
         scrollUpButton.setOnClickListener { v ->
             recyclerView.smoothScrollToPosition(0)
         }
-        return view
-    }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+        liveArticleModel.loading.observe(viewLifecycleOwner, Observer { state ->
+            loadingView.visibility = if(state) View.VISIBLE else View.GONE
+        })
 
         categorySelectionModel.getCategory().observe(viewLifecycleOwner, Observer { category ->
             selectedCategory = category
@@ -97,8 +106,6 @@ class NewsPageFragment : Fragment() {
                     this.handleCategorySelectionView(category.hashCode(), nextId, mappedView)
                 }
             }
-
-            // TODO: pre logic for loading bar
             liveArticleModel.loading.value = true
 
             fetchArticleItems(category)
@@ -111,9 +118,6 @@ class NewsPageFragment : Fragment() {
 
     private fun fetchCategoryNames() {
 //        fetchDummyCategoryNames()
-
-        val liveCategoriesModel = ViewModelProvider(this, CustomViewModelFactory(categoryRepository))
-            .get(LiveCategoriesModel::class.java)
 
         liveCategoriesModel.requestCategories()
 
@@ -215,13 +219,6 @@ class NewsPageFragment : Fragment() {
         fetchArticleItems(initCategory)
         categorySelectionModel.setCategory(initCategory)
         selectedCategory = initCategory
-
-//        categorySelectionModel.getCashedCategories().observe(viewLifecycleOwner, Observer { categoryList ->
-//            val initCategory = categoryList.getOrElse(0){CategoryItemModel("latest news", "news", 0)}
-//            fetchArticleItems(initCategory)
-//            categorySelectionModel.setCategory(initCategory)
-//            selectedCategory = initCategory
-//        })
     }
 
     override fun onAttach(context: Context) {

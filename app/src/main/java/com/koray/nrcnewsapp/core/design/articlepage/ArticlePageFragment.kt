@@ -35,7 +35,13 @@ class ArticlePageFragment : Fragment() {
 
     private val articleRepository: ArticleRepository by inject()
     private val categorySelectionModel: CategorySelectionModel by activityViewModels()
+    private val articleItemSelectionModel: ArticleSelectionModel by activityViewModels()
     private lateinit var selectedCategory: CategoryItemModel
+
+    private val liveArticleModel: LiveArticleModel by lazy {
+        ViewModelProvider(this, CustomViewModelFactory(articleRepository))
+            .get(LiveArticleModel::class.java)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,36 +51,26 @@ class ArticlePageFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_article_page, container, false)
+        return inflater.inflate(R.layout.fragment_article_page, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         val loadingView = view.findViewById<LinearLayout>(R.id.included_progress_bar)
 
-        val liveArticleModel = ViewModelProvider(this, CustomViewModelFactory(articleRepository))
-            .get(LiveArticleModel::class.java)
-
-        val articleItemSelectionModel: ArticleSelectionModel by activityViewModels()
-
-        // TODO: pre logic for loading bar
         liveArticleModel.loading.observe(viewLifecycleOwner, Observer { state ->
-            if (state) {
-                loadingView.visibility = View.VISIBLE
-            } else {
-                loadingView.visibility = View.GONE
-            }
+            loadingView.visibility = if(state) View.VISIBLE else View.GONE
         })
 
         articleItemSelectionModel.getArticleItemModel()
             .observe(viewLifecycleOwner, Observer { articleItem ->
                 initArticlePage(view, articleItem)
             })
-
-        return view
     }
 
     private fun initArticlePage(view: View, articleItemModel: ArticleItemModel) {
 //        fakeArticlePage(view, articleItemModel)
-
-        val liveArticleModel = ViewModelProvider(this, CustomViewModelFactory(articleRepository))
-            .get(LiveArticleModel::class.java)
 
         categorySelectionModel.getCategory().observe(viewLifecycleOwner, Observer { category ->
             selectedCategory = category
