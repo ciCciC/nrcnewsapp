@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
@@ -21,10 +22,7 @@ import com.koray.nrcnewsapp.core.domain.CategoryItemModel
 import com.koray.nrcnewsapp.core.network.dto.ContentBodyDto
 import com.koray.nrcnewsapp.core.network.dto.SectionDto
 import com.koray.nrcnewsapp.core.network.repository.ArticleRepository
-import com.koray.nrcnewsapp.core.network.viewmodel.LiveArticleSelectionModel
-import com.koray.nrcnewsapp.core.network.viewmodel.LiveCategorySelectionModel
-import com.koray.nrcnewsapp.core.network.viewmodel.CustomViewModelFactory
-import com.koray.nrcnewsapp.core.network.viewmodel.LiveArticleModel
+import com.koray.nrcnewsapp.core.network.viewmodel.*
 import com.koray.nrcnewsapp.core.util.ImageManager
 import com.koray.nrcnewsapp.core.util.inject
 import java.util.*
@@ -66,6 +64,12 @@ class ArticlePageFragment : Fragment() {
             .observe(viewLifecycleOwner, Observer { articleItem ->
                 initArticlePage(view, articleItem)
             })
+
+        ErrorHandler.ErrorStateObject.getErrorState().observe(viewLifecycleOwner, Observer { errorMessage ->
+            if (errorMessage.showMessage) {
+                Toast.makeText(this.context, errorMessage.message, Toast.LENGTH_LONG).show()
+            }
+        })
     }
 
     private fun initArticlePage(view: View, articleItemModel: ArticleItemModel) {

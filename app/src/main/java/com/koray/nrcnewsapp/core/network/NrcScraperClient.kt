@@ -42,9 +42,9 @@ class NrcScraperClient(
                 .toBlocking()
                 .exchange(req, argumentType)
 
-//            if(response.status.code == 200) {
-//                throw HttpStatusException(HttpStatus.BAD_REQUEST, "awesome it works!")
-//            }
+            if(response.status.code == 200) {
+                throw HttpStatusException(HttpStatus.BAD_REQUEST, "awesome it works!")
+            }
 
             response.body()
         }
