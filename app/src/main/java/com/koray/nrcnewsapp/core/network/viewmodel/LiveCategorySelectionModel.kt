@@ -6,7 +6,7 @@ import com.koray.nrcnewsapp.core.design.category.CategoryItemRecyclerViewAdapter
 import com.koray.nrcnewsapp.core.domain.CategoryItemModel
 import java.util.function.Consumer
 
-class CategorySelectionModel : ViewModel() {
+class LiveCategorySelectionModel : ViewModel() {
 
     // The cashing is being done due to loading the predefined test images.
     private val CASHED_CATEGORIES = HashMap<String, CategoryItemModel>()
