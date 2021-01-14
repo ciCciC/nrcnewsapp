@@ -21,11 +21,9 @@ import com.koray.nrcnewsapp.core.domain.ArticlePageModel
 import com.koray.nrcnewsapp.core.domain.CategoryItemModel
 import com.koray.nrcnewsapp.core.network.dto.ContentBodyDto
 import com.koray.nrcnewsapp.core.network.dto.SectionDto
+import com.koray.nrcnewsapp.core.network.helper.ErrorHandler
 import com.koray.nrcnewsapp.core.network.repository.ArticleRepository
-import com.koray.nrcnewsapp.core.network.viewmodel.ArticleSelectionModel
-import com.koray.nrcnewsapp.core.network.viewmodel.CategorySelectionModel
-import com.koray.nrcnewsapp.core.network.viewmodel.CustomViewModelFactory
-import com.koray.nrcnewsapp.core.network.viewmodel.LiveArticleModel
+import com.koray.nrcnewsapp.core.network.viewmodel.*
 import com.koray.nrcnewsapp.core.util.ImageManager
 import com.koray.nrcnewsapp.core.util.inject
 import java.util.*
@@ -34,8 +32,8 @@ import java.util.*
 class ArticlePageFragment : Fragment() {
 
     private val articleRepository: ArticleRepository by inject()
-    private val categorySelectionModel: CategorySelectionModel by activityViewModels()
-    private val articleItemSelectionModel: ArticleSelectionModel by activityViewModels()
+    private val liveCategorySelectionModel: LiveCategorySelectionModel by activityViewModels()
+    private val liveArticleItemSelectionModel: LiveArticleSelectionModel by activityViewModels()
     private lateinit var selectedCategory: CategoryItemModel
 
     private val liveArticleModel: LiveArticleModel by lazy {
@@ -63,16 +61,22 @@ class ArticlePageFragment : Fragment() {
             loadingView.visibility = if(state) View.VISIBLE else View.GONE
         })
 
-        articleItemSelectionModel.getArticleItemModel()
+        liveArticleItemSelectionModel.getArticleItemModel()
             .observe(viewLifecycleOwner, Observer { articleItem ->
                 initArticlePage(view, articleItem)
             })
+
+        ErrorHandler.getErrorState().observe(viewLifecycleOwner, Observer { errorMessage ->
+            if (errorMessage.showMessage) {
+                Toast.makeText(this.context, errorMessage.message, Toast.LENGTH_LONG).show()
+            }
+        })
     }
 
     private fun initArticlePage(view: View, articleItemModel: ArticleItemModel) {
 //        fakeArticlePage(view, articleItemModel)
 
-        categorySelectionModel.getCategory().observe(viewLifecycleOwner, Observer { category ->
+        liveCategorySelectionModel.getCategory().observe(viewLifecycleOwner, Observer { category ->
             selectedCategory = category
         })
 

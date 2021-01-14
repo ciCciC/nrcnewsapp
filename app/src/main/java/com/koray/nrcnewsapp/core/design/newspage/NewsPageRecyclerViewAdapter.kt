@@ -13,7 +13,7 @@ import com.koray.nrcnewsapp.core.design.viewholders.CategoryListViewHolder
 import com.koray.nrcnewsapp.core.domain.ArticleItemModel
 import com.koray.nrcnewsapp.core.domain.CategoryItemModel
 import com.koray.nrcnewsapp.core.domain.NewsPageItemModel
-import com.koray.nrcnewsapp.core.network.viewmodel.CategorySelectionModel
+import com.koray.nrcnewsapp.core.network.viewmodel.LiveCategorySelectionModel
 import com.koray.nrcnewsapp.core.util.ImageManager
 import java.util.*
 
@@ -23,7 +23,7 @@ class NewsPageRecyclerViewAdapter(
     private val mValuesMap: Map<NewsPageItemModel.ItemType, Any>,
     private val mListenerNewsPage: NewsPageOnListFragmentInteractionListener?,
     private val mCategoryListener: CategoryOnListInteractionListener?,
-    private val categoryLiveData: CategorySelectionModel
+    private val liveCategoryLiveData: LiveCategorySelectionModel
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val mOnClickListener: View.OnClickListener
@@ -51,7 +51,7 @@ class NewsPageRecyclerViewAdapter(
             CategoryListViewHolder(view,
                 (mValuesMap[NewsPageItemModel.ItemType.CATEGORY] as MutableList<CategoryItemModel>),
                 mCategoryListener,
-                categoryLiveData
+                liveCategoryLiveData
             )
         } else {
             view = LayoutInflater.from(parent.context)

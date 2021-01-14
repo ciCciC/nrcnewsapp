@@ -22,7 +22,7 @@ import com.koray.nrcnewsapp.core.domain.CategoryItemModel
 import com.koray.nrcnewsapp.core.domain.NewsPageItemModel
 import com.koray.nrcnewsapp.core.network.repository.ArticleRepository
 import com.koray.nrcnewsapp.core.network.repository.CategoryRepository
-import com.koray.nrcnewsapp.core.network.viewmodel.CategorySelectionModel
+import com.koray.nrcnewsapp.core.network.viewmodel.LiveCategorySelectionModel
 import com.koray.nrcnewsapp.core.network.viewmodel.CustomViewModelFactory
 import com.koray.nrcnewsapp.core.network.viewmodel.LiveArticleModel
 import com.koray.nrcnewsapp.core.network.viewmodel.LiveCategoriesModel
@@ -39,7 +39,7 @@ class NewsPageFragment : Fragment() {
     private val categoryRepository: CategoryRepository by inject()
     private val articleRepository: ArticleRepository by inject()
 
-    private val categorySelectionModel: CategorySelectionModel by activityViewModels()
+    private val liveCategorySelectionModel: LiveCategorySelectionModel by activityViewModels()
 
     private val liveArticleModel: LiveArticleModel by lazy {
         ViewModelProvider(this, CustomViewModelFactory(articleRepository))
@@ -85,7 +85,7 @@ class NewsPageFragment : Fragment() {
             newsPageItemMap,
             newsPageListener,
             categoryListener,
-            categorySelectionModel
+            liveCategorySelectionModel
         )
 
         recyclerView.layoutManager = LinearLayoutManager(context)
@@ -99,10 +99,10 @@ class NewsPageFragment : Fragment() {
             loadingView.visibility = if(state) View.VISIBLE else View.GONE
         })
 
-        categorySelectionModel.getCategory().observe(viewLifecycleOwner, Observer { category ->
+        liveCategorySelectionModel.getCategory().observe(viewLifecycleOwner, Observer { category ->
             selectedCategory = category
             run {
-                categorySelectionModel.getCategoryMapsViewHolder().forEach { (nextId, mappedView) ->
+                liveCategorySelectionModel.getCategoryMapsViewHolder().forEach { (nextId, mappedView) ->
                     this.handleCategorySelectionView(category.hashCode(), nextId, mappedView)
                 }
             }
@@ -139,7 +139,7 @@ class NewsPageFragment : Fragment() {
                 NewsPageItemModel.ItemType.CATEGORY
             )
 
-            categorySelectionModel.setCashCategories(categoryList)
+            liveCategorySelectionModel.setCashCategories(categoryList)
             newsPageItemList.add(categoryItemListModel)
             newsPageItemMap[NewsPageItemModel.ItemType.CATEGORY] = categoryList
         })
@@ -163,7 +163,7 @@ class NewsPageFragment : Fragment() {
             cat
         }
 
-        categorySelectionModel.setCashCategories(categoryList)
+        liveCategorySelectionModel.setCashCategories(categoryList)
 
         val categoryListItemModel =
             CategoryItemListModel(categoryList, NewsPageItemModel.ItemType.CATEGORY)
@@ -213,11 +213,11 @@ class NewsPageFragment : Fragment() {
 
     private fun autoLoadArticles() {
 
-        val initCategory = categorySelectionModel.getCashedCategories().values.toList()
+        val initCategory = liveCategorySelectionModel.getCashedCategories().values.toList()
             .getOrElse(0) { CategoryItemModel("latest news", "news", 0) }
 
         fetchArticleItems(initCategory)
-        categorySelectionModel.setCategory(initCategory)
+        liveCategorySelectionModel.setCategory(initCategory)
         selectedCategory = initCategory
     }
 

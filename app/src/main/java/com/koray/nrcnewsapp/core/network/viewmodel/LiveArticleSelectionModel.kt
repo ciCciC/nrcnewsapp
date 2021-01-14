@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.koray.nrcnewsapp.core.domain.ArticleItemModel
 
-class ArticleSelectionModel: ViewModel() {
+class LiveArticleSelectionModel: ViewModel() {
 
     private val articleItemModel = MutableLiveData<ArticleItemModel>()
 

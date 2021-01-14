@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.koray.nrcnewsapp.R
 
 import com.koray.nrcnewsapp.core.design.articlelist.ArticleListDummyContent.DummyItem
-import com.koray.nrcnewsapp.core.network.viewmodel.CategorySelectionModel
+import com.koray.nrcnewsapp.core.network.viewmodel.LiveCategorySelectionModel
 
 /**
  * A fragment representing a list of Items.
@@ -26,7 +26,7 @@ class ArticleListFragment : Fragment() {
 
     private var listener: OnListFragmentInteractionListener? = null
 
-    private val categorySelectionModel: CategorySelectionModel by activityViewModels()
+    private val liveCategorySelectionModel: LiveCategorySelectionModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,7 +63,7 @@ class ArticleListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        categorySelectionModel.getCategory().observe(viewLifecycleOwner, Observer { category ->
+        liveCategorySelectionModel.getCategory().observe(viewLifecycleOwner, Observer { category ->
             println("Selected: " + category)
         })
     }
