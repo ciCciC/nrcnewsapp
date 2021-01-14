@@ -21,6 +21,7 @@ import com.koray.nrcnewsapp.core.domain.ArticlePageModel
 import com.koray.nrcnewsapp.core.domain.CategoryItemModel
 import com.koray.nrcnewsapp.core.network.dto.ContentBodyDto
 import com.koray.nrcnewsapp.core.network.dto.SectionDto
+import com.koray.nrcnewsapp.core.network.helper.ErrorHandler
 import com.koray.nrcnewsapp.core.network.repository.ArticleRepository
 import com.koray.nrcnewsapp.core.network.viewmodel.*
 import com.koray.nrcnewsapp.core.util.ImageManager
@@ -65,7 +66,7 @@ class ArticlePageFragment : Fragment() {
                 initArticlePage(view, articleItem)
             })
 
-        ErrorHandler.ErrorStateObject.getErrorState().observe(viewLifecycleOwner, Observer { errorMessage ->
+        ErrorHandler.getErrorState().observe(viewLifecycleOwner, Observer { errorMessage ->
             if (errorMessage.showMessage) {
                 Toast.makeText(this.context, errorMessage.message, Toast.LENGTH_LONG).show()
             }

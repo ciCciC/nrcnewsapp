@@ -9,6 +9,7 @@ import com.koray.nrcnewsapp.core.domain.ArticlePageModel
 import com.koray.nrcnewsapp.core.network.caching.ArticlePageService
 import com.koray.nrcnewsapp.core.network.dto.ArticleItemDto
 import com.koray.nrcnewsapp.core.network.dto.ArticlePageDto
+import com.koray.nrcnewsapp.core.network.helper.ErrorHandler
 import com.koray.nrcnewsapp.core.network.transformer.ArticleTransformer
 import com.koray.nrcnewsapp.core.network.repository.ArticleRepository
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
@@ -56,7 +57,9 @@ class LiveArticleModel @Inject constructor(
                     this.articlesByCategoryLiveData.value = response
                     this.loading.value = false
                 },
-                { error -> println("Error: this is my error!, ${error.message}") }
+                { error ->
+                    ErrorHandler.showError(StringBuilder(error.message!!))
+                }
             )
     }
 
@@ -83,7 +86,7 @@ class LiveArticleModel @Inject constructor(
                     this.loading.value = false
                 },
                 { error ->
-                    ErrorHandler.ErrorStateObject.showError(StringBuilder(error.message!!))
+                    ErrorHandler.showError(StringBuilder(error.message!!))
                 }
             )
     }
