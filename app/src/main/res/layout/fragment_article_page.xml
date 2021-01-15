@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
-    tools:context=".core.design.articlepage.ArticlePageFragment">
+    tools:context=".core.ui.articlepage.ArticlePageFragment">
 
     <ScrollView
         android:layout_width="match_parent"

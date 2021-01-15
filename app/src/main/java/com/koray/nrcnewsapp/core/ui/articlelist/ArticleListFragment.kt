@@ -1,4 +1,4 @@
-package com.koray.nrcnewsapp.core.design.articlelist
+package com.koray.nrcnewsapp.core.ui.articlelist
 
 import android.content.Context
 import android.os.Bundle
@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.koray.nrcnewsapp.R
 
-import com.koray.nrcnewsapp.core.design.articlelist.ArticleListDummyContent.DummyItem
+import com.koray.nrcnewsapp.core.ui.articlelist.ArticleListDummyContent.DummyItem
 import com.koray.nrcnewsapp.core.network.viewmodel.LiveCategorySelectionModel
 
 /**

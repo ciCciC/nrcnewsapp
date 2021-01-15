@@ -1,4 +1,4 @@
-package com.koray.nrcnewsapp.core.design.category
+package com.koray.nrcnewsapp.core.ui.category
 
 import androidx.fragment.app.Fragment
 

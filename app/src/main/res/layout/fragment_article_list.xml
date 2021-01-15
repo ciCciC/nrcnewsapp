@@ -10,5 +10,5 @@
     android:layout_marginLeft="12dp"
     android:layout_marginRight="12dp"
     app:layoutManager="LinearLayoutManager"
-    tools:context=".core.design.articlelist.ArticleListFragment"
+    tools:context=".core.ui.articlelist.ArticleListFragment"
     tools:listitem="@layout/fragment_article_item" />

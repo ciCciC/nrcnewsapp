@@ -1,4 +1,4 @@
-package com.koray.nrcnewsapp.core.design.info
+package com.koray.nrcnewsapp.core.ui.info
 
 import android.os.Bundle
 import android.view.LayoutInflater

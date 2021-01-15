@@ -1,11 +1,11 @@
-package com.koray.nrcnewsapp.core.design.viewholders
+package com.koray.nrcnewsapp.core.ui.viewholders
 
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.koray.nrcnewsapp.R
-import com.koray.nrcnewsapp.core.design.category.CategoryItemRecyclerViewAdapter
-import com.koray.nrcnewsapp.core.design.category.CategoryOnListInteractionListener
+import com.koray.nrcnewsapp.core.ui.category.CategoryItemRecyclerViewAdapter
+import com.koray.nrcnewsapp.core.ui.category.CategoryOnListInteractionListener
 import com.koray.nrcnewsapp.core.domain.CategoryItemModel
 import com.koray.nrcnewsapp.core.network.viewmodel.LiveCategorySelectionModel
 

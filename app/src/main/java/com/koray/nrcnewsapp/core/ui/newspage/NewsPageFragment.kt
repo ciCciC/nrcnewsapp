@@ -1,4 +1,4 @@
-package com.koray.nrcnewsapp.core.design.newspage
+package com.koray.nrcnewsapp.core.ui.newspage
 
 import android.content.Context
 import android.os.Bundle
@@ -14,8 +14,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.koray.nrcnewsapp.R
-import com.koray.nrcnewsapp.core.design.category.CategoryItemRecyclerViewAdapter
-import com.koray.nrcnewsapp.core.design.category.CategoryOnListInteractionListener
+import com.koray.nrcnewsapp.core.ui.category.CategoryItemRecyclerViewAdapter
+import com.koray.nrcnewsapp.core.ui.category.CategoryOnListInteractionListener
 import com.koray.nrcnewsapp.core.domain.ArticleItemModel
 import com.koray.nrcnewsapp.core.domain.CategoryItemListModel
 import com.koray.nrcnewsapp.core.domain.CategoryItemModel

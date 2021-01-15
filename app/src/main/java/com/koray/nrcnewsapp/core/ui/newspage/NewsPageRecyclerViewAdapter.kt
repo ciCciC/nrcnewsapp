@@ -1,4 +1,4 @@
-package com.koray.nrcnewsapp.core.design.newspage
+package com.koray.nrcnewsapp.core.ui.newspage
 
 
 import android.view.LayoutInflater
@@ -6,10 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.koray.nrcnewsapp.R
-import com.koray.nrcnewsapp.core.design.category.CategoryOnListInteractionListener
-import com.koray.nrcnewsapp.core.design.viewholders.ArticleViewHolder
-import com.koray.nrcnewsapp.core.design.viewholders.BaseViewHolder
-import com.koray.nrcnewsapp.core.design.viewholders.CategoryListViewHolder
+import com.koray.nrcnewsapp.core.ui.category.CategoryOnListInteractionListener
+import com.koray.nrcnewsapp.core.ui.viewholders.ArticleViewHolder
+import com.koray.nrcnewsapp.core.ui.viewholders.BaseViewHolder
+import com.koray.nrcnewsapp.core.ui.viewholders.CategoryListViewHolder
 import com.koray.nrcnewsapp.core.domain.ArticleItemModel
 import com.koray.nrcnewsapp.core.domain.CategoryItemModel
 import com.koray.nrcnewsapp.core.domain.NewsPageItemModel

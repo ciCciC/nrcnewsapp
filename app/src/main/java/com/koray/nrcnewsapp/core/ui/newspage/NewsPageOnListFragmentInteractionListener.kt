@@ -1,4 +1,4 @@
-package com.koray.nrcnewsapp.core.design.newspage
+package com.koray.nrcnewsapp.core.ui.newspage
 
 import com.koray.nrcnewsapp.core.domain.NewsPageItemModel
 

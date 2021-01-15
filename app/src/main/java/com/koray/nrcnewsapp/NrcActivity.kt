@@ -13,11 +13,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
-import com.koray.nrcnewsapp.core.design.articlepage.ArticlePageFragment
-import com.koray.nrcnewsapp.core.design.category.CategoryOnListInteractionListener
-import com.koray.nrcnewsapp.core.design.info.MenuItemInfoFragment
-import com.koray.nrcnewsapp.core.design.newspage.NewsPageFragment
-import com.koray.nrcnewsapp.core.design.newspage.NewsPageOnListFragmentInteractionListener
+import com.koray.nrcnewsapp.core.ui.articlepage.ArticlePageFragment
+import com.koray.nrcnewsapp.core.ui.category.CategoryOnListInteractionListener
+import com.koray.nrcnewsapp.core.ui.info.MenuItemInfoFragment
+import com.koray.nrcnewsapp.core.ui.newspage.NewsPageFragment
+import com.koray.nrcnewsapp.core.ui.newspage.NewsPageOnListFragmentInteractionListener
 import com.koray.nrcnewsapp.core.domain.ArticleItemModel
 import com.koray.nrcnewsapp.core.domain.CategoryItemModel
 import com.koray.nrcnewsapp.core.domain.NewsPageItemModel

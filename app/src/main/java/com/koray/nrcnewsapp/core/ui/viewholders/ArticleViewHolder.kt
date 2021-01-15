@@ -1,4 +1,4 @@
-package com.koray.nrcnewsapp.core.design.viewholders
+package com.koray.nrcnewsapp.core.ui.viewholders
 
 import android.view.View
 import android.widget.ImageView

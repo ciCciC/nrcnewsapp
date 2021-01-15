@@ -1,4 +1,4 @@
-package com.koray.nrcnewsapp.core.design.articlepage
+package com.koray.nrcnewsapp.core.ui.articlepage
 
 import android.graphics.Typeface
 import android.os.Bundle
@@ -15,7 +15,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.koray.nrcnewsapp.R
 import com.koray.nrcnewsapp.core.abstraction.Ctype
-import com.koray.nrcnewsapp.core.design.viewholders.ArticlePageViewHolder
+import com.koray.nrcnewsapp.core.ui.viewholders.ArticlePageViewHolder
 import com.koray.nrcnewsapp.core.domain.ArticleItemModel
 import com.koray.nrcnewsapp.core.domain.ArticlePageModel
 import com.koray.nrcnewsapp.core.domain.CategoryItemModel

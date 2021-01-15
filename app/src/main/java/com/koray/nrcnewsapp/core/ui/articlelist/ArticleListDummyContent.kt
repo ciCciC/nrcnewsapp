@@ -1,4 +1,4 @@
-package com.koray.nrcnewsapp.core.design.articlelist
+package com.koray.nrcnewsapp.core.ui.articlelist
 
 import java.util.*
 
