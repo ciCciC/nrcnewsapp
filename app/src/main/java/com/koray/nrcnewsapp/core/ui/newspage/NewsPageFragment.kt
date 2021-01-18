@@ -43,7 +43,7 @@ class NewsPageFragment : Fragment() {
 
     private val liveArticleModel: LiveArticleModel by lazy {
         ViewModelProvider(this, CustomViewModelFactory(articleRepository))
-        .get(LiveArticleModel::class.java)
+            .get(LiveArticleModel::class.java)
     }
 
     private val liveCategoriesModel: LiveCategoriesModel by lazy {
@@ -96,20 +96,26 @@ class NewsPageFragment : Fragment() {
         }
 
         liveArticleModel.loading.observe(viewLifecycleOwner, Observer { state ->
-            loadingView.visibility = if(state) View.VISIBLE else View.GONE
+            loadingView.visibility = if (state) View.VISIBLE else View.GONE
         })
 
-        liveCategorySelectionModel.getCategory().observe(viewLifecycleOwner, Observer { category ->
-            selectedCategory = category
-            run {
-                liveCategorySelectionModel.getCategoryMapsViewHolder().forEach { (nextId, mappedView) ->
-                    this.handleCategorySelectionView(category.hashCode(), nextId, mappedView)
+        liveCategorySelectionModel.getCategory()
+            .observe(viewLifecycleOwner, Observer { category ->
+                selectedCategory = category
+                run {
+                    liveCategorySelectionModel.getCategoryMapsViewHolder()
+                        .forEach { (nextId, mappedView) ->
+                            this.handleCategorySelectionView(
+                                category.hashCode(),
+                                nextId,
+                                mappedView
+                            )
+                        }
                 }
-            }
-            liveArticleModel.loading.value = true
+                liveArticleModel.loading.value = true
 
-            fetchArticleItems(category)
-        })
+                fetchArticleItems(category)
+            })
 
         if (!this::selectedCategory.isInitialized) {
             autoLoadArticles()
@@ -121,28 +127,29 @@ class NewsPageFragment : Fragment() {
 
         liveCategoriesModel.requestCategories()
 
-        liveCategoriesModel.getCategories().observe(viewLifecycleOwner, Observer { categoryList ->
-            val categoryItemListModel = CategoryItemListModel(
-                categoryList.map { categoryItemModel ->
-                    if (categoryItemModel.topic.equals("news")) {
-                        categoryItemModel.selected = true
-                    }
+        liveCategoriesModel.getCategories()
+            .observe(viewLifecycleOwner, Observer { categoryList ->
+                val categoryItemListModel = CategoryItemListModel(
+                    categoryList.map { categoryItemModel ->
+                        if (categoryItemModel.topic.equals("news")) {
+                            categoryItemModel.selected = true
+                        }
 
-                    val backgroundImgIdentifier = resources.getIdentifier(
-                        categoryItemModel.topic, "drawable",
-                        context?.packageName
-                    )
+                        val backgroundImgIdentifier = resources.getIdentifier(
+                            categoryItemModel.topic, "drawable",
+                            context?.packageName
+                        )
 
-                    categoryItemModel.img = backgroundImgIdentifier
-                    categoryItemModel
-                },
-                NewsPageItemModel.ItemType.CATEGORY
-            )
+                        categoryItemModel.img = backgroundImgIdentifier
+                        categoryItemModel
+                    },
+                    NewsPageItemModel.ItemType.CATEGORY
+                )
 
-            liveCategorySelectionModel.setCashCategories(categoryList)
-            newsPageItemList.add(categoryItemListModel)
-            newsPageItemMap[NewsPageItemModel.ItemType.CATEGORY] = categoryList
-        })
+                liveCategorySelectionModel.setCashCategories(categoryList)
+                newsPageItemList.add(categoryItemListModel)
+                newsPageItemMap[NewsPageItemModel.ItemType.CATEGORY] = categoryList
+            })
     }
 
     private fun fetchDummyCategoryNames() {

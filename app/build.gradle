@@ -82,6 +82,7 @@ dependencies {
     // Google
     implementation 'com.google.android.gms:play-services-auth:19.0.0'
     implementation 'com.google.android.material:material:1.2.1'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0'
 
     kapt platform("io.micronaut:micronaut-bom:$micronautVersion")
     kapt "io.micronaut:micronaut-inject-java"
