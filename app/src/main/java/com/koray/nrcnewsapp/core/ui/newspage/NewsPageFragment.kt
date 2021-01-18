@@ -51,8 +51,8 @@ class NewsPageFragment : Fragment() {
             .get(LiveCategoriesModel::class.java)
     }
 
-    private val newsPageItemList: MutableList<NewsPageItemModel> = ArrayList()
-    private val newsPageItemMap: MutableMap<NewsPageItemModel.ItemType, Any> =
+    private var newsPageItemList: MutableList<NewsPageItemModel> = ArrayList()
+    private var newsPageItemMap: MutableMap<NewsPageItemModel.ItemType, Any> =
         EnumMap(NewsPageItemModel.ItemType::class.java)
 
     private var newsPagerAdapter: NewsPageRecyclerViewAdapter? = null
@@ -91,23 +91,24 @@ class NewsPageFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = newsPagerAdapter
 
-        scrollUpButton.setOnClickListener { v ->
+        scrollUpButton.setOnClickListener {
             recyclerView.smoothScrollToPosition(0)
         }
 
-        liveArticleModel.loading.observe(viewLifecycleOwner, Observer { state ->
-            loadingView.visibility = if (state) View.VISIBLE else View.GONE
-        })
+        liveArticleModel.loading
+            .observe(viewLifecycleOwner, Observer { state ->
+                loadingView.visibility = if (state) View.VISIBLE else View.GONE
+            })
 
         liveCategorySelectionModel.getCategory()
             .observe(viewLifecycleOwner, Observer { category ->
                 selectedCategory = category
                 run {
                     liveCategorySelectionModel.getCategoryMapsViewHolder()
-                        .forEach { (nextId, mappedView) ->
+                        .forEach { (categoryId, mappedView) ->
                             this.handleCategorySelectionView(
                                 category.hashCode(),
-                                nextId,
+                                categoryId,
                                 mappedView
                             )
                         }
@@ -116,10 +117,6 @@ class NewsPageFragment : Fragment() {
 
                 fetchArticleItems(category)
             })
-
-        if (!this::selectedCategory.isInitialized) {
-            autoLoadArticles()
-        }
     }
 
     private fun fetchCategoryNames() {
@@ -133,6 +130,7 @@ class NewsPageFragment : Fragment() {
                     categoryList.map { categoryItemModel ->
                         if (categoryItemModel.topic.equals("news")) {
                             categoryItemModel.selected = true
+                            liveCategorySelectionModel.setCategory(categoryItemModel)
                         }
 
                         val backgroundImgIdentifier = resources.getIdentifier(
@@ -142,13 +140,13 @@ class NewsPageFragment : Fragment() {
 
                         categoryItemModel.img = backgroundImgIdentifier
                         categoryItemModel
-                    },
-                    NewsPageItemModel.ItemType.CATEGORY
+                    }
                 )
 
-                liveCategorySelectionModel.setCashCategories(categoryList)
+                newsPageItemList.removeAll { item -> item.itemType!! == NewsPageItemModel.ItemType.CATEGORY }
                 newsPageItemList.add(categoryItemListModel)
-                newsPageItemMap[NewsPageItemModel.ItemType.CATEGORY] = categoryList
+                newsPagerAdapter?.notifyDataSetChanged()
+//                newsPageItemMap[NewsPageItemModel.ItemType.CATEGORY] = categoryList
             })
     }
 
@@ -170,12 +168,10 @@ class NewsPageFragment : Fragment() {
             cat
         }
 
-        liveCategorySelectionModel.setCashCategories(categoryList)
-
         val categoryListItemModel =
             CategoryItemListModel(categoryList, NewsPageItemModel.ItemType.CATEGORY)
         newsPageItemList.add(categoryListItemModel)
-        newsPageItemMap[NewsPageItemModel.ItemType.CATEGORY] = categoryList
+//        newsPageItemMap[NewsPageItemModel.ItemType.CATEGORY] = categoryList
     }
 
     private fun fetchArticleItems(category: CategoryItemModel) {
@@ -212,20 +208,10 @@ class NewsPageFragment : Fragment() {
 
     private fun handleCategorySelectionView(
         targetId: Int,
-        nextId: Int,
+        categoryId: Int,
         mappedView: CategoryItemRecyclerViewAdapter.CategoryItemViewHolder
     ) {
-        mappedView.mImage.alpha = if (targetId == nextId.hashCode()) 1F else 0.27F
-    }
-
-    private fun autoLoadArticles() {
-
-        val initCategory = liveCategorySelectionModel.getCashedCategories().values.toList()
-            .getOrElse(0) { CategoryItemModel("latest news", "news", 0) }
-
-        fetchArticleItems(initCategory)
-        liveCategorySelectionModel.setCategory(initCategory)
-        selectedCategory = initCategory
+        mappedView.mImage.alpha = if (targetId == categoryId.hashCode()) 1F else 0.27F
     }
 
     override fun onAttach(context: Context) {
