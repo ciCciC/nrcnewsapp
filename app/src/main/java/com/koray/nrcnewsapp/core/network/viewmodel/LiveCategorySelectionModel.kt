@@ -4,12 +4,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.koray.nrcnewsapp.core.ui.category.CategoryItemRecyclerViewAdapter
 import com.koray.nrcnewsapp.core.domain.CategoryItemModel
-import java.util.function.Consumer
 
 class LiveCategorySelectionModel : ViewModel() {
 
     private val selectedCategoryItem = MutableLiveData<CategoryItemModel>()
-    private val categoryMapsViewHolder =
+    private val categoryViewHolderMap =
         HashMap<Int, CategoryItemRecyclerViewAdapter.CategoryItemViewHolder>()
 
     fun getCategory(): MutableLiveData<CategoryItemModel> {
@@ -20,11 +19,11 @@ class LiveCategorySelectionModel : ViewModel() {
         categoryId: Int,
         viewHolder: CategoryItemRecyclerViewAdapter.CategoryItemViewHolder
     ) {
-        this.categoryMapsViewHolder[categoryId] = viewHolder
+        this.categoryViewHolderMap[categoryId] = viewHolder
     }
 
-    fun getCategoryMapsViewHolder(): HashMap<Int, CategoryItemRecyclerViewAdapter.CategoryItemViewHolder> {
-        return this.categoryMapsViewHolder
+    fun getCategoryViewHolderMap(): HashMap<Int, CategoryItemRecyclerViewAdapter.CategoryItemViewHolder> {
+        return this.categoryViewHolderMap
     }
 
     fun setCategory(selectedCategory: CategoryItemModel) {

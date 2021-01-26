@@ -104,7 +104,7 @@ class NewsPageFragment : Fragment() {
             .observe(viewLifecycleOwner, Observer { category ->
                 selectedCategory = category
                 run {
-                    liveCategorySelectionModel.getCategoryMapsViewHolder()
+                    liveCategorySelectionModel.getCategoryViewHolderMap()
                         .forEach { (categoryId, mappedView) ->
                             this.handleCategorySelectionView(
                                 category.hashCode(),
