@@ -1,7 +1,6 @@
 package com.koray.nrcnewsapp
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -14,13 +13,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
+import androidx.navigation.NavOptions
+import androidx.navigation.findNavController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.SignInButton
-import com.google.android.gms.common.api.ApiException
-import com.google.android.gms.tasks.Task
 import com.koray.nrcnewsapp.core.domain.ArticleItemModel
 import com.koray.nrcnewsapp.core.domain.CategoryItemModel
 import com.koray.nrcnewsapp.core.domain.NewsPageItemModel
@@ -30,8 +27,7 @@ import com.koray.nrcnewsapp.core.network.viewmodel.LiveToolbarArrow
 import com.koray.nrcnewsapp.core.ui.articlepage.ArticlePageFragment
 import com.koray.nrcnewsapp.core.ui.category.CategoryOnListInteractionListener
 import com.koray.nrcnewsapp.core.ui.info.MenuItemInfoFragment
-import com.koray.nrcnewsapp.core.ui.login.LiveLoginModel
-import com.koray.nrcnewsapp.core.ui.newspage.NewsPageFragment
+import com.koray.nrcnewsapp.core.ui.login.LiveAccountModel
 import com.koray.nrcnewsapp.core.ui.newspage.NewsPageOnListFragmentInteractionListener
 import com.koray.nrcnewsapp.core.util.AnimationEffect
 import com.koray.nrcnewsapp.core.util.ChangeBackgroundOnTouch
@@ -42,85 +38,53 @@ import javax.inject.Singleton
 @Singleton
 class NrcActivity : AppCompatActivity(),
     CategoryOnListInteractionListener,
-    NewsPageOnListFragmentInteractionListener, View.OnClickListener {
-
-    private val RC_SIGN_IN = 200
+    NewsPageOnListFragmentInteractionListener {
 
     private val liveCategorySelectionModel: LiveCategorySelectionModel by viewModels()
     private val liveArticleItemSelectionModel: LiveArticleSelectionModel by viewModels()
-    private val liveAccountModel: LiveLoginModel by viewModels()
+    private val liveAccountModel: LiveAccountModel by viewModels()
     private val liveToolbarArrow: LiveToolbarArrow by viewModels()
     private lateinit var toolbarText: TextView
     private lateinit var toolbarArrow: ImageView
 
     private val menuItemInfoFragment: MenuItemInfoFragment = MenuItemInfoFragment.newInstance()
-    private val newsPageFragment: NewsPageFragment = NewsPageFragment.newInstance()
 
-    private lateinit var mGoogleSignInClient: GoogleSignInClient
-    private lateinit var signInButton: SignInButton
-
-    private var savedInstanceState: Bundle? = null
+    private lateinit var googleSignInClient: GoogleSignInClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        this.savedInstanceState = savedInstanceState
 
         setContentView(R.layout.activity_main)
         setCustomToolbar()
-        setGoogleSignInButton()
-        setGoogleSignInCheck()
-        setAccount()
+        setGoogleSignInClient()
+        checkSignIn()
     }
 
-    private fun setAccount() {
+    private fun checkSignIn() {
         this.liveAccountModel
             .getAccount()
-            .observe(this, Observer {
-                if (it != null) {
-                    if (this.savedInstanceState == null) {
-                        initNewsPageFragment()
-                    }
+            .observe(this, Observer { googleSignInAccount ->
+                if (googleSignInAccount.isLoggedIn) {
+                    val navController = findNavController(R.id.nav_host_fragment)
+                    navController.navigate(R.id.newsPageFragment)
                 } else {
-                    supportFragmentManager.fragments.forEach { fragmentToRemove ->
-                        if (fragmentToRemove != null) {
-                            supportFragmentManager
-                                .beginTransaction()
-                                .remove(fragmentToRemove)
-                                .commit()
-                        }
-                    }
-                    this.signInButton.visibility = View.VISIBLE
+                    val navController = findNavController(R.id.nav_host_fragment)
+                    val navOptions = NavOptions.Builder()
+                        .setPopUpTo(R.id.loginFragment, true)
+                        .build()
+
+                    navController.navigate(R.id.loginFragment, null, navOptions)
                 }
             })
     }
 
-    private fun setGoogleSignInButton() {
-        signInButton = findViewById(R.id.sign_in_button)
-        signInButton.setOnClickListener(this)
-        signInButton.setSize(SignInButton.SIZE_STANDARD)
-    }
-
-    private fun setGoogleSignInCheck() {
+    private fun setGoogleSignInClient() {
         val gso = GoogleSignInOptions
             .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestEmail()
             .build()
 
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
-
-        val account = GoogleSignIn.getLastSignedInAccount(this)
-
-        updateUI(account)
-
-    }
-
-    private fun updateUI(account: GoogleSignInAccount?) {
-        if (account == null) {
-            this.signInButton.visibility = View.VISIBLE
-        } else {
-            this.signInButton.visibility = View.GONE
-            this.liveAccountModel.setAccount(account)
-        }
+        googleSignInClient = GoogleSignIn.getClient(this, gso)
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -136,7 +100,7 @@ class NrcActivity : AppCompatActivity(),
 
         toolbarArrow.setOnClickListener {
             it.startAnimation(rotate)
-            onBackPress()
+            onBackPressed()
         }
 
         toolbarArrow.setOnTouchListener(ChangeBackgroundOnTouch(resources))
@@ -149,7 +113,7 @@ class NrcActivity : AppCompatActivity(),
                 run {
                     val categoryDisplay = categoryItem.display!!
                     toolbarText.text =
-                        "* ${categoryDisplay[0].toUpperCase() + categoryDisplay.substring(1)} *"
+                        "${categoryDisplay[0].toUpperCase() + categoryDisplay.substring(1)}"
                 }
             }
             )
@@ -166,28 +130,29 @@ class NrcActivity : AppCompatActivity(),
         return when (item?.itemId) {
             R.id.menu_info -> {
                 if (!menuItemInfoFragment.isVisible) {
-                    initInfoFragment()
+                    val navController = findNavController(R.id.nav_host_fragment)
+                    navController.navigate(R.id.menuItemInfoFragment)
                     liveToolbarArrow.showArrow()
                 }
                 return true
             }
             R.id.menu_logout -> {
-                this.handleSingOutResult()
+                this.singOut()
                 return true
             }
             else -> super.onOptionsItemSelected(item)
         }
     }
 
-    private fun initInfoFragment() {
-        val slide = FragmentAnimation.slide(supportFragmentManager)
-        commitFragment(slide, menuItemInfoFragment, MenuItemInfoFragment.getTagName())
-    }
+//    private fun initInfoFragment() {
+//        val slide = FragmentAnimation.slide(supportFragmentManager)
+//        commitFragment(slide, menuItemInfoFragment, MenuItemInfoFragment.getTagName())
+//    }
 
-    private fun initNewsPageFragment() {
-        val rightBottomToLeftTop = FragmentAnimation.rightBottomToLeftTop(supportFragmentManager)
-        commitFragment(rightBottomToLeftTop, newsPageFragment, ArticlePageFragment.getTagName())
-    }
+//    private fun initNewsPageFragment() {
+//        val rightBottomToLeftTop = FragmentAnimation.rightBottomToLeftTop(supportFragmentManager)
+//        commitFragment(rightBottomToLeftTop, newsPageFragment, ArticlePageFragment.getTagName())
+//    }
 
     private fun initArticlePageFragment() {
         val articlePageFragment: ArticlePageFragment = ArticlePageFragment.newInstance()
@@ -223,59 +188,20 @@ class NrcActivity : AppCompatActivity(),
     }
 
     override fun onBackPressed() {
-        onBackPress()
-    }
+        val findNavController = findNavController(R.id.nav_host_fragment)
 
-    private fun onBackPress() {
-        val backStackCount = supportFragmentManager.backStackEntryCount
+        val destination = findNavController.previousBackStackEntry!!.destination
 
-        if (backStackCount > 1) {
-            supportFragmentManager.popBackStack()
-        }
-
-        if (backStackCount == 2) {
+        if (destination.id == R.id.newsPageFragment) {
             liveToolbarArrow.hideArrow()
         }
+
+        findNavController.popBackStack()
     }
 
-    override fun onClick(v: View?) {
-        when (v!!.id) {
-            R.id.sign_in_button -> signIn()
-        }
-    }
-
-    private fun signIn() {
-        println("Clicked to sign")
-        val signInIntent = mGoogleSignInClient.signInIntent
-        startActivityForResult(signInIntent, RC_SIGN_IN)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
-        if (requestCode == RC_SIGN_IN) {
-            // The Task returned from this call is always completed, no need to attach
-            // a listener.
-            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-            handleSignInResult(task)
-        }
-    }
-
-    private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
-        try {
-            val account = completedTask.getResult(ApiException::class.java)
-            updateUI(account)
-        } catch (e: ApiException) {
-            println("signInResult:failed code=" + e.statusCode)
-            updateUI(null)
-        }
-    }
-
-    private fun handleSingOutResult() {
-        val completedTask = this.mGoogleSignInClient.signOut()
-//        completedTask.addOnCompleteListener()
-
+    private fun singOut() {
+        liveToolbarArrow.hideArrow()
+        this.googleSignInClient.signOut()
         this.liveAccountModel.signOut()
     }
 }

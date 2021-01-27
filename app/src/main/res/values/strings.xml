@@ -2,5 +2,5 @@
     <string name="app_name">NRC news</string>
     <string name="hello_blank_fragment">Hello NRC reader</string>
     <string name="underscore">___</string>
-    <string name="default_content_desc">yada</string>
+    <string name="default_content_desc">Welcome</string>
 </resources>
