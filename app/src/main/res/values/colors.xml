@@ -5,7 +5,8 @@
     <color name="colorTextPrimary">#555555</color>
     <color name="colorTextBar">#000000</color>
     <color name="colorTextTopic">#FF1744</color>
-    <color name="colorLogin">#000000</color>
+    <color name="colorLoginLabel">#000000</color>
+    <color name="colorLoginBoxStroke">#000000</color>
 
     <color name="genericColorHigh">#FF1744</color>
     <color name="colorNrcLogo">@color/genericColorHigh</color>

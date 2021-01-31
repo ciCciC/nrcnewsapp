@@ -35,7 +35,6 @@ class LoginFragment : Fragment(), View.OnClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         setGoogleSignInButton(view)
         setGoogleSignInCheck()
     }
@@ -43,7 +42,8 @@ class LoginFragment : Fragment(), View.OnClickListener {
     private fun setGoogleSignInButton(view: View) {
         signInButton = view.findViewById(R.id.sign_in_button)
         signInButton.setOnClickListener(this)
-        signInButton.setSize(SignInButton.SIZE_STANDARD)
+        signInButton.setColorScheme(SignInButton.COLOR_AUTO)
+        signInButton.setSize(SignInButton.SIZE_WIDE)
     }
 
     private fun setGoogleSignInCheck() {

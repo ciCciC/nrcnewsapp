@@ -5,7 +5,8 @@
     <color name="colorTextPrimary">#FFFFFF</color>
     <color name="colorTextBar">#FFFFFF</color>
     <color name="colorTextTopic">#FFF651</color>
-    <color name="colorLogin">#FFFFFF</color>
+    <color name="colorLoginLabel">#FFFFFF</color>
+    <color name="colorLoginBoxStroke">#FFFFFF</color>
 
     <color name="colorNrcLogo">#FFF651</color>
     <color name="colorShareLogo">#FFF651</color>
