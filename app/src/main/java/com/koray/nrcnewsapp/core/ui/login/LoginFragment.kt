@@ -40,10 +40,10 @@ class LoginFragment : Fragment(), View.OnClickListener {
     }
 
     private fun setGoogleSignInButton(view: View) {
-        signInButton = view.findViewById(R.id.sign_in_button)
+        signInButton = view.findViewById(R.id.google_sign_in_button)
         signInButton.setOnClickListener(this)
         signInButton.setColorScheme(SignInButton.COLOR_AUTO)
-        signInButton.setSize(SignInButton.SIZE_WIDE)
+        signInButton.setSize(SignInButton.SIZE_ICON_ONLY)
     }
 
     private fun setGoogleSignInCheck() {
@@ -73,7 +73,7 @@ class LoginFragment : Fragment(), View.OnClickListener {
 
     override fun onClick(v: View?) {
         when (v!!.id) {
-            R.id.sign_in_button -> signIn()
+            R.id.google_sign_in_button -> signIn()
         }
     }
 
