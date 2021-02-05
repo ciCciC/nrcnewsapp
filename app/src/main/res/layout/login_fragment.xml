@@ -11,25 +11,49 @@
         android:layout_width="match_parent"
         android:layout_height="350dp">
 
-        <ImageView
-            android:layout_width="wrap_content"
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/login_animation_view"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/nrclogo"
-            android:contentDescription="Shows NRC logo"/>
+            app:lottie_rawRes="@raw/lurkingcatday"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:paddingStart="30dp">
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/login_title_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:text="NRC"
+                android:textColor="@color/colorLoginTitlePrimary"
+                android:textSize="50dp"/>
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_nrc_arrow"
+                android:layout_gravity="center"
+                />
+        </LinearLayout>
     </FrameLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="350dp">
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/login_title"
             android:textSize="18sp"
             android:textColor="@color/colorTextPrimary"
-            app:layout_constraintVertical_bias="0.900"
+            app:layout_constraintVertical_bias=".200"
+            app:layout_constraintHorizontal_bias=".150"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -114,11 +138,11 @@
             style="?attr/materialButtonStyle"
             android:id="@+id/sign_in_button"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="60dp"
             android:text="Sign In"
             android:textColor="@color/colorWhite"
-            android:layout_marginStart="5dp"
-            android:layout_marginEnd="5dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
             android:textAllCaps="false"
             app:backgroundTint="#0091EA"
             app:layout_constraintVertical_bias="0.600"
@@ -127,10 +151,24 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent" />
 
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/login_or_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:text="OR"
+            android:gravity="center"
+            android:textColorHint="@color/colorTextPrimary"
+            app:layout_constraintVertical_bias="0.750"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
         <com.google.android.gms.common.SignInButton
             android:id="@+id/google_sign_in_button"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="60dp"
             app:layout_constraintVertical_bias="0.900"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

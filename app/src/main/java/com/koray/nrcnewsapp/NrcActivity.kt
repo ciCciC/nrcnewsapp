@@ -1,6 +1,7 @@
 package com.koray.nrcnewsapp
 
 import android.annotation.SuppressLint
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -53,6 +54,8 @@ class NrcActivity : AppCompatActivity(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 
         setContentView(R.layout.activity_main)
         setCustomToolbar()
@@ -190,9 +193,9 @@ class NrcActivity : AppCompatActivity(),
     override fun onBackPressed() {
         val findNavController = findNavController(R.id.nav_host_fragment)
 
-        val destination = findNavController.previousBackStackEntry!!.destination
+        val destinationId = findNavController.previousBackStackEntry!!.destination.id
 
-        if (destination.id == R.id.newsPageFragment) {
+        if (destinationId == R.id.newsPageFragment || destinationId == R.id.loginFragment) {
             liveToolbarArrow.hideArrow()
         }
 

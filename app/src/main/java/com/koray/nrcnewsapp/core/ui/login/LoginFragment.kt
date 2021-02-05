@@ -1,12 +1,15 @@
 package com.koray.nrcnewsapp.core.ui.login
 
+import android.animation.ValueAnimator
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import com.airbnb.lottie.LottieAnimationView
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -21,8 +24,8 @@ class LoginFragment : Fragment(), View.OnClickListener {
 
     private val RC_SIGN_IN = 200
 
-    private lateinit var mGoogleSignInClient: GoogleSignInClient
-    private lateinit var signInButton: SignInButton
+    private lateinit var googleSignInClient: GoogleSignInClient
+    private lateinit var googleSignInButton: SignInButton
 
     private val liveAccountModel: LiveAccountModel by activityViewModels()
 
@@ -35,15 +38,28 @@ class LoginFragment : Fragment(), View.OnClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setLogoMode(view)
         setGoogleSignInButton(view)
         setGoogleSignInCheck()
     }
 
+    private fun setLogoMode(view: View){
+        val animationView = view.findViewById<LottieAnimationView>(R.id.login_animation_view)
+
+        when (context?.resources?.configuration?.uiMode?.and(Configuration.UI_MODE_NIGHT_MASK)) {
+            Configuration.UI_MODE_NIGHT_NO -> {animationView.setAnimation(R.raw.lurkingcatday)}
+            Configuration.UI_MODE_NIGHT_YES -> {animationView.setAnimation(R.raw.lurkingcatnight)}
+        }
+
+        animationView.playAnimation()
+        animationView.repeatCount = ValueAnimator.INFINITE
+    }
+
     private fun setGoogleSignInButton(view: View) {
-        signInButton = view.findViewById(R.id.google_sign_in_button)
-        signInButton.setOnClickListener(this)
-        signInButton.setColorScheme(SignInButton.COLOR_AUTO)
-        signInButton.setSize(SignInButton.SIZE_ICON_ONLY)
+        googleSignInButton = view.findViewById(R.id.google_sign_in_button)
+        googleSignInButton.setOnClickListener(this)
+        googleSignInButton.setColorScheme(SignInButton.COLOR_AUTO)
+        googleSignInButton.setSize(SignInButton.SIZE_ICON_ONLY)
     }
 
     private fun setGoogleSignInCheck() {
@@ -52,7 +68,7 @@ class LoginFragment : Fragment(), View.OnClickListener {
             .requestEmail()
             .build()
 
-        mGoogleSignInClient = GoogleSignIn.getClient(requireContext(), gso)
+        googleSignInClient = GoogleSignIn.getClient(requireContext(), gso)
 
         val account = GoogleSignIn.getLastSignedInAccount(requireContext())
 
@@ -67,7 +83,7 @@ class LoginFragment : Fragment(), View.OnClickListener {
     }
 
     private fun signIn() {
-        val signInIntent = mGoogleSignInClient.signInIntent
+        val signInIntent = googleSignInClient.signInIntent
         startActivityForResult(signInIntent, RC_SIGN_IN)
     }
 

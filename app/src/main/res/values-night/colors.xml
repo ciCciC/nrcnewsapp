@@ -2,6 +2,7 @@
 <resources>
     <color name="colorPrimary">#FF323232</color>
     <color name="colorPrimaryDark">#FF323232</color>
+    <color name="colorLoginTitlePrimary">#FFFFFF</color>
     <color name="colorTextPrimary">#FFFFFF</color>
     <color name="colorTextBar">#FFFFFF</color>
     <color name="colorTextTopic">#FFF651</color>

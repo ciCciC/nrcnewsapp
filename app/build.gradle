@@ -49,6 +49,7 @@ android {
 
 dependencies {
     def nav_version = "2.3.2"
+    def lottieVersion = "3.6.0"
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
@@ -95,6 +96,9 @@ dependencies {
 
     kapt platform("io.micronaut:micronaut-bom:$micronautVersion")
     kapt "io.micronaut:micronaut-inject-java"
+
+    // Lottie for free animations
+    implementation "com.airbnb.android:lottie:$lottieVersion"
 
     // Picasso for image manipulation
     implementation group: 'com.squareup.picasso', name: 'picasso', version: '2.5.2'
