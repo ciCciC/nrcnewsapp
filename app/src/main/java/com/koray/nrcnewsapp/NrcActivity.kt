@@ -67,10 +67,13 @@ class NrcActivity : AppCompatActivity(),
         this.liveAccountModel
             .getAccount()
             .observe(this, Observer { googleSignInAccount ->
+                this.hideToolbar()
                 if (googleSignInAccount.isLoggedIn) {
+                    this.showToolbar()
                     val navController = findNavController(R.id.nav_host_fragment)
                     navController.navigate(R.id.newsPageFragment)
                 } else {
+                    this.hideToolbar()
                     val navController = findNavController(R.id.nav_host_fragment)
                     val navOptions = NavOptions.Builder()
                         .setPopUpTo(R.id.loginFragment, true)
@@ -120,6 +123,14 @@ class NrcActivity : AppCompatActivity(),
                 }
             }
             )
+    }
+
+    private fun hideToolbar() {
+        supportActionBar!!.hide()
+    }
+
+    private fun showToolbar() {
+        supportActionBar!!.show()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
