@@ -1,4 +1,4 @@
-package com.koray.nrcnewsapp.core.design.newspage
+package com.koray.nrcnewsapp.core.ui.newspage
 
 import android.content.Context
 import android.os.Bundle
@@ -14,18 +14,18 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.koray.nrcnewsapp.R
-import com.koray.nrcnewsapp.core.design.category.CategoryItemRecyclerViewAdapter
-import com.koray.nrcnewsapp.core.design.category.CategoryOnListInteractionListener
 import com.koray.nrcnewsapp.core.domain.ArticleItemModel
 import com.koray.nrcnewsapp.core.domain.CategoryItemListModel
 import com.koray.nrcnewsapp.core.domain.CategoryItemModel
 import com.koray.nrcnewsapp.core.domain.NewsPageItemModel
 import com.koray.nrcnewsapp.core.network.repository.ArticleRepository
 import com.koray.nrcnewsapp.core.network.repository.CategoryRepository
-import com.koray.nrcnewsapp.core.network.viewmodel.LiveCategorySelectionModel
 import com.koray.nrcnewsapp.core.network.viewmodel.CustomViewModelFactory
 import com.koray.nrcnewsapp.core.network.viewmodel.LiveArticleModel
 import com.koray.nrcnewsapp.core.network.viewmodel.LiveCategoriesModel
+import com.koray.nrcnewsapp.core.network.viewmodel.LiveCategorySelectionModel
+import com.koray.nrcnewsapp.core.ui.category.CategoryItemRecyclerViewAdapter
+import com.koray.nrcnewsapp.core.ui.category.CategoryOnListInteractionListener
 import com.koray.nrcnewsapp.core.util.inject
 import java.util.*
 import kotlin.collections.ArrayList
@@ -43,7 +43,7 @@ class NewsPageFragment : Fragment() {
 
     private val liveArticleModel: LiveArticleModel by lazy {
         ViewModelProvider(this, CustomViewModelFactory(articleRepository))
-        .get(LiveArticleModel::class.java)
+            .get(LiveArticleModel::class.java)
     }
 
     private val liveCategoriesModel: LiveCategoriesModel by lazy {
@@ -51,8 +51,8 @@ class NewsPageFragment : Fragment() {
             .get(LiveCategoriesModel::class.java)
     }
 
-    private val newsPageItemList: MutableList<NewsPageItemModel> = ArrayList()
-    private val newsPageItemMap: MutableMap<NewsPageItemModel.ItemType, Any> =
+    private var newsPageItemList: MutableList<NewsPageItemModel> = ArrayList()
+    private var newsPageItemMap: MutableMap<NewsPageItemModel.ItemType, Any> =
         EnumMap(NewsPageItemModel.ItemType::class.java)
 
     private var newsPagerAdapter: NewsPageRecyclerViewAdapter? = null
@@ -91,29 +91,32 @@ class NewsPageFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = newsPagerAdapter
 
-        scrollUpButton.setOnClickListener { v ->
+        scrollUpButton.setOnClickListener {
             recyclerView.smoothScrollToPosition(0)
         }
 
-        liveArticleModel.loading.observe(viewLifecycleOwner, Observer { state ->
-            loadingView.visibility = if(state) View.VISIBLE else View.GONE
-        })
+        liveArticleModel.loading
+            .observe(viewLifecycleOwner, Observer { state ->
+                loadingView.visibility = if (state) View.VISIBLE else View.GONE
+            })
 
-        liveCategorySelectionModel.getCategory().observe(viewLifecycleOwner, Observer { category ->
-            selectedCategory = category
-            run {
-                liveCategorySelectionModel.getCategoryMapsViewHolder().forEach { (nextId, mappedView) ->
-                    this.handleCategorySelectionView(category.hashCode(), nextId, mappedView)
+        liveCategorySelectionModel.getCategory()
+            .observe(viewLifecycleOwner, Observer { category ->
+                selectedCategory = category
+                run {
+                    liveCategorySelectionModel.getCategoryViewHolderMap()
+                        .forEach { (categoryId, mappedView) ->
+                            this.handleCategorySelectionView(
+                                category.hashCode(),
+                                categoryId,
+                                mappedView
+                            )
+                        }
                 }
-            }
-            liveArticleModel.loading.value = true
+                liveArticleModel.loading.value = true
 
-            fetchArticleItems(category)
-        })
-
-        if (!this::selectedCategory.isInitialized) {
-            autoLoadArticles()
-        }
+                fetchArticleItems(category)
+            })
     }
 
     private fun fetchCategoryNames() {
@@ -121,28 +124,30 @@ class NewsPageFragment : Fragment() {
 
         liveCategoriesModel.requestCategories()
 
-        liveCategoriesModel.getCategories().observe(viewLifecycleOwner, Observer { categoryList ->
-            val categoryItemListModel = CategoryItemListModel(
-                categoryList.map { categoryItemModel ->
-                    if (categoryItemModel.topic.equals("news")) {
-                        categoryItemModel.selected = true
+        liveCategoriesModel.getCategories()
+            .observe(viewLifecycleOwner, Observer { categoryList ->
+                val categoryItemListModel = CategoryItemListModel(
+                    categoryList.map { categoryItemModel ->
+                        if (categoryItemModel.topic.equals("news")) {
+                            categoryItemModel.selected = true
+                            liveCategorySelectionModel.setCategory(categoryItemModel)
+                        }
+
+                        val backgroundImgIdentifier = resources.getIdentifier(
+                            categoryItemModel.topic, "drawable",
+                            context?.packageName
+                        )
+
+                        categoryItemModel.img = backgroundImgIdentifier
+                        categoryItemModel
                     }
+                )
 
-                    val backgroundImgIdentifier = resources.getIdentifier(
-                        categoryItemModel.topic, "drawable",
-                        context?.packageName
-                    )
-
-                    categoryItemModel.img = backgroundImgIdentifier
-                    categoryItemModel
-                },
-                NewsPageItemModel.ItemType.CATEGORY
-            )
-
-            liveCategorySelectionModel.setCashCategories(categoryList)
-            newsPageItemList.add(categoryItemListModel)
-            newsPageItemMap[NewsPageItemModel.ItemType.CATEGORY] = categoryList
-        })
+                newsPageItemList.removeAll { item -> item.itemType!! == NewsPageItemModel.ItemType.CATEGORY }
+                newsPageItemList.add(categoryItemListModel)
+                newsPagerAdapter?.notifyDataSetChanged()
+//                newsPageItemMap[NewsPageItemModel.ItemType.CATEGORY] = categoryList
+            })
     }
 
     private fun fetchDummyCategoryNames() {
@@ -163,12 +168,10 @@ class NewsPageFragment : Fragment() {
             cat
         }
 
-        liveCategorySelectionModel.setCashCategories(categoryList)
-
         val categoryListItemModel =
             CategoryItemListModel(categoryList, NewsPageItemModel.ItemType.CATEGORY)
         newsPageItemList.add(categoryListItemModel)
-        newsPageItemMap[NewsPageItemModel.ItemType.CATEGORY] = categoryList
+//        newsPageItemMap[NewsPageItemModel.ItemType.CATEGORY] = categoryList
     }
 
     private fun fetchArticleItems(category: CategoryItemModel) {
@@ -205,20 +208,10 @@ class NewsPageFragment : Fragment() {
 
     private fun handleCategorySelectionView(
         targetId: Int,
-        nextId: Int,
+        categoryId: Int,
         mappedView: CategoryItemRecyclerViewAdapter.CategoryItemViewHolder
     ) {
-        mappedView.mImage.alpha = if (targetId == nextId.hashCode()) 1F else 0.27F
-    }
-
-    private fun autoLoadArticles() {
-
-        val initCategory = liveCategorySelectionModel.getCashedCategories().values.toList()
-            .getOrElse(0) { CategoryItemModel("latest news", "news", 0) }
-
-        fetchArticleItems(initCategory)
-        liveCategorySelectionModel.setCategory(initCategory)
-        selectedCategory = initCategory
+        mappedView.mImage.alpha = if (targetId == categoryId.hashCode()) 1F else 0.27F
     }
 
     override fun onAttach(context: Context) {

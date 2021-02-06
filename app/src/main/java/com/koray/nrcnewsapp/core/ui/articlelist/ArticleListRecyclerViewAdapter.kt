@@ -1,4 +1,4 @@
-package com.koray.nrcnewsapp.core.design.articlelist
+package com.koray.nrcnewsapp.core.ui.articlelist
 
 
 import android.view.LayoutInflater
@@ -7,8 +7,8 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.koray.nrcnewsapp.R
-import com.koray.nrcnewsapp.core.design.articlelist.ArticleListFragment.OnListFragmentInteractionListener
-import com.koray.nrcnewsapp.core.design.articlelist.ArticleListDummyContent.DummyItem
+import com.koray.nrcnewsapp.core.ui.articlelist.ArticleListFragment.OnListFragmentInteractionListener
+import com.koray.nrcnewsapp.core.ui.articlelist.ArticleListDummyContent.DummyItem
 import kotlinx.android.synthetic.main.fragment_article_item.view.*
 
 /**

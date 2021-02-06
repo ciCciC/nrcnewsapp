@@ -2,9 +2,12 @@
 <resources>
     <color name="colorPrimary">#FFFFFF</color>
     <color name="colorPrimaryDark">#FF1744</color>
+    <color name="colorLoginTitlePrimary">#000000</color>
     <color name="colorTextPrimary">#555555</color>
     <color name="colorTextBar">#000000</color>
     <color name="colorTextTopic">#FF1744</color>
+    <color name="colorLoginLabel">#000000</color>
+    <color name="colorLoginBoxStroke">#000000</color>
 
     <color name="genericColorHigh">#FF1744</color>
     <color name="colorNrcLogo">@color/genericColorHigh</color>
@@ -13,5 +16,7 @@
     <color name="colorToolbarArrow">@color/genericColorHigh</color>
 
     <color name="colorWhite">#FFFFFF</color>
+    <color name="colorGreen">#00BFA5</color>
+    <color name="colorWarning">@color/genericColorHigh</color>
     <color name="colorTransparant">@android:color/transparent</color>
 </resources>
