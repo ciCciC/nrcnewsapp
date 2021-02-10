@@ -7,6 +7,8 @@ import android.view.Menu
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatImageButton
+import androidx.core.view.children
 import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -22,7 +24,6 @@ import com.koray.nrcnewsapp.core.network.viewmodel.LiveToolbarArrow
 import com.koray.nrcnewsapp.core.ui.LiveToolbarModel
 import com.koray.nrcnewsapp.core.ui.articlepage.ArticlePageFragment
 import com.koray.nrcnewsapp.core.ui.category.CategoryOnListInteractionListener
-import com.koray.nrcnewsapp.core.ui.info.MenuItemInfoFragment
 import com.koray.nrcnewsapp.core.ui.login.LiveAccountModel
 import com.koray.nrcnewsapp.core.ui.newspage.NewsPageOnListFragmentInteractionListener
 import com.koray.nrcnewsapp.core.util.AnimationEffect
@@ -41,11 +42,7 @@ class NrcActivity : AppCompatActivity(),
     private val liveToolbarArrow: LiveToolbarArrow by viewModels()
     private val liveToolbarModel: LiveToolbarModel by viewModels()
 
-    //    private lateinit var toolbarText: TextView
-//    private lateinit var toolbarArrow: ImageView
     private lateinit var toolbar: MaterialToolbar
-
-    private val menuItemInfoFragment: MenuItemInfoFragment = MenuItemInfoFragment.newInstance()
 
     private lateinit var googleSignInClient: GoogleSignInClient
 
@@ -56,7 +53,7 @@ class NrcActivity : AppCompatActivity(),
 
         setContentView(R.layout.activity_main)
         setStatusBarDayNight()
-        setCustomToolbar()
+        setToolbar()
         setMenuItem()
         setGoogleSignInClient()
         checkSignIn()
@@ -99,23 +96,23 @@ class NrcActivity : AppCompatActivity(),
         }
     }
 
-    private fun setCustomToolbar() {
+    private fun setToolbar() {
         toolbar = findViewById(R.id.toolbar_app)
 
-        val rotate = AnimationEffect.rotate(duration = 2 * 200)
+        val imageButton = toolbar.children
+            .firstOrNull { view -> view is AppCompatImageButton} as AppCompatImageButton?
 
-        toolbar.setNavigationOnClickListener {
-            it.startAnimation(rotate)
+        imageButton?.visibility = View.INVISIBLE
+
+        imageButton?.setOnClickListener {
+            it.startAnimation(AnimationEffect
+                .rotate(duration = 2 * 200))
             onBackPressed()
         }
 
         liveToolbarArrow.getStatus()
             .observe(this, { status ->
-                if (status == 0) {
-                    toolbar.setNavigationIcon(R.drawable.ic_arrow_back)
-                } else {
-                    toolbar.navigationIcon = null
-                }
+                imageButton?.visibility = status
             })
 
         liveCategorySelectionModel.getCategory()
@@ -143,11 +140,9 @@ class NrcActivity : AppCompatActivity(),
         toolbar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.menu_info -> {
-                    if (!menuItemInfoFragment.isVisible) {
-                        val navController = findNavController(R.id.nav_host_fragment)
-                        navController.navigate(R.id.menuItemInfoFragment)
-                        liveToolbarArrow.showArrow()
-                    }
+                    val navController = findNavController(R.id.nav_host_fragment)
+                    navController.navigate(R.id.menuItemInfoFragment)
+                    liveToolbarArrow.showArrow()
                     true
                 }
                 R.id.menu_logout -> {
@@ -158,35 +153,6 @@ class NrcActivity : AppCompatActivity(),
             }
         }
     }
-
-//    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-//
-//        return when (item?.itemId) {
-//            R.id.menu_info -> {
-//                if (!menuItemInfoFragment.isVisible) {
-//                    val navController = findNavController(R.id.nav_host_fragment)
-//                    navController.navigate(R.id.menuItemInfoFragment)
-//                    liveToolbarArrow.showArrow()
-//                }
-//                return true
-//            }
-//            R.id.menu_logout -> {
-//                this.singOut()
-//                return true
-//            }
-//            else -> super.onOptionsItemSelected(item)
-//        }
-//    }
-
-//    private fun initInfoFragment() {
-//        val slide = FragmentAnimation.slide(supportFragmentManager)
-//        commitFragment(slide, menuItemInfoFragment, MenuItemInfoFragment.getTagName())
-//    }
-
-//    private fun initNewsPageFragment() {
-//        val rightBottomToLeftTop = FragmentAnimation.rightBottomToLeftTop(supportFragmentManager)
-//        commitFragment(rightBottomToLeftTop, newsPageFragment, ArticlePageFragment.getTagName())
-//    }
 
     private fun initArticlePageFragment() {
         val articlePageFragment: ArticlePageFragment = ArticlePageFragment.newInstance()

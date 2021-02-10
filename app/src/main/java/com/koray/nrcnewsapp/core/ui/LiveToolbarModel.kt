@@ -14,7 +14,7 @@ class LiveToolbarModel: ViewModel() {
     }
 
     fun hide() {
-        showToolbar.value = View.GONE
+        showToolbar.value = View.INVISIBLE
     }
 
     fun getState(): LiveData<Int> {

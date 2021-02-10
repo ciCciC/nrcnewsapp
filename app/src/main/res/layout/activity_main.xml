@@ -22,6 +22,7 @@
             app:titleTextColor="@color/colorTextBar"
             app:subtitle="test me !!"
             app:subtitleTextColor="@color/colorTextBar"
+            app:navigationIcon="@drawable/ic_arrow_back"
             app:menu="@menu/menu_toolbar"
             style="@style/Widget.MaterialComponents.Toolbar.Surface"
             />
