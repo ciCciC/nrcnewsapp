@@ -22,6 +22,7 @@ public class BaseApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+//        RxJavaPlugins.setErrorHandler(throwable -> System.out.println("SICK"));
         ctx = ApplicationContext.build(NrcActivity.class, Environment.ANDROID).start();
         ctx.inject(NrcScraperClient.class);
         ctx.inject(ArticleRepository.class);

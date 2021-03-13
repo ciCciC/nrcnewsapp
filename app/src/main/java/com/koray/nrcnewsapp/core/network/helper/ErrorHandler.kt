@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import io.micronaut.http.HttpStatus
 import io.micronaut.http.exceptions.HttpStatusException
-import java.lang.StringBuilder
 
 object ErrorHandler {
 
@@ -23,7 +22,9 @@ object ErrorHandler {
 //            400 -> throw HttpStatusException(HttpStatus.BAD_REQUEST, "Invalid request.")
 //            401 -> throw HttpStatusException(HttpStatus.UNAUTHORIZED, "Incorrect credentials.")
             404 -> throw HttpStatusException(HttpStatus.BAD_REQUEST, "Resource is not available.")
+            408 -> throw HttpStatusException(HttpStatus.REQUEST_TIMEOUT, "Resource is not available.")
             500 or 503 -> throw HttpStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Service is not available.")
+            522 -> throw HttpStatusException(HttpStatus.CONNECTION_TIMED_OUT, "Connection Timed Out.")
         }
     }
 

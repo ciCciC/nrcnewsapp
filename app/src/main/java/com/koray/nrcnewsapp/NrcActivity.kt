@@ -91,8 +91,12 @@ class NrcActivity : AppCompatActivity(),
 
     private fun setStatusBarDayNight() {
         when(resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
-            Configuration.UI_MODE_NIGHT_NO -> {window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR}
-            Configuration.UI_MODE_NIGHT_YES -> {window.clearFlags(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR)}
+            Configuration.UI_MODE_NIGHT_NO -> {
+                window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+            }
+            Configuration.UI_MODE_NIGHT_YES -> {
+                window.clearFlags(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR)
+            }
         }
     }
 
@@ -105,8 +109,10 @@ class NrcActivity : AppCompatActivity(),
         imageButton?.visibility = View.INVISIBLE
 
         imageButton?.setOnClickListener {
-            it.startAnimation(AnimationEffect
-                .rotate(duration = 2 * 200))
+            it.startAnimation(
+                AnimationEffect
+                    .rotate(duration = 2 * 200)
+            )
             onBackPressed()
         }
 
@@ -117,15 +123,15 @@ class NrcActivity : AppCompatActivity(),
 
         liveCategorySelectionModel.getCategory()
             .observe(this, { categoryItem ->
-                    run {
-                        val categoryDisplay = categoryItem.display!!
-                        toolbar.title =
-                            "${categoryDisplay[0].toUpperCase() + categoryDisplay.substring(1)}"
-                    }
+                run {
+                    val categoryDisplay = categoryItem.display!!
+                    toolbar.title =
+                        "${categoryDisplay[0].toUpperCase() + categoryDisplay.substring(1)}"
                 }
+            }
             )
 
-        liveToolbarModel.getState().observe(this, {state ->
+        liveToolbarModel.getState().observe(this, { state ->
             toolbar.visibility = state
         })
     }

@@ -1,7 +1,7 @@
 package com.koray.nrcnewsapp.core.network
 
-import com.koray.nrcnewsapp.core.network.dto.ArticlePageDto
 import com.koray.nrcnewsapp.core.network.dto.ArticleItemDto
+import com.koray.nrcnewsapp.core.network.dto.ArticlePageDto
 import com.koray.nrcnewsapp.core.network.dto.CategoryDto
 import com.koray.nrcnewsapp.core.network.helper.ErrorHandler
 import io.micronaut.core.annotation.Introspected
@@ -21,6 +21,7 @@ class NrcScraperClient(
     private var httpClient: RxHttpClient
 ) {
 
+    @Deprecated("Dont use this api call.")
     fun getAll(): List<ArticleItemDto> {
         val req = HttpRequest.GET<Any>("/" + ApiStore.CATEGORY + "/" + ApiStore.TECHNOLOGY)
         return this.httpClient
