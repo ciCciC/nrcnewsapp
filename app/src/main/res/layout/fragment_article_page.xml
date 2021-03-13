@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
-    tools:context=".core.design.articlepage.ArticlePageFragment">
+    tools:context=".core.ui.articlepage.ArticlePageFragment">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -26,7 +26,6 @@
                 android:contentDescription="header image"
                 android:maxHeight="300dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/test_deadstranding"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -39,7 +38,6 @@
                 android:layout_marginTop="@dimen/article_margin"
                 android:layout_marginEnd="@dimen/article_margin"
                 android:layout_marginBottom="2dp"
-                android:text="Cyborgs"
                 android:textColor="@color/colorTextTopic"
                 app:layout_constraintTop_toBottomOf="@id/articlepage_headerImage" />
 
@@ -49,7 +47,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/article_margin"
                 android:layout_marginEnd="@dimen/article_margin"
-                android:text="In gesprek met James Lovelock, de profeet van moeder aarde"
                 android:textColor="@color/colorTextPrimary"
                 android:textSize="18sp"
                 android:textStyle="bold"
@@ -63,7 +60,6 @@
                 android:layout_marginTop="@dimen/article_margin"
                 android:layout_marginEnd="@dimen/article_margin"
                 android:layout_marginBottom="@dimen/article_margin"
-                android:text="Met kunstmatige intelligentie kunnen we de aarde redden, denkt James Lovelock. In de jaren zeventig ontwikkelde de 100-jarige chemicus de Gaia-hypothese, over de aarde als zelfregulerend systeem. Klimaatverandering bedreigt dat mechanisme."
                 android:textColor="@color/colorTextPrimary"
                 app:layout_constraintTop_toBottomOf="@id/articlepage_title" />
 
@@ -76,5 +72,9 @@
         </LinearLayout>
     </ScrollView>
 
+    <include
+        android:id="@+id/included_progress_bar"
+        android:visibility="gone"
+        layout="@layout/progress_bar"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

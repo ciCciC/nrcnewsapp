@@ -5,7 +5,7 @@ import android.app.Application;
 import com.koray.nrcnewsapp.core.network.NrcScraperClient;
 import com.koray.nrcnewsapp.core.network.repository.ArticleRepository;
 import com.koray.nrcnewsapp.core.network.repository.CategoryRepository;
-import com.koray.nrcnewsapp.core.network.viewmodel.LiveArticlesModel;
+import com.koray.nrcnewsapp.core.network.viewmodel.LiveArticleModel;
 import com.koray.nrcnewsapp.core.network.viewmodel.LiveCategoriesModel;
 
 import io.micronaut.context.ApplicationContext;
@@ -22,12 +22,13 @@ public class BaseApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+//        RxJavaPlugins.setErrorHandler(throwable -> System.out.println("SICK"));
         ctx = ApplicationContext.build(NrcActivity.class, Environment.ANDROID).start();
         ctx.inject(NrcScraperClient.class);
         ctx.inject(ArticleRepository.class);
         ctx.inject(CategoryRepository.class);
         ctx.inject(LiveCategoriesModel.class);
-        ctx.inject(LiveArticlesModel.class);
+        ctx.inject(LiveArticleModel.class);
     }
 
     @Override

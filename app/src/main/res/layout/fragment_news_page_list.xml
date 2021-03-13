@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".core.design.newspage.NewsPageFragment">
+    tools:context=".core.ui.newspage.NewsPageFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list"
@@ -20,18 +20,24 @@
         android:id="@+id/buttonScrollUp"
         android:layout_width="@dimen/floating_button_size"
         android:layout_height="@dimen/floating_button_size"
-        android:backgroundTint="@color/colorPrimary"
+        android:layout_gravity="bottom|end"
         android:clickable="true"
-        android:src="@drawable/ic_nrc_arrow_up"
+        app:srcCompat="@drawable/ic_nrc_arrow_up"
+        app:tint="@color/colorNrcLogo"
         app:backgroundTint="@color/colorPrimary"
         app:fabCustomSize="@dimen/floating_button_size"
+        app:maxImageSize="@dimen/floating_button_image_size"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.96"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias=".98"
-        app:maxImageSize="@dimen/floating_button_image_size"
         android:contentDescription="@string/default_content_desc" />
+
+    <include
+        android:id="@+id/included_progress_bar"
+        android:visibility="gone"
+        layout="@layout/progress_bar"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

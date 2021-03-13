@@ -1,31 +1,32 @@
 package com.koray.nrcnewsapp
 
-import android.annotation.SuppressLint
+import android.content.pm.ActivityInfo
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.Menu
-import android.view.MenuItem
 import android.view.View
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.activity.viewModels
-import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
-import androidx.lifecycle.Observer
-import com.koray.nrcnewsapp.core.design.articlepage.ArticlePageFragment
-import com.koray.nrcnewsapp.core.design.category.CategoryOnListInteractionListener
-import com.koray.nrcnewsapp.core.design.info.MenuItemInfoFragment
-import com.koray.nrcnewsapp.core.design.newspage.NewsPageFragment
-import com.koray.nrcnewsapp.core.design.newspage.NewsPageOnListFragmentInteractionListener
+import androidx.appcompat.widget.AppCompatImageButton
+import androidx.core.view.children
+import androidx.navigation.NavOptions
+import androidx.navigation.findNavController
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.material.appbar.MaterialToolbar
 import com.koray.nrcnewsapp.core.domain.ArticleItemModel
 import com.koray.nrcnewsapp.core.domain.CategoryItemModel
 import com.koray.nrcnewsapp.core.domain.NewsPageItemModel
-import com.koray.nrcnewsapp.core.network.viewmodel.ArticleSelectionModel
-import com.koray.nrcnewsapp.core.network.viewmodel.CategorySelectionModel
+import com.koray.nrcnewsapp.core.network.viewmodel.LiveArticleSelectionModel
+import com.koray.nrcnewsapp.core.network.viewmodel.LiveCategorySelectionModel
 import com.koray.nrcnewsapp.core.network.viewmodel.LiveToolbarArrow
+import com.koray.nrcnewsapp.core.ui.LiveToolbarModel
+import com.koray.nrcnewsapp.core.ui.articlepage.ArticlePageFragment
+import com.koray.nrcnewsapp.core.ui.category.CategoryOnListInteractionListener
+import com.koray.nrcnewsapp.core.ui.login.LiveAccountModel
+import com.koray.nrcnewsapp.core.ui.newspage.NewsPageOnListFragmentInteractionListener
 import com.koray.nrcnewsapp.core.util.AnimationEffect
-import com.koray.nrcnewsapp.core.util.ChangeBackgroundOnTouch
 import com.koray.nrcnewsapp.core.util.FragmentAnimation
 import javax.inject.Singleton
 
@@ -35,55 +36,104 @@ class NrcActivity : AppCompatActivity(),
     CategoryOnListInteractionListener,
     NewsPageOnListFragmentInteractionListener {
 
-    private val categorySelectionModel: CategorySelectionModel by viewModels()
-    private val articleItemSelectionModel: ArticleSelectionModel by viewModels()
+    private val liveCategorySelectionModel: LiveCategorySelectionModel by viewModels()
+    private val liveArticleItemSelectionModel: LiveArticleSelectionModel by viewModels()
+    private val liveAccountModel: LiveAccountModel by viewModels()
     private val liveToolbarArrow: LiveToolbarArrow by viewModels()
-    private lateinit var toolbarText: TextView
-    private lateinit var toolbarArrow: ImageView
+    private val liveToolbarModel: LiveToolbarModel by viewModels()
 
-    private val menuItemInfoFragment: MenuItemInfoFragment = MenuItemInfoFragment.newInstance()
-    private val newsPageFragment: NewsPageFragment = NewsPageFragment.newInstance()
+    private lateinit var toolbar: MaterialToolbar
+
+    private lateinit var googleSignInClient: GoogleSignInClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        setCustomToolbar()
 
-        if (savedInstanceState == null) {
-            initNewsPageFragment()
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+
+        setContentView(R.layout.activity_main)
+        setStatusBarDayNight()
+        setToolbar()
+        setMenuItem()
+        setGoogleSignInClient()
+        checkSignIn()
+    }
+
+    private fun checkSignIn() {
+        this.liveAccountModel
+            .getAccount()
+            .observe(this, { googleSignInAccount ->
+
+                if (googleSignInAccount.isLoggedIn) {
+                    this.liveToolbarModel.show()
+                    val navController = findNavController(R.id.nav_host_fragment)
+                    navController.navigate(R.id.newsPageFragment)
+                } else {
+                    this.liveToolbarModel.hide()
+                    val navController = findNavController(R.id.nav_host_fragment)
+                    val navOptions = NavOptions.Builder()
+                        .setPopUpTo(R.id.loginFragment, true)
+                        .build()
+
+                    navController.navigate(R.id.loginFragment, null, navOptions)
+                }
+            })
+    }
+
+    private fun setGoogleSignInClient() {
+        val gso = GoogleSignInOptions
+            .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestEmail()
+            .build()
+
+        googleSignInClient = GoogleSignIn.getClient(this, gso)
+    }
+
+    private fun setStatusBarDayNight() {
+        when(resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
+            Configuration.UI_MODE_NIGHT_NO -> {
+                window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+            }
+            Configuration.UI_MODE_NIGHT_YES -> {
+                window.clearFlags(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR)
+            }
         }
     }
 
-    @SuppressLint("ClickableViewAccessibility")
-    private fun setCustomToolbar() {
-        supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
-        supportActionBar?.setCustomView(R.layout.toolbar_app)
+    private fun setToolbar() {
+        toolbar = findViewById(R.id.toolbar_app)
 
-        toolbarText = findViewById(R.id.toolbar_title)
-        toolbarArrow = findViewById(R.id.toolbar_arrow)
-        toolbarArrow.visibility = View.INVISIBLE
+        val imageButton = toolbar.children
+            .firstOrNull { view -> view is AppCompatImageButton} as AppCompatImageButton?
 
-        val rotate = AnimationEffect.rotate(duration = 2 * 200)
+        imageButton?.visibility = View.INVISIBLE
 
-        toolbarArrow.setOnClickListener {
-            it.startAnimation(rotate)
-            onBackPress()
+        imageButton?.setOnClickListener {
+            it.startAnimation(
+                AnimationEffect
+                    .rotate(duration = 2 * 200)
+            )
+            onBackPressed()
         }
 
-        toolbarArrow.setOnTouchListener(ChangeBackgroundOnTouch(resources))
-
         liveToolbarArrow.getStatus()
-            .observe(this, Observer { status -> toolbarArrow.visibility = status })
+            .observe(this, { status ->
+                imageButton?.visibility = status
+            })
 
-        categorySelectionModel.getCategory()
-            .observe(this, Observer { categoryItem ->
+        liveCategorySelectionModel.getCategory()
+            .observe(this, { categoryItem ->
                 run {
                     val categoryDisplay = categoryItem.display!!
-                    toolbarText.text =
-                        "* ${categoryDisplay[0].toUpperCase() + categoryDisplay.substring(1)} *"
+                    toolbar.title =
+                        "${categoryDisplay[0].toUpperCase() + categoryDisplay.substring(1)}"
                 }
             }
             )
+
+        liveToolbarModel.getState().observe(this, { state ->
+            toolbar.visibility = state
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -92,76 +142,72 @@ class NrcActivity : AppCompatActivity(),
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-
-        return when (item?.itemId) {
-            R.id.menu_info -> {
-                if (!menuItemInfoFragment.isVisible) {
-                    initInfoFragment()
+    private fun setMenuItem() {
+        toolbar.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.menu_info -> {
+                    val navController = findNavController(R.id.nav_host_fragment)
+                    navController.navigate(R.id.menuItemInfoFragment)
                     liveToolbarArrow.showArrow()
+                    true
                 }
-                return true
+                R.id.menu_logout -> {
+                    this.singOut()
+                    true
+                }
+                else -> super.onOptionsItemSelected(menuItem)
             }
-            else -> super.onOptionsItemSelected(item)
         }
-    }
-
-    private fun initInfoFragment() {
-        val slide = FragmentAnimation.slide(supportFragmentManager)
-        commitFragment(slide, menuItemInfoFragment, MenuItemInfoFragment.getTagName())
-    }
-
-    private fun initNewsPageFragment() {
-        val rightBottomToLeftTop = FragmentAnimation.rightBottomToLeftTop(supportFragmentManager)
-        commitFragment(rightBottomToLeftTop, newsPageFragment, ArticlePageFragment.getTagName())
     }
 
     private fun initArticlePageFragment() {
         val articlePageFragment: ArticlePageFragment = ArticlePageFragment.newInstance()
         val rightToLeftAnim = FragmentAnimation.rightToLeftAnim(supportFragmentManager)
-        commitFragment(rightToLeftAnim, articlePageFragment, ArticlePageFragment.getTagName())
+//        commitFragment(rightToLeftAnim, articlePageFragment, ArticlePageFragment.getTagName())
     }
 
-    private fun commitFragment(
-        fragmentTransaction: FragmentTransaction,
-        fragment: Fragment,
-        fragmentTag: String,
-        containerId: Int = R.id.news_page_container
-    ) {
-        fragmentTransaction.add(
-            containerId,
-            fragment,
-            fragmentTag
-        )
-            .addToBackStack(null)
-            .commit()
-    }
+//    private fun commitFragment(
+//        fragmentTransaction: FragmentTransaction,
+//        fragment: Fragment,
+//        fragmentTag: String,
+//        containerId: Int = R.id.news_page_container
+//    ) {
+//        fragmentTransaction.add(
+//            containerId,
+//            fragment,
+//            fragmentTag
+//        )
+//            .addToBackStack(null)
+//            .commit()
+//    }
 
     override fun onListFragmentInteraction(category: CategoryItemModel?) {
-        categorySelectionModel.setCategory(category!!)
+        liveCategorySelectionModel.setCategory(category!!)
     }
 
     override fun onListFragmentInteraction(newsPageItem: NewsPageItemModel?) {
         if (newsPageItem is ArticleItemModel) {
-            articleItemSelectionModel.setArticleItemModel(newsPageItem)
+            liveArticleItemSelectionModel.setArticleItemModel(newsPageItem)
             initArticlePageFragment()
             liveToolbarArrow.showArrow()
         }
     }
 
     override fun onBackPressed() {
-        onBackPress()
-    }
+        val findNavController = findNavController(R.id.nav_host_fragment)
 
-    private fun onBackPress() {
-        val backStackCount = supportFragmentManager.backStackEntryCount
+        val destinationId = findNavController.previousBackStackEntry!!.destination.id
 
-        if (backStackCount > 1) {
-            supportFragmentManager.popBackStack()
-        }
-
-        if (backStackCount == 2) {
+        if (destinationId == R.id.newsPageFragment || destinationId == R.id.loginFragment) {
             liveToolbarArrow.hideArrow()
         }
+
+        findNavController.popBackStack()
+    }
+
+    private fun singOut() {
+        liveToolbarArrow.hideArrow()
+        this.googleSignInClient.signOut()
+        this.liveAccountModel.signOut()
     }
 }

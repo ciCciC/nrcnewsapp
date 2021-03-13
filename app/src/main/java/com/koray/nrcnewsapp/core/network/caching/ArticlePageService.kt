@@ -5,7 +5,7 @@ import java.time.Duration
 import java.util.*
 
 
-object ArticlePageService: Cache<String, ArticlePageDto> {
+object ArticlePageService : Cache<String, ArticlePageDto> {
 
     private var cleanupInterval: Timer = Timer("articlepagecachertimer")
     private val DELAY = Duration.ofMinutes(10).toMillis()
@@ -13,21 +13,21 @@ object ArticlePageService: Cache<String, ArticlePageDto> {
     private val cacheMap = HashMap<String, ArticlePageDto>()
 
     override fun add(key: String, value: ArticlePageDto) {
-        if(cacheMap.size == 0) {
-            println("Caching...")
-            cleanupInterval.schedule(object: TimerTask() {
+        if (cacheMap.size == 0) {
+            println("Caching data...")
+            cleanupInterval.schedule(object : TimerTask() {
                 override fun run() {
                     removeAll()
                 }
             }, DELAY)
         } else {
-            println("Caching active")
+            println("Caching is active")
         }
         cacheMap[key] = value
     }
 
     override fun get(key: String): ArticlePageDto? {
-        return if(cacheMap.containsKey(key)) {
+        return if (cacheMap.containsKey(key)) {
             cacheMap[key]
         } else {
             null
@@ -39,7 +39,7 @@ object ArticlePageService: Cache<String, ArticlePageDto> {
     }
 
     override fun removeAll() {
-        println("Cache cleared time up!")
+        println("Clearing all cached data!")
         cacheMap.clear()
     }
 }

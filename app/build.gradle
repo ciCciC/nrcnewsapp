@@ -7,12 +7,12 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
     buildToolsVersion "29.0.3"
     defaultConfig {
         applicationId "com.koray.nrcnewsapp"
         minSdkVersion 28
-        targetSdkVersion 28
+        targetSdkVersion 29
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -48,25 +48,38 @@ android {
 }
 
 dependencies {
+    def nav_version = "2.3.3"
+    def lottieVersion = "3.6.0"
+
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
 
-    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
 //    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    implementation "androidx.constraintlayout:constraintlayout:2.0.0-rc1"
+    implementation "androidx.constraintlayout:constraintlayout:2.1.0-alpha2"
     implementation "androidx.cardview:cardview:1.0.0"
 
     // https://mvnrepository.com/artifact/androidx.core/core
-    implementation group: 'androidx.core', name: 'core', version: '1.3.1'
+    implementation group: 'androidx.core', name: 'core', version: '1.3.2'
 
     // Core KTX
-    implementation 'androidx.core:core-ktx:1.3.1'
+    implementation 'androidx.core:core-ktx:1.3.2'
     implementation "androidx.fragment:fragment-ktx:1.2.5"
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
 
     implementation "android.arch.lifecycle:extensions:1.1.1"
     implementation "android.arch.lifecycle:viewmodel:1.1.1"
+
+    // navigation
+    implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
+    implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
+
+    // navigation Feature module Support
+    implementation "androidx.navigation:navigation-dynamic-features-fragment:$nav_version"
+
+    // reactive
+    implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
 
     // Micronaut
     implementation "io.micronaut:micronaut-runtime:${micronautVersion}"
@@ -75,9 +88,17 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
-    implementation 'com.google.android.material:material:1.2.1'
+
+    // Google
+    implementation 'com.google.android.gms:play-services-auth:19.0.0'
+    implementation 'com.google.android.material:material:1.3.0'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0'
+
     kapt platform("io.micronaut:micronaut-bom:$micronautVersion")
     kapt "io.micronaut:micronaut-inject-java"
+
+    // Lottie for free animations
+    implementation "com.airbnb.android:lottie:$lottieVersion"
 
     // Picasso for image manipulation
     implementation group: 'com.squareup.picasso', name: 'picasso', version: '2.5.2'
@@ -90,6 +111,9 @@ dependencies {
     // https://mvnrepository.com/artifact/org.slf4j/slf4j-log4j12
     testImplementation group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.30'
     testImplementation 'junit:junit:4.13'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+
+    // Testing Navigation
+    androidTestImplementation "androidx.navigation:navigation-testing:$nav_version"
 }

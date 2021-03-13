@@ -10,5 +10,4 @@ class ArticlePageModel(
     override var topic: String?,
     override var title: String?,
     override var teaser: String?
-) : ArticlePage {
-}
+) : ArticlePage
