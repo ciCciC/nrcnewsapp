@@ -5,9 +5,9 @@ Login page (Day)               |    Login page (Night)
 :----------------------------: | :------------------------:
 ![](../master/login_day.jpg)  | ![](../master/login_night.jpg)
 
-Home page (Day)            |   Home page (Night)         |  Article view
+Home page (Day)            |   Article view (Night)         |  Article view (Day)
 :-------------------------:|:-------------------------:|:-------------------------:
-![](../master/sc.jpg)  | ![](../master/sc00.jpg)  |  ![](../master/sc1.jpg)
+![](../master/sc.jpg)  | ![](../master/article_night.jpg)  |  ![](../master/article_day.jpg)
 
 
 Demo (Day)               |
