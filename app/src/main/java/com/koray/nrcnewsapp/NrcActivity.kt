@@ -22,12 +22,10 @@ import com.koray.nrcnewsapp.core.network.viewmodel.LiveArticleSelectionModel
 import com.koray.nrcnewsapp.core.network.viewmodel.LiveCategorySelectionModel
 import com.koray.nrcnewsapp.core.network.viewmodel.LiveToolbarArrow
 import com.koray.nrcnewsapp.core.ui.LiveToolbarModel
-import com.koray.nrcnewsapp.core.ui.articlepage.ArticlePageFragment
 import com.koray.nrcnewsapp.core.ui.category.CategoryOnListInteractionListener
 import com.koray.nrcnewsapp.core.ui.login.LiveAccountModel
 import com.koray.nrcnewsapp.core.ui.newspage.NewsPageOnListFragmentInteractionListener
 import com.koray.nrcnewsapp.core.util.AnimationEffect
-import com.koray.nrcnewsapp.core.util.FragmentAnimation
 import javax.inject.Singleton
 
 
@@ -160,27 +158,6 @@ class NrcActivity : AppCompatActivity(),
         }
     }
 
-    private fun initArticlePageFragment() {
-        val articlePageFragment: ArticlePageFragment = ArticlePageFragment.newInstance()
-        val rightToLeftAnim = FragmentAnimation.rightToLeftAnim(supportFragmentManager)
-//        commitFragment(rightToLeftAnim, articlePageFragment, ArticlePageFragment.getTagName())
-    }
-
-//    private fun commitFragment(
-//        fragmentTransaction: FragmentTransaction,
-//        fragment: Fragment,
-//        fragmentTag: String,
-//        containerId: Int = R.id.news_page_container
-//    ) {
-//        fragmentTransaction.add(
-//            containerId,
-//            fragment,
-//            fragmentTag
-//        )
-//            .addToBackStack(null)
-//            .commit()
-//    }
-
     override fun onListFragmentInteraction(category: CategoryItemModel?) {
         liveCategorySelectionModel.setCategory(category!!)
     }
@@ -188,7 +165,8 @@ class NrcActivity : AppCompatActivity(),
     override fun onListFragmentInteraction(newsPageItem: NewsPageItemModel?) {
         if (newsPageItem is ArticleItemModel) {
             liveArticleItemSelectionModel.setArticleItemModel(newsPageItem)
-            initArticlePageFragment()
+            val navController = findNavController(R.id.nav_host_fragment)
+            navController.navigate(R.id.articlePageFragment)
             liveToolbarArrow.showArrow()
         }
     }

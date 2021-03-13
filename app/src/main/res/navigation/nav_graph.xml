@@ -16,6 +16,11 @@
         android:label="fragment_news_page_list"
         tools:layout="@layout/fragment_news_page_list" />
     <fragment
+        android:id="@+id/articlePageFragment"
+        android:name="com.koray.nrcnewsapp.core.ui.articlepage.ArticlePageFragment"
+        android:label="fragment_article_page_view"
+        tools:layout="@layout/fragment_article_page" />
+    <fragment
         android:id="@+id/menuItemInfoFragment"
         android:name="com.koray.nrcnewsapp.core.ui.info.MenuItemInfoFragment"
         android:label="fragment_menu_item_info"
