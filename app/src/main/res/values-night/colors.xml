@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#FF323232</color>
-    <color name="colorPrimaryDark">#FF323232</color>
+<!--    Status bars-->
+<!--    <color name="colorPrimary">#FF323232</color>-->
+    <color name="colorPrimary">#000000</color>
+    <color name="colorStatusBar">#000000</color>
+    <color name="colorPrimaryDark">@color/colorStatusBar</color>
+
     <color name="colorLoginTitlePrimary">#FFFFFF</color>
     <color name="colorTextPrimary">#FFFFFF</color>
     <color name="colorTextBar">#FFFFFF</color>

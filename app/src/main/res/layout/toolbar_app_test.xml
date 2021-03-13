@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.google.android.material.textview.MaterialTextView
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content">
+
+</com.google.android.material.textview.MaterialTextView>
+
+<!--<androidx.appcompat.widget.Toolbar-->
+<!--    xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    xmlns:tools="http://schemas.android.com/tools"-->
+<!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--    android:id="@+id/toolbar_app_test"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="56dp"-->
+<!--    android:contentInsetLeft="0dp"-->
+<!--    android:contentInsetStart="0dp"-->
+<!--    app:contentInsetLeft="0dp"-->
+<!--    app:contentInsetStart="0dp"-->
+<!--    android:minHeight="?attr/actionBarSize"-->
+<!--    android:theme="?attr/actionBarTheme">-->
+
+<!--&lt;!&ndash;        <LinearLayout&ndash;&gt;-->
+<!--&lt;!&ndash;            android:layout_width="match_parent"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:layout_height="match_parent"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:orientation="horizontal"&ndash;&gt;-->
+<!--&lt;!&ndash;            tools:ignore="UseCompoundDrawables">&ndash;&gt;-->
+
+<!--&lt;!&ndash;            <ImageView&ndash;&gt;-->
+<!--&lt;!&ndash;                android:id="@+id/toolbar_arrow"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:layout_width="30dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:layout_height="match_parent"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:layout_gravity="center_vertical"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:contentDescription="@string/default_content_desc"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:src="@drawable/ic_arrow_back" />&ndash;&gt;-->
+
+<!--&lt;!&ndash;            <TextView&ndash;&gt;-->
+<!--&lt;!&ndash;                android:id="@+id/toolbar_title"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:layout_width="match_parent"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:layout_height="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:layout_gravity="center"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:paddingEnd="0dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:text="@string/default_content_desc"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:textAlignment="center"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:textColor="@color/colorTextBar"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:textSize="18dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:textStyle="bold" />&ndash;&gt;-->
+<!--&lt;!&ndash;        </LinearLayout>&ndash;&gt;-->
+
+<!--</androidx.appcompat.widget.Toolbar>-->
