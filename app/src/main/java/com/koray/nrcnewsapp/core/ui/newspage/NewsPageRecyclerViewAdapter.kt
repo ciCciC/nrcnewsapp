@@ -6,15 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.koray.nrcnewsapp.R
-import com.koray.nrcnewsapp.core.ui.category.CategoryOnListInteractionListener
-import com.koray.nrcnewsapp.core.ui.viewholders.ArticleViewHolder
-import com.koray.nrcnewsapp.core.ui.viewholders.BaseViewHolder
-import com.koray.nrcnewsapp.core.ui.viewholders.CategoryListViewHolder
 import com.koray.nrcnewsapp.core.domain.ArticleItemModel
 import com.koray.nrcnewsapp.core.domain.CategoryItemListModel
 import com.koray.nrcnewsapp.core.domain.CategoryItemModel
 import com.koray.nrcnewsapp.core.domain.NewsPageItemModel
 import com.koray.nrcnewsapp.core.network.viewmodel.LiveCategorySelectionModel
+import com.koray.nrcnewsapp.core.ui.category.CategoryOnListInteractionListener
+import com.koray.nrcnewsapp.core.ui.viewholders.ArticleViewHolder
+import com.koray.nrcnewsapp.core.ui.viewholders.BaseViewHolder
+import com.koray.nrcnewsapp.core.ui.viewholders.CategoryListViewHolder
 import com.koray.nrcnewsapp.core.util.ImageManager
 import java.util.*
 

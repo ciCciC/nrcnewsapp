@@ -14,12 +14,26 @@
         android:id="@+id/newsPageFragment"
         android:name="com.koray.nrcnewsapp.core.ui.newspage.NewsPageFragment"
         android:label="fragment_news_page_list"
-        tools:layout="@layout/fragment_news_page_list" />
+        tools:layout="@layout/fragment_news_page_list" >
+        <action
+            android:id="@+id/action_newsPageFragment_to_articlePageFragment"
+            app:destination="@id/articlePageFragment"
+            app:enterAnim="@anim/enter_from_right_to_left"
+            app:exitAnim="@anim/exit_from_left_to_right" />
+    </fragment>
     <fragment
         android:id="@+id/articlePageFragment"
         android:name="com.koray.nrcnewsapp.core.ui.articlepage.ArticlePageFragment"
         android:label="fragment_article_page_view"
-        tools:layout="@layout/fragment_article_page" />
+        tools:layout="@layout/fragment_article_page" >
+        <action
+            android:id="@+id/action_articlePageFragment_to_newsPageFragment"
+            app:destination="@id/newsPageFragment"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
+            app:popUpTo="@id/newsPageFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
     <fragment
         android:id="@+id/menuItemInfoFragment"
         android:name="com.koray.nrcnewsapp.core.ui.info.MenuItemInfoFragment"

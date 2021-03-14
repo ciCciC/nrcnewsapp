@@ -57,8 +57,6 @@ class NewsPageFragment : Fragment() {
 
     private var newsPagerAdapter: NewsPageRecyclerViewAdapter? = null
 
-    private lateinit var selectedCategory: CategoryItemModel
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -101,7 +99,6 @@ class NewsPageFragment : Fragment() {
 
         liveCategorySelectionModel.getCategory()
             .observe(viewLifecycleOwner, Observer { category ->
-                selectedCategory = category
                 run {
                     liveCategorySelectionModel.getCategoryViewHolderMap()
                         .forEach { (categoryId, mappedView) ->
@@ -127,17 +124,26 @@ class NewsPageFragment : Fragment() {
             .observe(viewLifecycleOwner, Observer { categoryList ->
                 val categoryItemListModel = CategoryItemListModel(
                     categoryList.map { categoryItemModel ->
-                        if (categoryItemModel.topic.equals("news")) {
-                            categoryItemModel.selected = true
-                            liveCategorySelectionModel.setCategory(categoryItemModel)
-                        }
-
                         val backgroundImgIdentifier = resources.getIdentifier(
                             categoryItemModel.topic, "drawable",
                             context?.packageName
                         )
 
                         categoryItemModel.img = backgroundImgIdentifier
+
+                        // Use the already existing topic (eg. when navigating back)
+                        val notSelected = liveCategorySelectionModel.getCategory().value == null
+
+                        if (notSelected && categoryItemModel.topic.equals("news")) {
+                            categoryItemModel.selected = true
+                            liveCategorySelectionModel.setCategory(categoryItemModel)
+                        } else if (!notSelected && categoryItemModel.topic.equals(liveCategorySelectionModel.getCategory().value?.topic)) {
+                            categoryItemModel.selected = true
+                            liveCategorySelectionModel.setCategory(categoryItemModel)
+                        } else {
+                            categoryItemModel.selected = false
+                        }
+
                         categoryItemModel
                     }
                 )

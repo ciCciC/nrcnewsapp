@@ -14,6 +14,7 @@ import androidx.navigation.findNavController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.MaterialToolbar
 import com.koray.nrcnewsapp.core.domain.ArticleItemModel
 import com.koray.nrcnewsapp.core.domain.CategoryItemModel
@@ -41,6 +42,7 @@ class NrcActivity : AppCompatActivity(),
     private val liveToolbarModel: LiveToolbarModel by viewModels()
 
     private lateinit var toolbar: MaterialToolbar
+    private lateinit var toolbarLayout: AppBarLayout
 
     private lateinit var googleSignInClient: GoogleSignInClient
 
@@ -100,6 +102,7 @@ class NrcActivity : AppCompatActivity(),
 
     private fun setToolbar() {
         toolbar = findViewById(R.id.toolbar_app)
+        toolbarLayout = findViewById(R.id.toolbar_app_layout)
 
         val imageButton = toolbar.children
             .firstOrNull { view -> view is AppCompatImageButton} as AppCompatImageButton?
@@ -131,6 +134,7 @@ class NrcActivity : AppCompatActivity(),
 
         liveToolbarModel.getState().observe(this, { state ->
             toolbar.visibility = state
+            toolbarLayout.visibility = state
         })
     }
 
@@ -166,7 +170,13 @@ class NrcActivity : AppCompatActivity(),
         if (newsPageItem is ArticleItemModel) {
             liveArticleItemSelectionModel.setArticleItemModel(newsPageItem)
             val navController = findNavController(R.id.nav_host_fragment)
-            navController.navigate(R.id.articlePageFragment)
+            val navOptions = NavOptions.Builder()
+                .setEnterAnim(R.anim.enter_from_right_to_left)
+                .setExitAnim(R.anim.exit_from_left_to_hide)
+                .setPopEnterAnim(R.anim.enter_from_hide_to_right)
+                .setPopExitAnim(R.anim.exit_from_left_to_right)
+                .build()
+            navController.navigate(R.id.articlePageFragment, null, navOptions)
             liveToolbarArrow.showArrow()
         }
     }
@@ -185,6 +195,7 @@ class NrcActivity : AppCompatActivity(),
 
     private fun singOut() {
         liveToolbarArrow.hideArrow()
+        liveToolbarModel.hide()
         this.googleSignInClient.signOut()
         this.liveAccountModel.signOut()
     }

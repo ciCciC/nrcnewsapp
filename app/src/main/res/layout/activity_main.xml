@@ -12,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
+        android:id="@+id/toolbar_app_layout"
         app:liftOnScroll="true">
 
         <com.google.android.material.appbar.MaterialToolbar
@@ -22,7 +23,7 @@
             app:layout_scrollFlags="scroll|enterAlways|snap"
             app:title="@string/default_content_desc"
             app:titleTextColor="@color/colorTextBar"
-            app:subtitle="Add some subtitle here !!"
+            app:subtitle="Enjoy reading"
             app:subtitleTextColor="@color/colorTextBar"
             app:navigationIcon="@drawable/ic_arrow_back"
             app:menu="@menu/menu_toolbar"
