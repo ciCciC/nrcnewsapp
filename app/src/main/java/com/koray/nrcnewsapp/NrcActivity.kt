@@ -15,6 +15,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.material.appbar.AppBarLayout
+import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.appbar.MaterialToolbar
 import com.koray.nrcnewsapp.core.domain.ArticleItemModel
 import com.koray.nrcnewsapp.core.domain.CategoryItemModel
@@ -43,6 +44,7 @@ class NrcActivity : AppCompatActivity(),
 
     private lateinit var toolbar: MaterialToolbar
     private lateinit var toolbarLayout: AppBarLayout
+    private lateinit var toolbarCollapsing: CollapsingToolbarLayout
 
     private lateinit var googleSignInClient: GoogleSignInClient
 
@@ -103,6 +105,7 @@ class NrcActivity : AppCompatActivity(),
     private fun setToolbar() {
         toolbar = findViewById(R.id.toolbar_app)
         toolbarLayout = findViewById(R.id.toolbar_app_layout)
+        toolbarCollapsing = findViewById(R.id.toolbar_app_collapsing)
 
         val imageButton = toolbar.children
             .firstOrNull { view -> view is AppCompatImageButton} as AppCompatImageButton?
@@ -126,8 +129,8 @@ class NrcActivity : AppCompatActivity(),
             .observe(this, { categoryItem ->
                 run {
                     val categoryDisplay = categoryItem.display!!
-                    toolbar.title =
-                        "${categoryDisplay[0].toUpperCase() + categoryDisplay.substring(1)}"
+                    toolbar.title = "${categoryDisplay[0].toUpperCase() + categoryDisplay.substring(1)}"
+                    toolbarCollapsing.title = toolbar.title
                 }
             }
             )
@@ -135,6 +138,7 @@ class NrcActivity : AppCompatActivity(),
         liveToolbarModel.getState().observe(this, { state ->
             toolbar.visibility = state
             toolbarLayout.visibility = state
+            toolbarCollapsing.visibility = state
         })
     }
 
@@ -176,8 +180,8 @@ class NrcActivity : AppCompatActivity(),
                 .setPopEnterAnim(R.anim.enter_from_hide_to_right)
                 .setPopExitAnim(R.anim.exit_from_left_to_right)
                 .build()
-            navController.navigate(R.id.articlePageFragment, null, navOptions)
             liveToolbarArrow.showArrow()
+            navController.navigate(R.id.articlePageFragment, null, navOptions)
         }
     }
 

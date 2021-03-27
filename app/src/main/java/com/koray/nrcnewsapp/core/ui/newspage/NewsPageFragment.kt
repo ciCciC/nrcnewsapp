@@ -72,7 +72,7 @@ class NewsPageFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val scrollUpButton = view.findViewById<FloatingActionButton>(R.id.buttonScrollUp)
         val recyclerView = view.findViewById<RecyclerView>(R.id.list)
-        val loadingView = view.findViewById<LinearLayout>(R.id.included_progress_bar)
+        val loadingBarLayout = view.findViewById<LinearLayout>(R.id.progress_bar_layout)
 
         fetchCategoryNames()
 
@@ -92,13 +92,12 @@ class NewsPageFragment : Fragment() {
             recyclerView.smoothScrollToPosition(-50)
         }
 
-        liveArticleModel.loading
-            .observe(viewLifecycleOwner, Observer { state ->
-                loadingView.visibility = if (state) View.VISIBLE else View.GONE
-            })
+        liveArticleModel.loading.observe(viewLifecycleOwner, { state ->
+            loadingBarLayout.visibility = if (state) View.VISIBLE else View.GONE
+        })
 
         liveCategorySelectionModel.getCategory()
-            .observe(viewLifecycleOwner, Observer { category ->
+            .observe(viewLifecycleOwner, { category ->
                 run {
                     liveCategorySelectionModel.getCategoryViewHolderMap()
                         .forEach { (categoryId, mappedView) ->
