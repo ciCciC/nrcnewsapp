@@ -7,7 +7,7 @@ Login page (Day)               |    Login page (Night)
 
 Home page (Day)            |   Article view (Night)         |  Article view (Day)
 :-------------------------:|:-------------------------:|:-------------------------:
-![](../master/sc.jpg)  | ![](../master/article_night.jpg)  |  ![](../master/article_day.jpg)
+![](../master/home_day.jpg)  | ![](../master/article_night.jpg)  |  ![](../master/article_day.jpg)
 
 
 Demo (Day)               |
