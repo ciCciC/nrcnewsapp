@@ -35,9 +35,20 @@
         app:layout_constraintVertical_bias=".98"
         android:contentDescription="@string/default_content_desc" />
 
-    <include
-        android:id="@+id/included_progress_bar"
-        android:visibility="gone"
-        layout="@layout/progress_bar"/>
+    <LinearLayout
+        android:id="@+id/progress_bar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:background="@android:color/transparent"
+        android:orientation="vertical">
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            app:indicatorColor="@color/colorToolbarArrow"/>
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

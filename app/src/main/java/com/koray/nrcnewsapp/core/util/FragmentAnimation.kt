@@ -14,10 +14,10 @@ object FragmentAnimation {
     fun rightToLeftAnim(fragmentManager: FragmentManager): FragmentTransaction {
         return fragmentManager.beginTransaction()
             .setCustomAnimations(
-                R.anim.enter_from_right,
-                R.anim.exit_to_right,
-                R.anim.enter_from_right,
-                R.anim.exit_to_right
+                R.anim.enter_from_right_to_left,
+                R.anim.exit_from_left_to_right,
+                R.anim.enter_from_right_to_left,
+                R.anim.exit_from_left_to_right
             )
     }
 
@@ -25,9 +25,9 @@ object FragmentAnimation {
         return fragmentManager.beginTransaction()
             .setCustomAnimations(
                 R.anim.enter_from_rightbottom,
-                R.anim.exit_to_right,
+                R.anim.exit_from_left_to_right,
                 R.anim.enter_from_rightbottom,
-                R.anim.exit_to_right
+                R.anim.exit_from_left_to_right
             )
     }
 

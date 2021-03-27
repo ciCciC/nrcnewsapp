@@ -9,25 +9,51 @@
     tools:context=".NrcActivity">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/toolbar_app_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="125dp"
         android:background="@color/colorPrimary"
-        app:liftOnScroll="true">
+        android:fitsSystemWindows="true">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar_app"
+<!--        <com.google.android.material.appbar.MaterialToolbar-->
+<!--            android:id="@+id/toolbar_app"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="?attr/actionBarSize"-->
+<!--            android:background="@color/colorPrimary"-->
+<!--            app:layout_scrollFlags="scroll|enterAlways"-->
+<!--            app:title="@string/default_content_desc"-->
+<!--            app:titleTextColor="@color/colorTextBar"-->
+<!--            app:subtitle="Enjoy reading"-->
+<!--            app:subtitleTextColor="@color/colorTextBar"-->
+<!--            app:navigationIcon="@drawable/ic_arrow_back"-->
+<!--            app:menu="@menu/menu_toolbar"-->
+<!--            style="@style/Widget.MaterialComponents.Toolbar.Surface"-->
+<!--            />-->
+
+        <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
+            android:layout_height="match_parent"
+            android:id="@+id/toolbar_app_collapsing"
             android:background="@color/colorPrimary"
-            app:layout_scrollFlags="scroll|enterAlways|snap"
-            app:title="@string/default_content_desc"
-            app:titleTextColor="@color/colorTextBar"
-            app:subtitle="Add some subtitle here !!"
-            app:subtitleTextColor="@color/colorTextBar"
-            app:navigationIcon="@drawable/ic_arrow_back"
-            app:menu="@menu/menu_toolbar"
-            style="@style/Widget.MaterialComponents.Toolbar.Surface"
-            />
+            android:fitsSystemWindows="true"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar_app"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/colorPrimary"
+                app:layout_collapseMode="pin"
+                app:title="@string/default_content_desc"
+                app:titleTextColor="@color/colorTextBar"
+                app:subtitle="Enjoy reading"
+                app:subtitleTextColor="@color/colorTextBar"
+                app:navigationIcon="@drawable/ic_arrow_back"
+                app:menu="@menu/menu_toolbar"
+                style="@style/Widget.MaterialComponents.Toolbar.Surface"
+                />
+
+    </com.google.android.material.appbar.CollapsingToolbarLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -38,10 +64,6 @@
         android:layout_height="match_parent"
         android:background="@color/colorPrimary"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:defaultNavHost="true"
         app:navGraph="@navigation/nav_graph" />
 
