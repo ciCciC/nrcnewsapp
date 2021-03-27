@@ -11,7 +11,6 @@ import com.koray.nrcnewsapp.core.network.repository.CategoryRepository
 import com.koray.nrcnewsapp.core.network.transformer.CategoryTransformer
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.schedulers.Schedulers
-import java.lang.StringBuilder
 import javax.inject.Inject
 
 class LiveCategoriesModel @Inject constructor(

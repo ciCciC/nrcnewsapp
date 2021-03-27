@@ -14,6 +14,8 @@ import androidx.navigation.findNavController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.material.appbar.AppBarLayout
+import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.appbar.MaterialToolbar
 import com.koray.nrcnewsapp.core.domain.ArticleItemModel
 import com.koray.nrcnewsapp.core.domain.CategoryItemModel
@@ -22,12 +24,10 @@ import com.koray.nrcnewsapp.core.network.viewmodel.LiveArticleSelectionModel
 import com.koray.nrcnewsapp.core.network.viewmodel.LiveCategorySelectionModel
 import com.koray.nrcnewsapp.core.network.viewmodel.LiveToolbarArrow
 import com.koray.nrcnewsapp.core.ui.LiveToolbarModel
-import com.koray.nrcnewsapp.core.ui.articlepage.ArticlePageFragment
 import com.koray.nrcnewsapp.core.ui.category.CategoryOnListInteractionListener
 import com.koray.nrcnewsapp.core.ui.login.LiveAccountModel
 import com.koray.nrcnewsapp.core.ui.newspage.NewsPageOnListFragmentInteractionListener
 import com.koray.nrcnewsapp.core.util.AnimationEffect
-import com.koray.nrcnewsapp.core.util.FragmentAnimation
 import javax.inject.Singleton
 
 
@@ -43,6 +43,8 @@ class NrcActivity : AppCompatActivity(),
     private val liveToolbarModel: LiveToolbarModel by viewModels()
 
     private lateinit var toolbar: MaterialToolbar
+    private lateinit var toolbarLayout: AppBarLayout
+    private lateinit var toolbarCollapsing: CollapsingToolbarLayout
 
     private lateinit var googleSignInClient: GoogleSignInClient
 
@@ -102,6 +104,8 @@ class NrcActivity : AppCompatActivity(),
 
     private fun setToolbar() {
         toolbar = findViewById(R.id.toolbar_app)
+        toolbarLayout = findViewById(R.id.toolbar_app_layout)
+        toolbarCollapsing = findViewById(R.id.toolbar_app_collapsing)
 
         val imageButton = toolbar.children
             .firstOrNull { view -> view is AppCompatImageButton} as AppCompatImageButton?
@@ -125,14 +129,16 @@ class NrcActivity : AppCompatActivity(),
             .observe(this, { categoryItem ->
                 run {
                     val categoryDisplay = categoryItem.display!!
-                    toolbar.title =
-                        "${categoryDisplay[0].toUpperCase() + categoryDisplay.substring(1)}"
+                    toolbar.title = "${categoryDisplay[0].toUpperCase() + categoryDisplay.substring(1)}"
+                    toolbarCollapsing.title = toolbar.title
                 }
             }
             )
 
         liveToolbarModel.getState().observe(this, { state ->
             toolbar.visibility = state
+            toolbarLayout.visibility = state
+            toolbarCollapsing.visibility = state
         })
     }
 
@@ -160,27 +166,6 @@ class NrcActivity : AppCompatActivity(),
         }
     }
 
-    private fun initArticlePageFragment() {
-        val articlePageFragment: ArticlePageFragment = ArticlePageFragment.newInstance()
-        val rightToLeftAnim = FragmentAnimation.rightToLeftAnim(supportFragmentManager)
-//        commitFragment(rightToLeftAnim, articlePageFragment, ArticlePageFragment.getTagName())
-    }
-
-//    private fun commitFragment(
-//        fragmentTransaction: FragmentTransaction,
-//        fragment: Fragment,
-//        fragmentTag: String,
-//        containerId: Int = R.id.news_page_container
-//    ) {
-//        fragmentTransaction.add(
-//            containerId,
-//            fragment,
-//            fragmentTag
-//        )
-//            .addToBackStack(null)
-//            .commit()
-//    }
-
     override fun onListFragmentInteraction(category: CategoryItemModel?) {
         liveCategorySelectionModel.setCategory(category!!)
     }
@@ -188,8 +173,15 @@ class NrcActivity : AppCompatActivity(),
     override fun onListFragmentInteraction(newsPageItem: NewsPageItemModel?) {
         if (newsPageItem is ArticleItemModel) {
             liveArticleItemSelectionModel.setArticleItemModel(newsPageItem)
-            initArticlePageFragment()
+            val navController = findNavController(R.id.nav_host_fragment)
+            val navOptions = NavOptions.Builder()
+                .setEnterAnim(R.anim.enter_from_right_to_left)
+                .setExitAnim(R.anim.exit_from_left_to_hide)
+                .setPopEnterAnim(R.anim.enter_from_hide_to_right)
+                .setPopExitAnim(R.anim.exit_from_left_to_right)
+                .build()
             liveToolbarArrow.showArrow()
+            navController.navigate(R.id.articlePageFragment, null, navOptions)
         }
     }
 
@@ -207,6 +199,7 @@ class NrcActivity : AppCompatActivity(),
 
     private fun singOut() {
         liveToolbarArrow.hideArrow()
+        liveToolbarModel.hide()
         this.googleSignInClient.signOut()
         this.liveAccountModel.signOut()
     }

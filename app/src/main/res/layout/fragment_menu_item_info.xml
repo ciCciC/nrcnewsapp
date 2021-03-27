@@ -10,7 +10,7 @@
     android:background="@color/colorPrimary"
     android:clickable="true"
     tools:context=".core.ui.info.MenuItemInfoFragment">
-
+w
     <ImageView
         android:id="@+id/headerImage"
         android:layout_width="match_parent"
