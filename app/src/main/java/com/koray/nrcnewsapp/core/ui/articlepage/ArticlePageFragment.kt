@@ -1,12 +1,12 @@
 package com.koray.nrcnewsapp.core.ui.articlepage
 
+import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -15,7 +15,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.koray.nrcnewsapp.R
 import com.koray.nrcnewsapp.core.abstraction.Ctype
-import com.koray.nrcnewsapp.core.ui.viewholders.ArticlePageViewHolder
 import com.koray.nrcnewsapp.core.domain.ArticleItemModel
 import com.koray.nrcnewsapp.core.domain.ArticlePageModel
 import com.koray.nrcnewsapp.core.domain.CategoryItemModel
@@ -23,9 +22,14 @@ import com.koray.nrcnewsapp.core.network.dto.ContentBodyDto
 import com.koray.nrcnewsapp.core.network.dto.SectionDto
 import com.koray.nrcnewsapp.core.network.helper.ErrorHandler
 import com.koray.nrcnewsapp.core.network.repository.ArticleRepository
-import com.koray.nrcnewsapp.core.network.viewmodel.*
+import com.koray.nrcnewsapp.core.network.viewmodel.CustomViewModelFactory
+import com.koray.nrcnewsapp.core.network.viewmodel.LiveArticleModel
+import com.koray.nrcnewsapp.core.network.viewmodel.LiveArticleSelectionModel
+import com.koray.nrcnewsapp.core.network.viewmodel.LiveCategorySelectionModel
+import com.koray.nrcnewsapp.core.ui.viewholders.ArticlePageViewHolder
 import com.koray.nrcnewsapp.core.util.ImageManager
 import com.koray.nrcnewsapp.core.util.inject
+import kotlinx.android.synthetic.main.fragment_article_page.view.*
 import java.util.*
 
 
@@ -35,6 +39,7 @@ class ArticlePageFragment : Fragment() {
     private val liveCategorySelectionModel: LiveCategorySelectionModel by activityViewModels()
     private val liveArticleItemSelectionModel: LiveArticleSelectionModel by activityViewModels()
     private lateinit var selectedCategory: CategoryItemModel
+    private var toggle = false
 
     private val liveArticleModel: LiveArticleModel by lazy {
         ViewModelProvider(this, CustomViewModelFactory(articleRepository))
@@ -55,16 +60,29 @@ class ArticlePageFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val loadingView = view.findViewById<LinearLayout>(R.id.included_progress_bar)
-
-        liveArticleModel.loading.observe(viewLifecycleOwner, Observer { state ->
-            loadingView.visibility = if(state) View.VISIBLE else View.GONE
-        })
+        val favoriteIcon: ImageView = view.articlepage_header_favorite
+        val shareIcon: ImageView = view.articlepage_header_share
 
         liveArticleItemSelectionModel.getArticleItemModel()
             .observe(viewLifecycleOwner, Observer { articleItem ->
                 initArticlePage(view, articleItem)
             })
+
+        favoriteIcon.setOnClickListener {
+            this.toggle = !toggle
+            it.setBackgroundResource(if (toggle) R.drawable.ic_favorite_on else R.drawable.ic_favorite_off)
+        }
+
+        shareIcon.setOnClickListener {
+            liveArticleItemSelectionModel.getArticleItemModel()
+                .observe(viewLifecycleOwner, Observer { articleItem ->
+                    val intent = Intent()
+                    intent.action = Intent.ACTION_SEND
+                    intent.putExtra(Intent.EXTRA_TEXT, "${articleItem.pageLink}, send by NRC APP" )
+                    intent.type = "text/plain"
+                    startActivity(Intent.createChooser(intent, "Share To:"))
+                })
+        }
 
         ErrorHandler.getErrorState().observe(viewLifecycleOwner, Observer { errorMessage ->
             if (errorMessage.showMessage) {

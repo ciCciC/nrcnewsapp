@@ -9,4 +9,9 @@
     <string name="login_title">Sign In</string>
     <string name="hint_login_username">Username*</string>
     <string name="hint_login_password">Password*</string>
+
+<!--    Test data for Article fragment -->
+    <string name="test_topic">Some topic</string>
+    <string name="test_title">Some title</string>
+    <string name="test_teaser">Some teaser for this article</string>
 </resources>

@@ -30,16 +30,50 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/articlepage_topic"
+            <LinearLayout
+                android:id="@+id/articlepage_header_topic_actions"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/article_margin"
-                android:layout_marginTop="@dimen/article_margin"
-                android:layout_marginEnd="@dimen/article_margin"
-                android:layout_marginBottom="2dp"
-                android:textColor="@color/colorTextTopic"
-                app:layout_constraintTop_toBottomOf="@id/articlepage_headerImage" />
+                android:orientation="horizontal"
+                android:layout_gravity="bottom|end"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/articlepage_headerImage">
+
+                <TextView
+                    android:id="@+id/articlepage_topic"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="@dimen/article_margin"
+                    android:layout_marginTop="@dimen/article_margin"
+                    android:layout_marginEnd="@dimen/article_margin"
+                    android:layout_marginBottom="2dp"
+                    android:text="@string/test_topic"
+                    android:textColor="@color/colorTextTopic"/>
+
+                <ImageView
+                    android:id="@+id/articlepage_header_favorite"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="10dp"
+                    android:adjustViewBounds="true"
+                    android:contentDescription="header favorite"
+                    android:background="@drawable/ic_favorite_off" />
+
+                <ImageView
+                    android:id="@+id/articlepage_header_share"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="25dp"
+                    android:layout_marginBottom="10dp"
+                    android:adjustViewBounds="true"
+                    android:contentDescription="header share"
+                    android:src="@drawable/ic_share"/>
+
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/articlepage_title"
@@ -47,6 +81,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/article_margin"
                 android:layout_marginEnd="@dimen/article_margin"
+                android:text="@string/test_title"
                 android:textColor="@color/colorTextPrimary"
                 android:textSize="18sp"
                 android:textStyle="bold"
@@ -60,6 +95,7 @@
                 android:layout_marginTop="@dimen/article_margin"
                 android:layout_marginEnd="@dimen/article_margin"
                 android:layout_marginBottom="@dimen/article_margin"
+                android:text="@string/test_teaser"
                 android:textColor="@color/colorTextPrimary"
                 app:layout_constraintTop_toBottomOf="@id/articlepage_title" />
 
