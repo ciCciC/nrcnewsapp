@@ -74,7 +74,7 @@ class NewsPageRecyclerViewAdapter(
             is ArticleViewHolder -> {
                 if(item is ArticleItemModel){
                     ImageManager.loadImage(holder.mView, holder.articleItemImg, item.imageLink.toString())
-                    holder.topic.text = item.topic?.toUpperCase(Locale.ROOT)
+                    holder.topic.text = item.topic?.uppercase(Locale.ROOT)
                     holder.title.text = item.title
                     holder.teaser.text = item.teaser
 

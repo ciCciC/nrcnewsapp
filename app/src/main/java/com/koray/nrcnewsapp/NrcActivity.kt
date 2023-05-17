@@ -51,7 +51,7 @@ class NrcActivity : AppCompatActivity(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
 
         setContentView(R.layout.activity_main)
         setStatusBarDayNight()
@@ -64,7 +64,7 @@ class NrcActivity : AppCompatActivity(),
     private fun checkSignIn() {
         this.liveAccountModel
             .getAccount()
-            .observe(this, { googleSignInAccount ->
+            .observe(this) { googleSignInAccount ->
 
                 if (googleSignInAccount.isLoggedIn) {
                     this.liveToolbarModel.show()
@@ -79,7 +79,7 @@ class NrcActivity : AppCompatActivity(),
 
                     navController.navigate(R.id.loginFragment, null, navOptions)
                 }
-            })
+            }
     }
 
     private fun setGoogleSignInClient() {
@@ -121,25 +121,26 @@ class NrcActivity : AppCompatActivity(),
         }
 
         liveToolbarArrow.getStatus()
-            .observe(this, { status ->
+            .observe(this) { status ->
                 imageButton?.visibility = status
-            })
+            }
 
         liveCategorySelectionModel.getCategory()
-            .observe(this, { categoryItem ->
+            .observe(this
+            ) { categoryItem ->
                 run {
                     val categoryDisplay = categoryItem.display!!
-                    toolbar.title = "${categoryDisplay[0].toUpperCase() + categoryDisplay.substring(1)}"
+                    toolbar.title =
+                        "${categoryDisplay[0].uppercaseChar() + categoryDisplay.substring(1)}"
                     toolbarCollapsing.title = toolbar.title
                 }
             }
-            )
 
-        liveToolbarModel.getState().observe(this, { state ->
+        liveToolbarModel.getState().observe(this) { state ->
             toolbar.visibility = state
             toolbarLayout.visibility = state
             toolbarCollapsing.visibility = state
-        })
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -185,6 +186,7 @@ class NrcActivity : AppCompatActivity(),
         }
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         val findNavController = findNavController(R.id.nav_host_fragment)
 

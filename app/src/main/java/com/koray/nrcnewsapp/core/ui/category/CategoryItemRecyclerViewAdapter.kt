@@ -12,7 +12,6 @@ import com.koray.nrcnewsapp.R
 import com.koray.nrcnewsapp.core.domain.CategoryItemModel
 import com.koray.nrcnewsapp.core.network.viewmodel.LiveCategorySelectionModel
 import com.koray.nrcnewsapp.core.util.AnimationEffect
-import kotlinx.android.synthetic.main.fragment_category_item.view.*
 
 /**
  *
@@ -62,8 +61,8 @@ class CategoryItemRecyclerViewAdapter(
         private val categoryListener: CategoryOnListInteractionListener?,
         val liveCategoryLiveData: LiveCategorySelectionModel
     ) : RecyclerView.ViewHolder(mView), View.OnClickListener {
-        val mContentView: TextView = mView.category_name
-        val mImage: ImageView = mView.category_item_image
+        val mContentView: TextView = mView.findViewById(R.id.category_name)
+        val mImage: ImageView = mView.findViewById(R.id.category_item_image)
         lateinit var categoryItemModel: CategoryItemModel
 
         init {

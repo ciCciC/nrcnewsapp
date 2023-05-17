@@ -9,6 +9,7 @@ class LiveAccountModel : ViewModel() {
     private val accountLiveData: MutableLiveData<AccountModel> by lazy { MutableLiveData<AccountModel>() }
 
     fun getAccount(): LiveData<AccountModel> {
+        this.accountLiveData.value = AccountModel(isLoggedIn = true) // TODO: remove this line
         return this.accountLiveData
     }
 
