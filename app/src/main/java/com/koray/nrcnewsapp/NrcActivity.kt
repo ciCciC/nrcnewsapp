@@ -66,6 +66,8 @@ class NrcActivity : AppCompatActivity(),
             .getAccount()
             .observe(this) { googleSignInAccount ->
 
+                print("State: ${googleSignInAccount.isLoggedIn}")
+
                 if (googleSignInAccount.isLoggedIn) {
                     this.liveToolbarModel.show()
                     val navController = findNavController(R.id.nav_host_fragment)

@@ -29,7 +29,6 @@ import com.koray.nrcnewsapp.core.network.viewmodel.LiveCategorySelectionModel
 import com.koray.nrcnewsapp.core.ui.viewholders.ArticlePageViewHolder
 import com.koray.nrcnewsapp.core.util.ImageManager
 import com.koray.nrcnewsapp.core.util.inject
-import kotlinx.android.synthetic.main.fragment_article_page.view.*
 import java.util.*
 
 
@@ -60,8 +59,8 @@ class ArticlePageFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val favoriteIcon: ImageView = view.articlepage_header_favorite
-        val shareIcon: ImageView = view.articlepage_header_share
+        val favoriteIcon: ImageView = view.findViewById(R.id.articlepage_header_favorite)
+        val shareIcon: ImageView = view.findViewById(R.id.articlepage_header_share)
 
         liveArticleItemSelectionModel.getArticleItemModel()
             .observe(viewLifecycleOwner, Observer { articleItem ->

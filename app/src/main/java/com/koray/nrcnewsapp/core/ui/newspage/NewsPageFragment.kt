@@ -92,12 +92,12 @@ class NewsPageFragment : Fragment() {
             recyclerView.smoothScrollToPosition(-50)
         }
 
-        liveArticleModel.loading.observe(viewLifecycleOwner, { state ->
+        liveArticleModel.loading.observe(viewLifecycleOwner) { state ->
             loadingBarLayout.visibility = if (state) View.VISIBLE else View.GONE
-        })
+        }
 
         liveCategorySelectionModel.getCategory()
-            .observe(viewLifecycleOwner, { category ->
+            .observe(viewLifecycleOwner) { category ->
                 run {
                     liveCategorySelectionModel.getCategoryViewHolderMap()
                         .forEach { (categoryId, mappedView) ->
@@ -111,7 +111,7 @@ class NewsPageFragment : Fragment() {
                 liveArticleModel.loading.value = true
 
                 fetchArticleItems(category)
-            })
+            }
     }
 
     private fun fetchCategoryNames() {
